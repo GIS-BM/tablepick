@@ -11,7 +11,8 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar
+## jar 파일 각주 처리
 *.war
 *.nar
 *.ear
