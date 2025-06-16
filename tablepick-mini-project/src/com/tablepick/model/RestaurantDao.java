@@ -9,6 +9,7 @@ import java.sql.Statement;
 import com.tablepick.common.DatabaseUtil;
 import com.tablepick.exception.AccountNotFoundException;
 import com.tablepick.exception.NotMatchedPasswordException;
+import com.tablepick.exception.RestaurantNotFoundException;
 
 //레스토랑 Dao 입니다. 
 
@@ -127,5 +128,103 @@ public class RestaurantDao {
 		}
 
 	}
+	
+	/** 해당 아이디로 식당이 존재하는지 확인하는 메서드
+	 * 
+	 * @param accountId
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean existRes(String accountId) throws SQLException {
+		boolean existRes = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "SELECT 1 FROM restaurant WHERE account_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, accountId);
+			rs = pstmt.executeQuery();
+			existRes = rs.next();
+		} finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+		return existRes;
+	}
+
+	/**
+	 * 내 식당을 조회하는 메서드 <br>
+	 * 
+	 * @param accountId
+	 * @return res
+	 * @throws SQLException
+	 */
+	public RestaurantVO checkMyRes(String accountId) throws SQLException {
+//	public ArrayList<RestaurantVO> checkMyRes(String accountId) throws SQLException {
+		RestaurantVO res = null;
+//		ArrayList<RestaurantVO> resList = new ArrayList<>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT idx, account_id, name, type, address, tel ");
+		sql.append("FROM restaurant ");
+		sql.append("WHERE account_id = ?");
+
+		try(Connection con = DatabaseUtil.getConnection();
+			PreparedStatement pstmt = con.prepareStatement(sql.toString())
+		) {
+			pstmt.setString(1, accountId);
+			try(ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+//				while (rs.next()) {
+					res = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), rs.getString("address"), rs.getString("tel"));
+//					res.setRestaurantId(rs.getInt("idx"));
+//					res.setAccountId(rs.getString("account_id"));
+//					res.setName(rs.getString("name"));
+//					res.setType(rs.getString("type"));
+//					res.setAddress(rs.getString("address"));
+//					res.setTel(rs.getString("tel"));
+//					resList.add(new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), rs.getString("address"), rs.getString("tel")));
+				}
+			}
+		}
+		
+		return res;
+//		return resList;
+	}
+
+	/**
+	 * 식당 정보 업데이트 메서드
+	 * 
+	 * @param accountId
+	 * @param name
+	 * @param type
+	 * @param address
+	 * @param tel
+	 * @throws RestaurantNotFoundException
+	 * @throws SQLException
+	 */
+	public void changeMyRes(String accountId, String name, String type, String address, String tel) throws RestaurantNotFoundException, SQLException {
+		if (existRes(accountId) == false) {
+			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+		}
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE restaurant ");
+		sql.append("SET name = ?, type = ?, address = ?, tel = ? ");
+		sql.append("WHERE account_id = ?");
+				
+		try(Connection con = DatabaseUtil.getConnection();
+			PreparedStatement pstmt = con.prepareStatement(sql.toString());
+		) {
+			pstmt.setString(1, name);
+			pstmt.setString(2, type);
+			pstmt.setString(3, address);
+			pstmt.setString(4, tel);
+			pstmt.setString(5, accountId);
+			
+			pstmt.executeUpdate();
+		}
+	}
+
+	
 
 }
