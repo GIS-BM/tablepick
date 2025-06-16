@@ -225,6 +225,41 @@ public class RestaurantDao {
 		}
 	}
 
+	/**
+	 * 식당 정보 조회 및 식당 별 매출액 조회하는 메서드
+	 * 
+	 * @param accountId
+	 * @param reservationIdx
+	 * @return
+	 * @throws SQLException
+	 */
+	public RestaurantVO checkMyRestaurantAndReservation(String accountId, int reservationIdx) throws SQLException {
+		RestaurantVO resVO = null;
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT rt.idx, rt.account_id, rt.name, rt.type, rt.address, rt.tel, SUM(rs.sale) ");
+		sql.append("FROM restaurant rt ");
+		sql.append("INNER JOIN reserve rs ON rt.idx = rs.restaurant_idx ");
+		sql.append("WHERE rt.idx = ?");
+		
+		try(Connection con = DatabaseUtil.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql.toString());
+				){
+			pstmt.setInt(1, reservationIdx);
+			try(ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					resVO = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), rs.getString("address"), rs.getString("tel"), rs.getInt(7));
+				}
+			} 
+		}
+
+		return resVO;
+	}
+
+
+	public void updateRestaurantSales(String total) {
+		
+	}
+
 	
 
 }
