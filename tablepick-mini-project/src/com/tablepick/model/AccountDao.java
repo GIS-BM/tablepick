@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.tablepick.common.DatabaseUtil;
 import com.tablepick.common.DbConfig;
 
 public class AccountDao {
@@ -30,7 +31,23 @@ public class AccountDao {
 			rs.close();
 		closeAll(pstmt, con);
 	}
-
+	public boolean existAccountId(String id) throws SQLException {
+		boolean existAccount = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "SELECT 1 FROM account WHERE id = ?"; 
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			existAccount = rs.next(); // 결과행이 존재하면 true , 없으면 false 
+		}finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+		return existAccount;
+	}
 	// 계정 등록
 	public boolean insertAccount(AccountVO accountVO) throws SQLException {
 		boolean result = false;
