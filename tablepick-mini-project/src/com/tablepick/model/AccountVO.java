@@ -1,17 +1,14 @@
 package com.tablepick.model;
 
 public class AccountVO {
-	private String id;
-	private String type;
-	private String name;
-	private String password;
-	private String tel;
-	
-	// 기본 생성자
+	String id;
+	String type;
+	String name;
+	String password;
+	String tel;
 	public AccountVO() {
-		super();
+		
 	}
-	// 매개변수 추가한 생성자
 	public AccountVO(String id, String type, String name, String password, String tel) {
 		super();
 		this.id = id;
@@ -20,7 +17,6 @@ public class AccountVO {
 		this.password = password;
 		this.tel = tel;
 	}
-	// getter, setter 매서드
 	public String getId() {
 		return id;
 	}
@@ -51,11 +47,11 @@ public class AccountVO {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
-	// toString 메서드
 	@Override
 	public String toString() {
 		return "AccountVO [id=" + id + ", type=" + type + ", name=" + name + ", password=" + password + ", tel=" + tel
 				+ "]";
 	}
+	
 	
 }

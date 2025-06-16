@@ -1,145 +1,153 @@
 package com.tablepick.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-import com.tablepick.common.DbConfig;
+import com.tablepick.common.DatabaseUtil;
 
 public class AccountDao {
-	public AccountDao() throws ClassNotFoundException {
-		Class.forName(DbConfig.DRIVER);
-	}
-
-	public Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(DbConfig.URL, DbConfig.USER, DbConfig.PASS);
-	}
-
-	public void closeAll(PreparedStatement pstmt, Connection con) throws SQLException {
-		if (pstmt != null)
-			pstmt.close();
-		if (con != null)
-			con.close();
-	}
-
-	public void closeAll(ResultSet rs, PreparedStatement pstmt, Connection con) throws SQLException {
-		if (rs != null)
-			rs.close();
-		closeAll(pstmt, con);
-	}
-
-	// 계정 등록
-	public boolean insertAccount(AccountVO accountVO) throws SQLException {
-		boolean result = false;
+	
+	public boolean existAccountId(String id) throws SQLException {
+		boolean existAccount = false;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			con = getConnection();
-			String sql = "INSERT INTO account (id, type, name, password, tel) VALUES (?, ?, ?, ?, ?)";
+			con = DatabaseUtil.getConnection();
+			String sql = "SELECT 1 FROM account WHERE id = ?"; 
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			existAccount = rs.next(); // 결과행이 존재하면 true , 없으면 false 
+		}finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+		return existAccount;
+	}
+	
+	public void createAccount(AccountVO accountVO) throws SQLException {
+		/*
+		if(existAccountId(accountVO.getId()) == true)
+			throw new AccountAlreadyExistsException 발동
+		*/
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "insert into account (id, type, name, password, tel) values (?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, accountVO.getId());
 			pstmt.setString(2, accountVO.getType());
 			pstmt.setString(3, accountVO.getName());
 			pstmt.setString(4, accountVO.getPassword());
 			pstmt.setString(5, accountVO.getTel());
-			int rows = pstmt.executeUpdate();
-			result = rows > 0;
-		} finally {
-			closeAll(rs, pstmt, con);
+			pstmt.executeUpdate();
+		}finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
 		}
-		return result;
+		
 	}
 
-	// 전체 계정 목록 출력
-	public ArrayList<AccountVO> getAllAccounts() throws SQLException {
-		ArrayList<AccountVO> list = new ArrayList<AccountVO>();
+	public String login(String id, String password) throws SQLException {
+		/*
+		if(existAccountId(receiverAccountNo) == false)
+			throw new AccountNotFoundException 발동
+		*/
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		String type = null;
 		try {
-			con = getConnection();
-			String sql = "SELECT * FROM account";
+			con = DatabaseUtil.getConnection();
+			String sql = "select type,id,password from account where id = ?";
 			pstmt = con.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				list.add(new AccountVO(rs.getString("id"), rs.getString("type"), rs.getString("name"),
-						rs.getString("password"), rs.getString("tel")));
+			pstmt.setString(1, id);
+			rs=pstmt.executeQuery();
+			if(rs.next()) {
+				/*
+				if(!password.equals(rs.getString("password"))
+					throw new passwordNotMatchedException 발동
+				*/
+				type = rs.getString("type");
 			}
-
-		} finally {
-			closeAll(rs, pstmt, con);
+			
+		}finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
 		}
-		return list;
+		return type;
 	}
 	
-	// 하나의 계정 출력
-	public AccountVO findAccountById(String accountId) throws SQLException {
-		AccountVO accountVO = null;
+	public AccountVO checkAccount(String id1) throws SQLException {
+		/*
+		if(existAccountId(receiverAccountNo) == false)
+			throw new AccountNotFoundException 발동
+		 */
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		AccountVO vo = null;
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "select id, type, name, password, tel from account where id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id1);
+			rs=pstmt.executeQuery();
+			if(rs.next())
+				vo = new AccountVO(rs.getString("id"), rs.getString("type"), rs.getString("password"), rs.getString("name"),
+						rs.getString("tel"));
+			
+		}finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+		return vo;
+	}
+
+	public void updateAccount(String updateId, AccountVO updateAccount) throws SQLException {
+		/*
+		if(existAccountId(receiverAccountNo) == false)
+			throw new AccountNotFoundException 발동
+		*/
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			con = getConnection();
-			String sql = "SELECT * from account where id = ?";
+			con = DatabaseUtil.getConnection();
+			String sql = "update account set type = ?, name = ?, password = ?, tel = ? where id = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, accountId);
-			rs = pstmt.executeQuery();
-			if(rs.next())
-				accountVO = new AccountVO(
-				    rs.getString("id"),
-				    rs.getString("type"),
-				    rs.getString("name"),
-				    rs.getString("password"),
-				    rs.getString("tel")
-				);		} finally {
-			closeAll(rs, pstmt, con);
+			pstmt.setString(1, updateAccount.getType());
+			pstmt.setString(2, updateAccount.getName());
+			pstmt.setString(3, updateAccount.getPassword());
+			pstmt.setString(4, updateAccount.getTel());
+			pstmt.setString(5, updateId);
+			pstmt.executeUpdate();
+			
+		}finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
 		}
-		return accountVO;
 	}
-	
-	// 계정 데이터 수정
-  public boolean updateAccount(AccountVO accountVO) throws SQLException {
-      boolean result = false;
-      Connection con = null;
-      PreparedStatement pstmt = null;
-      try {
-          con = getConnection();
-          String sql = "UPDATE account SET type = ?, name = ?, password = ?, tel = ? WHERE id = ?";
-          pstmt = con.prepareStatement(sql);
-          pstmt.setString(1, accountVO.getType());
-          pstmt.setString(2, accountVO.getName());
-          pstmt.setString(3, accountVO.getPassword());
-          pstmt.setString(4, accountVO.getTel());
-          pstmt.setString(5, accountVO.getId());
-          int rows = pstmt.executeUpdate();
-          result = rows > 0;
-      } finally {
-          closeAll(pstmt, con);
-      }
-      return result;
-  }
-	
-	// 계정 삭제
-  public boolean deleteAccount(String id) throws SQLException {
-      boolean result = false;
-      Connection con = null;
-      PreparedStatement pstmt = null;
-      try {
-          con = getConnection();
-          String sql = "DELETE FROM account WHERE id = ?";
-          pstmt = con.prepareStatement(sql);
-          pstmt.setString(1, id);
-          int rows = pstmt.executeUpdate();
-          result = rows > 0;
-      } finally {
-          closeAll(pstmt, con);
-      }
-      return result;
-  }
+
+	public void deleteAccount(String deleteId) throws SQLException {
+		/*
+		if(existAccountId(receiverAccountNo) == false)
+			throw new AccountNotFoundException 발동
+		*/
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "delete from account where id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, deleteId);
+			pstmt.executeUpdate();
+			
+		}finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+	}
+
 }
 
