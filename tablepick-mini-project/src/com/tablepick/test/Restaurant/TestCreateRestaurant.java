@@ -8,7 +8,7 @@ import com.tablepick.model.RestaurantVO;
 
 //식당 등록을 테스트하는 클래스 입니다.
 
-public class TestMakeRestaurant {
+public class TestCreateRestaurant {
 	public static void main(String[] args) {
 		
 		RestaurantDao dao = new RestaurantDao();
@@ -51,7 +51,7 @@ public class TestMakeRestaurant {
 		
 		
 		try {
-			System.out.println("레스토랑이 등록되었습니다. id:"+dao.makeRes(vo1));
+			System.out.println("레스토랑이 등록되었습니다. id:"+dao.makeRestaurant(vo1));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -24,7 +24,7 @@ public class TestDeleteRestaurant {
 				accountId = sc.nextLine();
 				System.out.println("비밀번호 : ");
 				password = sc.nextLine();
-				dao.deleteMyRes(accountId, password);
+				dao.deleteMyRestaurant(accountId, password);
 
 				System.out.println("삭제 완료");
 				restaurantDelete = false;
