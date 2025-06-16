@@ -15,7 +15,7 @@ public class AccountLoginAdd {
 	
 	public AccountLoginAdd() throws ClassNotFoundException {
 		accountdao = new AccountDao();
-		tablePickServiceCommon = new TablePickSerivceCommon();
+    this.tablePickServiceCommon = TablePickSerivceCommon.getInstance();
 	}
 	
 	public static void main(String[] args) {
@@ -27,16 +27,16 @@ public class AccountLoginAdd {
 				
 				while (true) {
 					System.out.println("로그인 회원가입 매뉴");
-					System.out.println("login: 로그인");
-					System.out.println("addAccount: 회원가입");
+					System.out.println("1. 로그인");
+					System.out.println("2. 회원가입");
 					System.out.println("입력 :");
 					String inputoption = reader.readLine().trim();					
 					
 					switch (inputoption) {
-					case "login" :
+					case "1" :
 						accountLoginAdd.loginView(reader);
 						break;
-					case "addAccount" :
+					case "2" :
 						accountLoginAdd.addAccountView(reader);
 						break;
 					}
@@ -57,12 +57,11 @@ public class AccountLoginAdd {
 			System.out.println("Password: ");
 			String password = reader.readLine();
 			
-			if (tablePickServiceCommon.login(id, password))
+			if (tablePickServiceCommon.login(id, password) != null)
 				System.out.println("로그인 성공");
 			else
 				System.out.println("로그인 실패");
 		} catch (IOException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
