@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import com.tablepick.common.DbConfig;
@@ -76,7 +79,7 @@ public class AccountDao {
 		}
 		return list;
 	}
-	
+
 	// 하나의 계정 출력
 	public AccountVO findAccountById(String accountId) throws SQLException {
 		AccountVO accountVO = null;
@@ -89,57 +92,189 @@ public class AccountDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, accountId);
 			rs = pstmt.executeQuery();
-			if(rs.next())
-				accountVO = new AccountVO(
-				    rs.getString("id"),
-				    rs.getString("type"),
-				    rs.getString("name"),
-				    rs.getString("password"),
-				    rs.getString("tel")
-				);		} finally {
+			if (rs.next())
+				accountVO = new AccountVO(rs.getString("id"), rs.getString("type"), rs.getString("name"),
+						rs.getString("password"), rs.getString("tel"));
+		} finally {
 			closeAll(rs, pstmt, con);
 		}
 		return accountVO;
 	}
-	
-	// 계정 데이터 수정
-  public boolean updateAccount(AccountVO accountVO) throws SQLException {
-      boolean result = false;
-      Connection con = null;
-      PreparedStatement pstmt = null;
-      try {
-          con = getConnection();
-          String sql = "UPDATE account SET type = ?, name = ?, password = ?, tel = ? WHERE id = ?";
-          pstmt = con.prepareStatement(sql);
-          pstmt.setString(1, accountVO.getType());
-          pstmt.setString(2, accountVO.getName());
-          pstmt.setString(3, accountVO.getPassword());
-          pstmt.setString(4, accountVO.getTel());
-          pstmt.setString(5, accountVO.getId());
-          int rows = pstmt.executeUpdate();
-          result = rows > 0;
-      } finally {
-          closeAll(pstmt, con);
-      }
-      return result;
-  }
-	
-	// 계정 삭제
-  public boolean deleteAccount(String id) throws SQLException {
-      boolean result = false;
-      Connection con = null;
-      PreparedStatement pstmt = null;
-      try {
-          con = getConnection();
-          String sql = "DELETE FROM account WHERE id = ?";
-          pstmt = con.prepareStatement(sql);
-          pstmt.setString(1, id);
-          int rows = pstmt.executeUpdate();
-          result = rows > 0;
-      } finally {
-          closeAll(pstmt, con);
-      }
-      return result;
-  }
-}
 
+	// 계정 데이터 수정
+	public boolean updateAccount(AccountVO accountVO) throws SQLException {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = getConnection();
+			String sql = "UPDATE account SET type = ?, name = ?, password = ?, tel = ? WHERE id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, accountVO.getType());
+			pstmt.setString(2, accountVO.getName());
+			pstmt.setString(3, accountVO.getPassword());
+			pstmt.setString(4, accountVO.getTel());
+			pstmt.setString(5, accountVO.getId());
+			int rows = pstmt.executeUpdate();
+			result = rows > 0;
+		} finally {
+			closeAll(pstmt, con);
+		}
+		return result;
+	}
+
+	// 계정 삭제
+	public boolean deleteAccount(String id) throws SQLException {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = getConnection();
+			String sql = "DELETE FROM account WHERE id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			int rows = pstmt.executeUpdate();
+			result = rows > 0;
+		} finally {
+			closeAll(pstmt, con);
+		}
+		return result;
+	}
+	// 레스토랑 idx 찾는 메서드
+	public int findRestaurantIdByName(String name) throws SQLException {
+		int restaurantId = 0;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT idx from restaurant where name = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, name);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				restaurantId = rs.getInt("idx");
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return restaurantId;
+	}
+	// 레스토랑 name 찾는 메서드
+	public String findRestaurantNameById(int num) throws SQLException {
+		String name = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT name from restaurant where idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				name = rs.getString("name");
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return name;
+	}
+	// 예약 등록
+	public boolean insertReserve(ReserveVO reserveVO) throws SQLException {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "INSERT INTO reserve (account_id, restaurant_idx, reservecount,"
+					+ " reservedate, sale) VALUES (?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, reserveVO.getAccountId());
+			pstmt.setInt(2, reserveVO.getRestaurantId());
+			pstmt.setInt(3, reserveVO.getReserveCount());
+			pstmt.setTimestamp(4, Timestamp.valueOf(reserveVO.getReserveDate()));
+			pstmt.setLong(5, reserveVO.getSale());
+			int rows = pstmt.executeUpdate();
+			result = rows > 0;
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return result;
+	}
+	// 모든 예약 조회
+	public ArrayList<ReserveVO> getAllReserves(String id) throws SQLException {
+		ArrayList<ReserveVO> list = new ArrayList<ReserveVO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT idx, account_id, restaurant_idx, reservecount,"
+					+ " reservedate, registerdate, sale FROM reserve where account_id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Timestamp reservedateTime = rs.getTimestamp("reservedate");
+				Timestamp registerdateTime = rs.getTimestamp("registerdate");
+				LocalDateTime reserveDate = null;
+				LocalDateTime registerDate = null;
+				if (reservedateTime != null) {
+				    reserveDate = reservedateTime.toLocalDateTime();
+				}
+				if (registerdateTime != null) {
+					registerDate = registerdateTime.toLocalDateTime();
+				}
+				
+				list.add(new ReserveVO(rs.getInt("restaurant_idx"), rs.getInt("reservecount"), reserveDate,
+						registerDate, rs.getLong("sale")));
+			}
+
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return list;
+	}
+	// 예약 수정
+	public boolean updateReserve(ReserveVO updated) throws SQLException {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = getConnection();
+			String sql = "UPDATE reserve SET restaurant_idx = ?, reservecount = ?, reservedate = ?, sale = ? WHERE idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pstmt.setInt(1, updated.getRestaurantId());
+			pstmt.setInt(2, updated.getReserveCount());
+			pstmt.setTimestamp(3, Timestamp.valueOf(updated.getReserveDate()));
+			pstmt.setLong(4, updated.getSale());
+			pstmt.setInt(5, updated.getReserveId());
+			int rows = pstmt.executeUpdate();
+			result = rows > 0;
+		} finally {
+			closeAll(pstmt, con);
+		}
+		return result;
+	}
+	// 예약 삭제
+	public boolean deleteReserve(ReserveVO old) throws SQLException {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = getConnection();
+			String sql = "DELETE FROM reserve WHERE idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pstmt.setInt(1, old.getReserveId());
+			int rows = pstmt.executeUpdate();
+			result = rows > 0;
+		} finally {
+			closeAll(pstmt, con);
+		}
+		return result;
+	}
+}
