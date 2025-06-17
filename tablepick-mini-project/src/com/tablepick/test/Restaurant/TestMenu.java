@@ -1,27 +1,44 @@
 package com.tablepick.test.Restaurant;
 
 import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import com.tablepick.exception.AccountNotFoundException;
 import com.tablepick.exception.NotFoundMenuException;
-import com.tablepick.model.MenuVO;
+import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
+import com.tablepick.service.TablePickSerivceCommon;
 
 //메뉴를 조회 및 생성하는 클래스 입니다.
 public class TestMenu{
+	
+	public void run(){
 
-	public static void main(String[] args) {
+	}
+
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
 		String console;
 		String name;
 		int price;
 		//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
-		//따라서 로그인 정보로 식당 주인의 식당 id를 가져오는 로직이 필요합니다.
-		//현재는 하드코딩 한 상태
-		int restaurantId = 1;
+		//1. 따라서 로그인 정보의 accountId를 받아온 후
+		//2. 이 정보를 가지고 restaurantId 를 조회합니다.
+		AccountVO loginData = null;
+	
+		try {
+			loginData = TablePickSerivceCommon.getInstance().getLoginData();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		String accountId = loginData.getId();
+		
 		boolean create = true;
 
 		RestaurantDao dao = new RestaurantDao();
@@ -39,7 +56,7 @@ public class TestMenu{
 			
 				try {
 					
-					List<Map<String, String>> list = dao.checkMenu(restaurantId);
+					List<Map<String, String>> list = dao.checkMenu(accountId);
 
 					System.out.println("등록된 메뉴를 조회합니다.");
 
@@ -71,7 +88,7 @@ public class TestMenu{
 				if (yesOrNo.equals("예")) {
 
 					try {
-						dao.createMenu(new MenuVO(restaurantId, name, price));
+						dao.createMenu(accountId, name, price);
 						System.out.println("메뉴가 성공적으로 등록되었습니다.");
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
@@ -95,7 +112,7 @@ public class TestMenu{
 				
 			
 				try {
-					dao.UpdateMenu(new MenuVO(restaurantId, name, price));
+					dao.UpdateMenu(accountId, name, price);
 					System.out.println("메뉴가 성공적으로 수정되었습니다.");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -115,7 +132,7 @@ public class TestMenu{
 				System.out.println("삭제하려는 메뉴를 입력해 주세요.");
 				name = sc.nextLine();
 				try {
-					dao.deleteMenu(restaurantId, name);
+					dao.deleteMenu(accountId, name);
 					
 					
 				} catch (SQLException e) {

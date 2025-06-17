@@ -304,20 +304,21 @@ public class RestaurantDao {
 	 * @param menuVO
 	 * @throws SQLException
 	 */
-	public void createMenu(MenuVO menuVO) throws SQLException {
-
+	public void createMenu(String accountId, String name, int price) throws SQLException {
+		RestaurantVO restaurantVo = checkMyRes(accountId);
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		int menuId = 0;
+		
 
 		try {
 			con = DatabaseUtil.getConnection();
 			String sql = "INSERT INTO menu(restaurant_idx, name, price) VALUES(?,?,?);";
 			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setInt(1, menuVO.getRestaurantId());
-			pstmt.setString(2, menuVO.getName());
-			pstmt.setInt(3, menuVO.getPrice());
+			pstmt.setInt(1, restaurantVo.getRestaurantId());
+			pstmt.setString(2, name);
+			pstmt.setInt(3, price);
 
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys(); // 발급된 메뉴 id를 반환받는다.
@@ -332,23 +333,29 @@ public class RestaurantDao {
 
 	/**
 	 * 메뉴를 조회하는 메소드 입니다.
-	 * 
+	 * accountId를 통해 해당 계정의 restaurantId 정보를 알아냅니다.
+	 * "내 식당을 조회하는 메소드" 를 사용하여 식당 정보 객체를 받아온 후, id만 뺍니다.
 	 * @param restaurantId
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
-	public List<Map<String, String>> checkMenu(int restaurantId) throws SQLException {
+	public List<Map<String, String>> checkMenu(String accountId) throws SQLException {
+		
+		RestaurantVO restaurantVo = checkMyRes(accountId);
+		
 		List<Map<String, String>> list = new ArrayList<>();
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		
+	
 
 		try {
 			con = DatabaseUtil.getConnection();
 			String sql = "SELECT name, price FROM menu WHERE restaurant_idx = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, restaurantId);
+			pstmt.setInt(1, restaurantVo.getRestaurantId());
 			rs = pstmt.executeQuery();
 
 			
@@ -378,9 +385,9 @@ public class RestaurantDao {
 	 * @throws AccountNotFoundException 
 	 */
 	
-	public boolean findMenu(int restaurantId, String name)
+	public boolean findMenu(String accountId, String name)
 			throws NotFoundMenuException, SQLException, AccountNotFoundException {
-
+		RestaurantVO restaurantVo = checkMyRes(accountId);
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -391,7 +398,7 @@ public class RestaurantDao {
 			con = DatabaseUtil.getConnection();
 			String sql = "SELECT name, price FROM menu WHERE restaurant_idx =? AND name = ?;";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, restaurantId);
+			pstmt.setInt(1, restaurantVo.getRestaurantId());
 			pstmt.setString(2, name);
 			rs = pstmt.executeQuery();
 
@@ -418,19 +425,20 @@ public class RestaurantDao {
 	 * @throws NotFoundMenuException 
 	 */
 
-	public void UpdateMenu(MenuVO menuVO) throws SQLException, NotFoundMenuException, AccountNotFoundException {
+	public void UpdateMenu(String accountId, String name, int price) throws SQLException, NotFoundMenuException, AccountNotFoundException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
-		
-		findMenu(menuVO.getRestaurantId(), menuVO.getName());
+		RestaurantVO restaurantVo = checkMyRes(accountId);
+		//메뉴가 존재하는지 확인
+		findMenu(accountId, name);
 	
 		try {
 			con = DatabaseUtil.getConnection();
 			String sql = "UPDATE menu SET price = ? WHERE name = ?;";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, menuVO.getPrice());
-			pstmt.setString(2, menuVO.getName());
+			pstmt.setInt(1, restaurantVo.getRestaurantId());
+			pstmt.setString(2, restaurantVo.getName());
 		
 			result = pstmt.executeUpdate();
 			
@@ -441,12 +449,22 @@ public class RestaurantDao {
 		}
 		
 	}
+	
+	/**
+	 * 메뉴를 삭제하는 메소드 입니다.
+	 * @param restaurantId
+	 * @param name
+	 * @throws SQLException
+	 * @throws NotFoundMenuException
+	 * @throws AccountNotFoundException
+	 */
 
-	public void deleteMenu(int restaurantId, String name) throws SQLException, NotFoundMenuException, AccountNotFoundException {
+	public void deleteMenu(String accountId, String name) throws SQLException, NotFoundMenuException, AccountNotFoundException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
-		findMenu(restaurantId, name);
+		//메뉴가 존재하는지 확인
+		findMenu(accountId, name);
 
 		try {
 			con = DatabaseUtil.getConnection();
@@ -469,10 +487,12 @@ public class RestaurantDao {
 	 * @param restaurantId
 	 * @throws SQLException 
 	 */
-	public List checkMyRestaurantReview(int restaurantId) throws SQLException {
+	public List checkMyRestaurantReview(String accountId) throws SQLException {
 		
 		List<Map<String, String>> list = new ArrayList<>();
-
+		//식당 정보 가져오기
+		RestaurantVO restaurantVo = checkMyRes(accountId);
+		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -481,7 +501,7 @@ public class RestaurantDao {
 			con = DatabaseUtil.getConnection();
 			String sql = "SELECT account_id, star, comment, registerdate FROM review WHERE restaurant_idx = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, restaurantId);
+			pstmt.setInt(1, restaurantVo.getRestaurantId());
 			rs = pstmt.executeQuery();
 			
 				while (rs.next()) {

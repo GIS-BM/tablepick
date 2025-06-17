@@ -1,11 +1,12 @@
 package com.tablepick.test.Restaurant;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 //식당 상세 정보 화면입니다.
 //식당주인 메인 화면에서 넘어옵니다.
 public class OwnerMainDetail {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		Scanner sc = new Scanner(System.in);
 		OwnerMain om = new OwnerMain();
 		TestMenu tm = new TestMenu();
