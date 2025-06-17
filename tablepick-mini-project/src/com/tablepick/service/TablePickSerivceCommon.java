@@ -85,4 +85,12 @@ public AccountVO login(String id, String password) throws SQLException {
    }
    return logindata;
 }
+public boolean logout(AccountVO logindata) throws SQLException {
+	boolean result = false;
+	logindata =null;
+	if(logindata == null)
+		System.out.println();
+	
+	return result;
+}
 }
