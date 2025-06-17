@@ -375,6 +375,7 @@ public class RestaurantDao {
 				PreparedStatement pstmt = con.prepareStatement(sql.toString());
 				){
 			try(ResultSet rs = pstmt.executeQuery()) {
+				pstmt.setInt(1, restaurantId);
 				while (rs.next()) {
 				    ReserveVO reserveVO = new ReserveVO(rs.getString("account_id"), rs.getInt("restaurant_idx"), rs.getInt("reservepeople"), rs.getInt("reservetime"), rs.getTimestamp("reservedate").toLocalDateTime());
 				    rList.add(reserveVO);
