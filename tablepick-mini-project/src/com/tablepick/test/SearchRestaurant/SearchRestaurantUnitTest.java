@@ -4,11 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
 import com.tablepick.model.AccountDao;
-import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantVO;
 import com.tablepick.model.ReviewVO;
 
@@ -29,8 +29,7 @@ public class SearchRestaurantUnitTest {
 				System.out.println("1. 식당 전체 조회");
 				System.out.println("2. 식당 타입별 조회");
 				System.out.println("3. 해당 식당 리뷰 조회");
-				System.out.println("4. 식당 예약 시간 조회");
-				System.out.println("5. 평균 별점 높은순 식당 조회");
+				System.out.println("4. 평균 별점 높은순 식당 조회");
 				System.out.println("exit: 종료");
 				System.out.print("입력 : ");
 				
@@ -46,9 +45,6 @@ public class SearchRestaurantUnitTest {
 						search.searchRestaurantReviewView(reader);
 						break;
 					case "4":
-						search.searchRestaurantReserveTimeView(reader);
-						break;
-					case "5":
 						search.searchRestaurantByStar(reader);
 						break;
 					case "exit":
@@ -130,50 +126,17 @@ public class SearchRestaurantUnitTest {
 			RestaurantVO vo = list.get(choice-1);
 			int restaurantId = vo.getRestaurantId();
 			ArrayList<ReviewVO> reviewList = accountdao.searchRestaurantReviewView(restaurantId);
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (reviewList.isEmpty()) {
 				System.out.println("등록된 리뷰가 없습니다.");
 			} else {
 				for (ReviewVO rvo : reviewList) {
-					System.out.println("식당명: "+accountdao.findRestaurantNameById(rvo.getRestaurantId())+" 별점: "+rvo.getStar()+"점 "
-							+" 내용: "+rvo.getComment()+" 등록일: "+rvo.getRegisterDate());
+					String formattedRegisterDate = rvo.getRegisterDate().format(dateTimeFormatter);
+					System.out.println("식당명: "+accountdao.findRestaurantNameById(rvo.getRestaurantId())+ " 별점: "+ rvo.getStar()+"점 "
+							+" 내용: "+ rvo.getComment()+" 등록일: "+ formattedRegisterDate);
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void searchRestaurantReserveTimeView(BufferedReader reader) {
-		try {
-			System.out.print("수정할 계정 ID: ");
-			String id = reader.readLine();
-			AccountVO old = accountdao.findAccountById(id);
-			if (old == null) {
-				System.out.println("해당 ID의 계정이 존재하지 않습니다.");
-				return;
-			}
-
-			System.out.print("새 Type (기존: " + old.getType() + "): ");
-			String type = reader.readLine();
-			System.out.print("새 Name (기존: " + old.getName() + "): ");
-			String name = reader.readLine();
-			System.out.print("새 Password (기존: " + old.getPassword() + "): ");
-			String password = reader.readLine();
-			System.out.print("새 Tel (기존: " + old.getTel() + "): ");
-			String tel = reader.readLine();
-
-			AccountVO updated = new AccountVO(id,
-					type.isEmpty() ? old.getType() : type,
-					name.isEmpty() ? old.getName() : name,
-					password.isEmpty() ? old.getPassword() : password,
-					tel.isEmpty() ? old.getTel() : tel);
-
-			if (accountdao.updateAccount(updated)) {
-				System.out.println("계정이 성공적으로 수정되었습니다.");
-			} else {
-				System.out.println("수정 실패");
-			}
-		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

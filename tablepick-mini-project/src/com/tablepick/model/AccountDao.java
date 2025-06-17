@@ -1,12 +1,13 @@
 package com.tablepick.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -192,14 +193,14 @@ public class AccountDao {
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "INSERT INTO reserve (account_id, restaurant_idx, reservecount,"
-					+ " reservedate, sale) VALUES (?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO reserve (account_id, restaurant_idx, reservepeople,"
+					+ " reservedate, reservetime) VALUES (?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, reserveVO.getAccountId());
 			pstmt.setInt(2, reserveVO.getRestaurantId());
-			pstmt.setInt(3, reserveVO.getReserveCount());
-			pstmt.setTimestamp(4, Timestamp.valueOf(reserveVO.getReserveDate()));
-			pstmt.setLong(5, reserveVO.getSale());
+			pstmt.setInt(3, reserveVO.getReservePeople());
+			pstmt.setDate(4, java.sql.Date.valueOf(reserveVO.getReserveDate()));
+			pstmt.setInt(5, reserveVO.getReserveTime());
 			int rows = pstmt.executeUpdate();
 			result = rows > 0;
 		} finally {
@@ -216,26 +217,20 @@ public class AccountDao {
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT idx, account_id, restaurant_idx, reservecount,"
-					+ " reservedate, registerdate, sale FROM reserve where account_id = ?";
-			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			String sql = "SELECT idx, account_id, restaurant_idx, reservepeople ,"
+					+ " reservedate, reservetime , registerdate FROM reserve where account_id = ?";
+			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				Timestamp reserveDateTime = rs.getTimestamp("reservedate");
+				Date reserveDateTime = rs.getDate("reservedate");
 				Timestamp registerDateTime = rs.getTimestamp("registerdate");
-				LocalDateTime reserveDate = null;
-				LocalDateTime registerDate = null;
-				if (reserveDateTime != null) {
-					reserveDate = reserveDateTime.toLocalDateTime();
-				}
-				if (registerDateTime != null) {
-					registerDate = registerDateTime.toLocalDateTime();
-				}
+				LocalDate reserveDate = reserveDateTime.toLocalDate();
+				LocalDateTime registerDate= registerDateTime.toLocalDateTime();
 
-				list.add(new ReserveVO(rs.getInt("idx"), id, rs.getInt("restaurant_idx"), rs.getInt("reservecount"),
-						reserveDate, registerDate, rs.getLong("sale")));
+				list.add(new ReserveVO(rs.getInt("idx"), rs.getString("account_id"), rs.getInt("restaurant_idx"),
+						rs.getInt("reservepeople"), reserveDate, rs.getInt("reservetime"), registerDate));
 			}
 
 		} finally {
@@ -251,12 +246,12 @@ public class AccountDao {
 		PreparedStatement pstmt = null;
 		try {
 			con = getConnection();
-			String sql = "UPDATE reserve SET restaurant_idx = ?, reservecount = ?, reservedate = ?, sale = ? WHERE idx = ?";
+			String sql = "UPDATE reserve SET restaurant_idx = ?, reservepeople = ?, reservedate = ?, reservetime = ? WHERE idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, updated.getRestaurantId());
-			pstmt.setInt(2, updated.getReserveCount());
-			pstmt.setTimestamp(3, Timestamp.valueOf(updated.getReserveDate()));
-			pstmt.setLong(4, updated.getSale());
+			pstmt.setInt(2, updated.getReservePeople());
+			pstmt.setDate(3, java.sql.Date.valueOf(updated.getReserveDate()));
+			pstmt.setInt(4, updated.getReserveTime());
 			pstmt.setInt(5, updated.getReserveId());
 			int rows = pstmt.executeUpdate();
 			result = rows > 0;
@@ -283,6 +278,7 @@ public class AccountDao {
 		}
 		return result;
 	}
+
 	// 전체 식당 조회
 	public ArrayList<RestaurantVO> searchAllRestaurants() throws SQLException {
 		ArrayList<RestaurantVO> list = new ArrayList<RestaurantVO>();
@@ -291,16 +287,15 @@ public class AccountDao {
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT idx, account_id, name, type, address, "
-					+ " tel, opentime FROM restaurant";
+			String sql = "SELECT idx, account_id, name, type, address, " + " tel, opentime FROM restaurant";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 				LocalTime openTime = rs.getObject("opentime", LocalTime.class);
 
-				list.add(new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), 
-						rs.getString("address"), rs.getString("tel"), openTime));
+				list.add(new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
+						rs.getString("type"), rs.getString("address"), rs.getString("tel"), openTime));
 			}
 
 		} finally {
@@ -308,7 +303,8 @@ public class AccountDao {
 		}
 		return list;
 	}
-	//타입별 식당 조회
+
+	// 타입별 식당 조회
 	public ArrayList<RestaurantVO> searchRestaurantByType(String type) throws SQLException {
 		ArrayList<RestaurantVO> list = new ArrayList<RestaurantVO>();
 		Connection con = null;
@@ -325,8 +321,8 @@ public class AccountDao {
 			while (rs.next()) {
 				LocalTime openTime = rs.getObject("opentime", LocalTime.class);
 
-				list.add(new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), 
-						rs.getString("address"), rs.getString("tel"), openTime));
+				list.add(new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
+						rs.getString("type"), rs.getString("address"), rs.getString("tel"), openTime));
 			}
 
 		} finally {
@@ -334,6 +330,7 @@ public class AccountDao {
 		}
 		return list;
 	}
+
 	// 해당 식당의 리뷰 조회
 	public ArrayList<ReviewVO> searchRestaurantReviewView(int restaurantId) throws SQLException {
 		ArrayList<ReviewVO> list = new ArrayList<ReviewVO>();
@@ -354,8 +351,8 @@ public class AccountDao {
 					registerDate = registerDateTime.toLocalDateTime();
 				}
 
-				list.add(new ReviewVO(rs.getInt("v.idx"), rs.getString("v.account_id"), rs.getInt("v.restaurant_idx"), rs.getInt("v.star"), 
-						rs.getString("v.comment"), registerDate));
+				list.add(new ReviewVO(rs.getInt("v.idx"), rs.getString("v.account_id"), rs.getInt("v.restaurant_idx"),
+						rs.getInt("v.star"), rs.getString("v.comment"), registerDate));
 			}
 
 		} finally {
@@ -363,7 +360,7 @@ public class AccountDao {
 		}
 		return list;
 	}
-	
+
 	// 별점 높은 순 조회
 	public Map<RestaurantVO, Double> searchRestaurantByStar() throws SQLException {
 		LinkedHashMap<RestaurantVO, Double> map = new LinkedHashMap<>();
@@ -383,10 +380,10 @@ public class AccountDao {
 			while (rs.next()) {
 				LocalTime openTime = rs.getObject("r.opentime", LocalTime.class);
 
-				vo = new RestaurantVO(rs.getInt("r.idx"), rs.getString("r.account_id"), rs.getString("r.name"), 
+				vo = new RestaurantVO(rs.getInt("r.idx"), rs.getString("r.account_id"), rs.getString("r.name"),
 						rs.getString("r.type"), rs.getString("r.address"), rs.getString("r.tel"), openTime);
 				double avgStar = rs.getDouble("round(avg(v.star), 2)");
-	            map.put(vo, avgStar);
+				map.put(vo, avgStar);
 			}
 		} finally {
 			closeAll(rs, pstmt, con);
