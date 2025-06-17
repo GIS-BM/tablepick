@@ -483,35 +483,35 @@ public class RestaurantDao {
 	}
 	
 	/**
-	 * 내 식당의 리뷰를 조회하는 메소드 입니다. 해당 식당의 id가 필요합니다.
+	 * 내 식당의 리뷰를 조회하는 메소드 입니다.
+	 * 리뷰 메소드는 예약 id를 가지고 있으므로 이를 가지고 리뷰를 조회해야 합니다.
 	 * @param restaurantId
 	 * @throws SQLException 
 	 */
 	public List checkMyRestaurantReview(String accountId) throws SQLException {
 		
 		List<Map<String, String>> list = new ArrayList<>();
-		//식당 정보 가져오기
-		RestaurantVO restaurantVo = checkMyRes(accountId);
 		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		RestaurantVO resVo = checkMyRes(accountId);
 
 		try {
 			con = DatabaseUtil.getConnection();
-			String sql = "SELECT account_id, star, comment, registerdate FROM review WHERE restaurant_idx = ?";
+			String sql = "SELECT rsv.account_id, rvw.star, rvw.comment, rvw.registerdate FROM reserve rsv JOIN review rvw ON rsv.idx = rvw.idx WHERE rsv.restaurant_idx = ?;"; 	
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, restaurantVo.getRestaurantId());
+			pstmt.setInt(1, resVo.getRestaurantId());
 			rs = pstmt.executeQuery();
 			
 				while (rs.next()) {
 					// 계속 맵을 만들어줘야 함
 					// 한 객체의 주솟값을 계속 받아버리면 이전의 데이터는 사라짐 (덮어쓰기가 되므로)
 					Map<String, String> map = new HashMap<String, String>();
-					map.put("작성자", rs.getString("account_id"));
-					map.put("별점", rs.getString("star"));
-					map.put("내용", rs.getString("comment"));
-					map.put("작성일자", rs.getString("registerdate"));
+					map.put("작성자", rs.getString("rsv.account_id"));
+					map.put("별점", rs.getString("rvw.star"));
+					map.put("내용", rs.getString("rvw.comment"));
+					map.put("작성일자", rs.getString("rvw.registerdate"));
 					list.add(map);
 				}
 		}

@@ -16,10 +16,7 @@ import com.tablepick.service.TablePickSerivceCommon;
 public class TestMenu{
 	
 	public void run(){
-
-	}
-
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		
 
 		String console;
 		String name;
@@ -46,8 +43,13 @@ public class TestMenu{
 		Scanner sc = new Scanner(System.in);
 
 		while (create) {
-			System.out.println("메뉴를 관리할 수 있는 화면입니다.");
-			System.out.println("1. 메뉴 조회하기 2. 메뉴 생성하기 3. 메뉴 수정하기 4. 메뉴 삭제하기 5. 이전 화면으로 돌아가기 6. 프로그램 종료하기");
+			System.out.println("                  메뉴를 관리할 수 있는 화면입니다.");
+			System.out.println("                          1. 메뉴 조회하기");
+			System.out.println("                          2. 메뉴 생성하기");
+			System.out.println("                          3. 메뉴 수정하기");
+			System.out.println("                          4. 메뉴 삭제하기");
+			System.out.println("                          5. 이전 화면으로 돌아가기");
+			System.out.println("                          6. 프로그램 종료하기");
 			console = sc.nextLine();
 
 			switch (console) {
@@ -75,6 +77,7 @@ public class TestMenu{
 				
 				
 			case "2":
+				System.out.println("새로운 메뉴를 등록합니다. 등록할 메뉴의 정보를 입력하세요.");
 
 				System.out.println("1. 메뉴 이름 : ");
 				name = sc.nextLine();
@@ -133,7 +136,7 @@ public class TestMenu{
 				name = sc.nextLine();
 				try {
 					dao.deleteMenu(accountId, name);
-					
+					System.out.println("메뉴가 삭제되었습니다.");
 					
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -160,4 +163,10 @@ public class TestMenu{
 		}
 	}
 
+
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+
+		new TestMenu().run();
+		
+	}
 }
