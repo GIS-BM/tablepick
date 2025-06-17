@@ -21,7 +21,7 @@ public class TestMenu{
 		//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
 		//따라서 로그인 정보로 식당 주인의 식당 id를 가져오는 로직이 필요합니다.
 		//현재는 하드코딩 한 상태
-		int restaurantId = 2;
+		int restaurantId = 1;
 		boolean create = true;
 
 		RestaurantDao dao = new RestaurantDao();

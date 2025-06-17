@@ -433,5 +433,45 @@ public class RestaurantDao {
 
 		
 	}
+	
+	/**
+	 * 내 식당의 리뷰를 조회하는 메소드 입니다. 해당 식당의 id가 필요합니다.
+	 * @param restaurantId
+	 * @throws SQLException 
+	 */
+	public List checkMyRestaurantReview(int restaurantId) throws SQLException {
+		
+		List<Map<String, String>> list = new ArrayList<>();
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "SELECT account_id, star, comment, registerdate FROM review WHERE restaurant_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, restaurantId);
+			rs = pstmt.executeQuery();
+			
+				while (rs.next()) {
+					// 계속 맵을 만들어줘야 함
+					// 한 객체의 주솟값을 계속 받아버리면 이전의 데이터는 사라짐 (덮어쓰기가 되므로)
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("작성자", rs.getString("account_id"));
+					map.put("별점", rs.getString("star"));
+					map.put("내용", rs.getString("comment"));
+					map.put("작성일자", rs.getString("registerdate"));
+					list.add(map);
+				}
+		}
+
+		finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+
+		return list;
+
+	}
 
 }
