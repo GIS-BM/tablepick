@@ -1,11 +1,10 @@
 package com.tablepick.test.Restaurant;
 
 import java.util.List;
+import java.util.Map;
 
 import com.tablepick.exception.RestaurantNotFoundException;
-import com.tablepick.model.ReserveVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.model.RestaurantVO;
 
 public class TestSelectRestaurantAndSales {
 	public static void main(String[] args) throws RestaurantNotFoundException {
@@ -15,20 +14,19 @@ public class TestSelectRestaurantAndSales {
 
 			String accountId = "owner01";
 			int reservationIdx = 1;
-			RestaurantVO res = resDao.checkMyRestaurantAndReservation(accountId, reservationIdx);
-//			if (res != null) {
-//				System.out.println("** 내 식당 조회 **");
-//				System.out.println(res);
-//			}
 			
-			List<ReserveVO> reservationList = resDao.checkMyRestaurantReservationList();
+			List<Map<String, String>> resList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
 			
-			for (ReserveVO vo : reservationList) {
-				System.out.print("고객아이디 : " + vo.getAccountId() + ", ");
-				System.out.print("식당 번호 : " + vo.getRestaurantId() + ", ");
-				System.out.print("예약 인원 : " + vo.getReservePeople()+ ", ");
-				System.out.print("예약 시간 : " + vo.getReservetime() + "시, ");
-				System.out.println("예약 일 : " + vo.getReserveDate());
+			for (int i = 0; i < resList.size(); i++) {
+				Map<String, String> map = resList.get(i);
+				
+				String name = map.get("name");
+				String type = map.get("type");
+				String address = map.get("address");
+				String tel = map.get("tel");
+				String sales = map.get("sales");
+				System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 매출액: " + sales);
+
 			}
 			
 		} catch (Exception e) {

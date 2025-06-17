@@ -161,71 +161,11 @@ public class RestaurantDao {
 		return existRes;
 	}
 
-	/**
-	 * 내 식당을 조회하는 메서드 <br>
-	 * 
-	 * @param accountId
-	 * @return res
-	 * @throws SQLException
-	 */
-	public RestaurantVO checkMyRes(String accountId) throws SQLException {
-		RestaurantVO res = null;
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT idx, account_id, name, type, address, tel ");
-		sql.append("FROM restaurant ");
-		sql.append("WHERE account_id = ?");
-
-		try (Connection con = DatabaseUtil.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(sql.toString())) {
-			pstmt.setString(1, accountId);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				if (rs.next()) {
-					res = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
-							rs.getString("type"), rs.getString("address"), rs.getString("tel"));
-
-				}
-			}
-		}
-		return res;
-	}
-
-	/**
-	 * 식당 정보 업데이트 메서드
-	 * 
-	 * @param accountId
-	 * @param name
-	 * @param type
-	 * @param address
-	 * @param tel
-	 * @throws RestaurantNotFoundException
-	 * @throws SQLException
-	 */
-	public void changeMyRes(String accountId, String name, String type, String address, String tel)
-			throws RestaurantNotFoundException, SQLException {
-		if (existRes(accountId) == false) {
-			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
-		}
-		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE restaurant ");
-		sql.append("SET name = ?, type = ?, address = ?, tel = ? ");
-		sql.append("WHERE account_id = ?");
-
-		try (Connection con = DatabaseUtil.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
-			pstmt.setString(1, name);
-			pstmt.setString(2, type);
-			pstmt.setString(3, address);
-			pstmt.setString(4, tel);
-			pstmt.setString(5, accountId);
-
-			pstmt.executeUpdate();
-		}
-	}
 
 	/**
 	 * 식당 정보 조회 및 식당 별 매출액 조회하는 메서드
 	 * 내 식당이 존재하는지 먼저 확인 후 쿼리문을 실행한다.
-	 * 내 식당 조회 시 정보, 매출액(매출액 구하는 메서드에서 가져와서 총 매출액) 출력
+	 * 내 식당 조회 시 정보, 매출액 출력
 	 * 
 	 * @param accountId
 	 * @param reservationIdx
@@ -233,53 +173,126 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException 
 	 */
-//	public RestaurantVO checkMyRestaurantAndReservation(String accountId, int restaurantIdx) throws SQLException, RestaurantNotFoundException {
-//		if (existRes(accountId) == false) {
-//			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
-//		}
-//		RestaurantVO resVO = null;
-//		SalesVO saleVO = null;
-//		StringBuilder sql = new StringBuilder();
-//		sql.append("SELECT r.idx, r.account_id, r.name, r.type, r.address, r.tel, t.sales as totalsales ");
-//		sql.append("FROM restaurant r ");
-//		sql.append("INNER JOIN total_sales t ON r.idx = t.restaurant_idx ");
-//		sql.append("WHERE r.idx = ? AND r.account_id = ?");
-//		
-//		try(Connection con = DatabaseUtil.getConnection();
-//				PreparedStatement pstmt = con.prepareStatement(sql.toString());
-//				){
-//			pstmt.setInt(1, restaurantIdx);
-//			pstmt.setString(2, accountId);
-//			try(ResultSet rs = pstmt.executeQuery()) {
-//				if (rs.next()) {
-//					resVO = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), rs.getString("address"), rs.getString("tel"));
-//					saleVO = new SalesVO(rs.getInt("idx"), restaurantIdx, rs.getInt("totalsales"));
-//					resVO.setTotalSalesVO(saleVO);
-//				}
-//			} 
-//		}
-//
-//		return resVO;
-//	}
+	public List<Map<String, String>> checkMyRestaurantAndSales(String accountId, int restaurantIdx) throws SQLException, RestaurantNotFoundException {
+		if (existRes(accountId) == false) {
+			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+		}
+		
+		List<Map<String, String>> listM = new ArrayList<Map<String,String>>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT r.name AS name, r.type AS type, r.address AS address, r.tel AS tel, COALESCE(SUM(s.sales), 0) AS sales ");
+		sql.append("FROM restaurant r ");
+		sql.append("LEFT JOIN reserve rv ON r.idx = rv.restaurant_idx ");
+		sql.append("LEFT JOIN sales s ON rv.idx = s.reserve_idx ");
+		sql.append("WHERE r.account_id =? AND r.idx = ? ");
+		sql.append("GROUP BY r.idx, r.name, r.type, r.address, r.tel;");
 
+		try(Connection con = DatabaseUtil.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql.toString());
+				){
+			pstmt.setString(1, accountId);
+			pstmt.setInt(2, restaurantIdx);
+			try(ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("name", rs.getString("name"));
+					map.put("type", rs.getString("type"));
+					map.put("address", rs.getString("address"));
+					map.put("tel", rs.getString("tel"));
+					map.put("sales", String.valueOf(rs.getLong("sales")));
+					
+					listM.add(map);
+				}
+			} 
+		}
+
+		return listM;
+	}
+
+	/**
+	 * 식당 정보 및 매출액 업데이트
+	 * 
+	 * @param accountId
+	 * @param reservationIdx 
+	 * @param newName
+	 * @param newType
+	 * @param newAddress
+	 * @param newTel
+	 * @param newSales
+	 * @throws SQLException
+	 * @throws RestaurantNotFoundException
+	 */
+	public void changeMyRestaurantInfoAndSales(String accountId, int reservationIdx, String newName, String newType, String newAddress,
+			String newTel, int newSales) throws SQLException, RestaurantNotFoundException {
+		if (existRes(accountId) == false) {
+			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+		}
+		
+		Connection con = DatabaseUtil.getConnection();
+		PreparedStatement pstmt = null;
+		try {
+			
+			con.setAutoCommit(false); // 트랜젝션 처리를 위한 자동 커밋 모드 해제
+			
+			String updateRestaurantInfoSql = "UPDATE restaurant SET name = ?, type = ?, address = ?, tel = ? WHERE account_id = ?";
+			String updateSalesSql = "UPDATE sales SET sales = ? WHERE reserve_idx = ?";
+			
+			pstmt = con.prepareStatement(updateRestaurantInfoSql);
+			pstmt.setString(1, newName);
+			pstmt.setString(2, newType);
+			pstmt.setString(3, newAddress);
+			pstmt.setString(4, newTel);
+			pstmt.setString(5, accountId);
+			
+			int newInfoResult = pstmt.executeUpdate();
+			if (newInfoResult > 0) {
+				System.out.println("레스토랑 업데이트 완료. 코드 : " + newInfoResult);
+			}
+			pstmt.close();
+			
+			pstmt = con.prepareStatement(updateSalesSql);
+			pstmt.setInt(1, newSales);
+			pstmt.setInt(2, reservationIdx);
+			
+			int newSalesResult = pstmt.executeUpdate();
+			if (newSalesResult > 0) {
+				System.out.println("매출액 업데이트 완료. 코드 : " + newSalesResult);
+			}
+			
+			con.commit(); // 정보 업데이트 내의 모든 세부 작업 정상 처리
+			System.out.println("모두 업데이트 완. commit");
+		} catch (Exception e) {
+			con.rollback();
+			throw e;
+		} finally {
+			DatabaseUtil.closeAll(pstmt, con);
+		}
+		
+		
+	}
+
+	
 	/**
 	 * 식당의 매출액을 입력시 업데이트 해주는 메서드 (디폴트 값 0이기때문에 update 쿼리를 이용)
 	 * 
 	 * @param accountId
 	 * @param totalSales
+	 * @param newSales 
 	 * @throws SQLException 
 	 */
-	public void updateRestaurantSales(String accountId, int totalSales) throws SQLException {
+	public void updateRestaurantSales(String accountId, int reservationIdx, int newSales) throws SQLException {
 		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE total_sales ts ");
-		sql.append("JOIN restaurant r ON ts.restaurant_idx = r.idx ");
-		sql.append("SET ts.sales = ? ");
-		sql.append("WHERE ts.idx > 0 AND r.account_id = ?");
+		sql.append("UPDATE sales s  ");
+		sql.append("JOIN reserve rv ON s.reserve_idx = rv.idx ");
+		sql.append("JOIN restaurant r ON rv.restaurant_idx = r.idx ");
+		sql.append("SET s.sales = ? ");
+		sql.append("WHERE s.idx > 0 AND r.account_id = ?");
+
 		
 		try(Connection con = DatabaseUtil.getConnection();
 			PreparedStatement pstmt = con.prepareStatement(sql.toString());
 				){
-			pstmt.setInt(1, totalSales);
+			pstmt.setInt(1, newSales);
 			pstmt.setString(2, accountId);
 			
 			pstmt.executeUpdate();
@@ -494,33 +507,5 @@ public class RestaurantDao {
 
 	}
 
-	
-	
-	
-	
-	
-	
-	public List<ReserveVO> checkMyRestaurantReservationList() throws SQLException {
-		List<ReserveVO> rList = new ArrayList<ReserveVO>();
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT account_id, restaurant_idx, reservepeople, reservedate, reservetime, registerdate FROM reserve WHERE restaurant_idx = ?;");
-		
-		try(Connection con = DatabaseUtil.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(sql.toString());
-				){
-			try(ResultSet rs = pstmt.executeQuery()) {
-				pstmt.setInt(1, restaurantId);
-				while (rs.next()) {
-				    ReserveVO reserveVO = new ReserveVO(rs.getString("account_id"), rs.getInt("restaurant_idx"), rs.getInt("reservepeople"), rs.getInt("reservetime"), rs.getTimestamp("reservedate").toLocalDateTime());
-				    rList.add(reserveVO);
-				}
-			} 
-		}
-		return rList;
-	}
-	
-	
-	
-	
 
 }
