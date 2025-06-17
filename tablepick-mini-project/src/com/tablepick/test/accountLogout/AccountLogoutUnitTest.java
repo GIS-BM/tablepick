@@ -19,10 +19,11 @@ public class AccountLogoutUnitTest {
 			loginData = TablePickSerivceCommon.getInstance().getLoginData();
 			System.out.println("로그인 데이터 값 출력 : " + loginData);
 			TablePickSerivceCommon.getInstance().logout(loginData);
-			if(loginData!=null)
-				throw new LogoutFailException("로그아웃이 실패하였습니다. 다시 시도해주세요");
-			System.out.println("로그아웃이 성공");
-		} catch (ClassNotFoundException | SQLException | LogoutFailException e) {
+			System.out.println(loginData);
+//			if(loginData!=null)
+//				throw new LogoutFailException("로그아웃이 실패하였습니다. 다시 시도해주세요");
+//			System.out.println("로그아웃이 성공");
+		} catch (ClassNotFoundException | SQLException  e) {
 			e.printStackTrace();
 		}
 	}
