@@ -1,14 +1,18 @@
 package com.tablepick.model;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class ReserveVO {
 	private int reserveId;
 	private String accountId;
 	private int restaurantId;
-	private int reserveCount;
+	private int reservePeople;
+	private int reservetime;
 	private LocalDateTime reserveDate;
 	private LocalDateTime registerDate;
+	
 	public LocalDateTime getRegisterDate() {
 		return registerDate;
 	}
@@ -17,35 +21,26 @@ public class ReserveVO {
 		this.registerDate = registerDate;
 	}
 
-	private Long sale;
-
-	public ReserveVO(String accountId, int restaurantId, int reserveCount, LocalDateTime reserveDate, Long sale) {
+	
+	
+	public ReserveVO(String accountId, int restaurantId, int reservePeople, int reservetime, LocalDateTime reserveDate) {
 		super();
 		this.accountId = accountId;
 		this.restaurantId = restaurantId;
-		this.reserveCount = reserveCount;
+		this.reservePeople = reservePeople;
+		this.reservetime = reservetime;
 		this.reserveDate = reserveDate;
-		this.sale = sale;
-	}
-	public ReserveVO(int restaurantId, int reserveCount, LocalDateTime reserveDate, LocalDateTime registerDate,
-			Long sale) {
-		super();
-		this.restaurantId = restaurantId;
-		this.reserveCount = reserveCount;
-		this.reserveDate = reserveDate;
-		this.registerDate = registerDate;
-		this.sale = sale;
 	}
 
-	public ReserveVO(int reserveId, String accountId, int restaurantId, int reserveCount, LocalDateTime reserveDate,
-			Long sale) {
+	public ReserveVO(int reserveId, String accountId, int restaurantId, int reservePeople, int reservetime,
+			LocalDateTime reserveDate) {
 		super();
 		this.reserveId = reserveId;
 		this.accountId = accountId;
 		this.restaurantId = restaurantId;
-		this.reserveCount = reserveCount;
+		this.reservePeople = reservePeople;
+		this.reservetime = reservetime;
 		this.reserveDate = reserveDate;
-		this.sale = sale;
 	}
 
 	public int getReserveId() {
@@ -72,12 +67,20 @@ public class ReserveVO {
 		this.restaurantId = restaurantId;
 	}
 
-	public int getReserveCount() {
-		return reserveCount;
+	public int getReservePeople() {
+		return reservePeople;
 	}
 
-	public void setReserveCount(int reserveCount) {
-		this.reserveCount = reserveCount;
+	public void setReservePeople(int reservePeople) {
+		this.reservePeople = reservePeople;
+	}
+
+	public int getReservetime() {
+		return reservetime;
+	}
+
+	public void setReservetime(int reservetime) {
+		this.reservetime = reservetime;
 	}
 
 	public LocalDateTime getReserveDate() {
@@ -88,18 +91,11 @@ public class ReserveVO {
 		this.reserveDate = reserveDate;
 	}
 
-	public Long getSale() {
-		return sale;
-	}
-
-	public void setSale(Long sale) {
-		this.sale = sale;
-	}
-
 	@Override
 	public String toString() {
 		return "ReserveVO [reserveId=" + reserveId + ", accountId=" + accountId + ", restaurantId=" + restaurantId
-				+ ", reserveCount=" + reserveCount + ", reserveDate=" + reserveDate + ", sale=" + sale + "]";
+				+ ", reservePeople=" + reservePeople + ", reservetime=" + reservetime + ", reserveDate=" + reserveDate
+				+ ", registerDate=" + registerDate + "]";
 	}
 
 }
