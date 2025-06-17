@@ -47,6 +47,18 @@ public class ReserveVO {
 		this.reserveDate = reserveDate;
 		this.sale = sale;
 	}
+	
+	public ReserveVO(int reserveId, String accountId, int restaurantId, int reserveCount, LocalDateTime reserveDate,
+			LocalDateTime registerDate, Long sale) {
+		super();
+		this.reserveId = reserveId;
+		this.accountId = accountId;
+		this.restaurantId = restaurantId;
+		this.reserveCount = reserveCount;
+		this.reserveDate = reserveDate;
+		this.registerDate = registerDate;
+		this.sale = sale;
+	}
 
 	public int getReserveId() {
 		return reserveId;

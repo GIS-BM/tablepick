@@ -211,7 +211,6 @@ public class AccountDao {
 			con = getConnection();
 			String sql = "SELECT idx, account_id, restaurant_idx, reservecount,"
 					+ " reservedate, registerdate, sale FROM reserve where account_id = ?";
-			pstmt = con.prepareStatement(sql);
 			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -228,7 +227,7 @@ public class AccountDao {
 					registerDate = registerdateTime.toLocalDateTime();
 				}
 				
-				list.add(new ReserveVO(rs.getInt("restaurant_idx"), rs.getInt("reservecount"), reserveDate,
+				list.add(new ReserveVO(rs.getInt("idx"),id, rs.getInt("restaurant_idx"), rs.getInt("reservecount"), reserveDate,
 						registerDate, rs.getLong("sale")));
 			}
 
@@ -246,7 +245,6 @@ public class AccountDao {
 			con = getConnection();
 			String sql = "UPDATE reserve SET restaurant_idx = ?, reservecount = ?, reservedate = ?, sale = ? WHERE idx = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, updated.getRestaurantId());
 			pstmt.setInt(2, updated.getReserveCount());
 			pstmt.setTimestamp(3, Timestamp.valueOf(updated.getReserveDate()));

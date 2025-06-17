@@ -133,13 +133,13 @@ public class ReserveCRUDUnitTest {
 			System.out.print("새 ReserveDate ( 예)2025-06-12 12:40 ) (기존: " + old.getReserveDate() + "): ");
 			String date = reader.readLine();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-			LocalDateTime registerDate = LocalDateTime.parse(date, formatter);
+			LocalDateTime reserveDate = LocalDateTime.parse(date, formatter);
 			int resId= accountdao.findRestaurantIdByName(name);
 			Long sale = 0L;
-			ReserveVO updated = new ReserveVO(id,
+			ReserveVO updated = new ReserveVO(old.getReserveId(), id,
 					name.isEmpty() ? old.getRestaurantId() : resId,
 					count==0 ? old.getReserveCount() : count,
-					date.isEmpty() ? old.getReserveDate() : registerDate, sale);
+					date.isEmpty() ? old.getReserveDate() : reserveDate, sale);
 
 			if (accountdao.updateReserve(updated)) {
 				System.out.println("예약이 성공적으로 수정되었습니다.");
