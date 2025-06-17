@@ -10,6 +10,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.tablepick.common.DbConfig;
 
@@ -363,9 +365,9 @@ public class AccountDao {
 	}
 	
 	// 별점 높은 순 조회
-	public ArrayList<RestaurantVO> searchRestaurantByStar() throws SQLException {
-		ArrayList<RestaurantVO> list = new ArrayList<RestaurantVO>();
-		ArrayList<ReviewVO> list2 = new ArrayList<ReviewVO>();
+	public Map<RestaurantVO, Double> searchRestaurantByStar() throws SQLException {
+		LinkedHashMap<RestaurantVO, Double> map = new LinkedHashMap<>();
+		RestaurantVO vo = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -381,12 +383,14 @@ public class AccountDao {
 			while (rs.next()) {
 				LocalTime openTime = rs.getObject("r.opentime", LocalTime.class);
 
-				list.add(new RestaurantVO(rs.getInt("r.idx"), rs.getString("r.account_id"), rs.getString("r.name"), 
-						rs.getString("r.type"), rs.getString("r.address"), rs.getString("r.tel"), openTime));
+				vo = new RestaurantVO(rs.getInt("r.idx"), rs.getString("r.account_id"), rs.getString("r.name"), 
+						rs.getString("r.type"), rs.getString("r.address"), rs.getString("r.tel"), openTime);
+				double avgStar = rs.getDouble("round(avg(v.star), 2)");
+	            map.put(vo, avgStar);
 			}
 		} finally {
 			closeAll(rs, pstmt, con);
 		}
-		return list;
+		return map;
 	}
 }

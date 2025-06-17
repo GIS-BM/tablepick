@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
@@ -180,12 +181,14 @@ public class SearchRestaurantUnitTest {
 	private void searchRestaurantByStar(BufferedReader reader) {
 		try {
 			System.out.println("[별점 높은순 조회]");
-			ArrayList<RestaurantVO> list = accountdao.searchRestaurantByStar();
-			if (list.isEmpty()) {
+			Map<RestaurantVO, Double> map = accountdao.searchRestaurantByStar();
+			if (map.isEmpty()) {
 				System.out.println("등록된 식당이 없습니다.");
 			} else {
-				for (RestaurantVO vo : list) {
-					System.out.println(vo.getName()+ " 주소: "+vo.getAddress()+" 전화번호: "+vo.getTel()+" 오픈 시간: "+vo.getOpenTime());
+				for (RestaurantVO vo : map.keySet()) {
+				    double avgStar = map.get(vo);
+					System.out.println(vo.getName()+ " 주소: "+vo.getAddress()+" 전화번호: "+vo.getTel()+
+							" 오픈 시간: "+vo.getOpenTime()+" 평균 별점: "+avgStar);
 				}
 			}
 		} catch (Exception e) {
