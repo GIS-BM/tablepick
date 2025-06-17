@@ -9,16 +9,8 @@ public class ReserveVO {
 	private int reserveCount;
 	private LocalDateTime reserveDate;
 	private LocalDateTime registerDate;
-	public LocalDateTime getRegisterDate() {
-		return registerDate;
-	}
-
-	public void setRegisterDate(LocalDateTime registerDate) {
-		this.registerDate = registerDate;
-	}
-
 	private Long sale;
-
+	
 	public ReserveVO(String accountId, int restaurantId, int reserveCount, LocalDateTime reserveDate, Long sale) {
 		super();
 		this.accountId = accountId;
@@ -100,6 +92,14 @@ public class ReserveVO {
 		this.reserveDate = reserveDate;
 	}
 
+	public LocalDateTime getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(LocalDateTime registerDate) {
+		this.registerDate = registerDate;
+	}
+
 	public Long getSale() {
 		return sale;
 	}
@@ -107,6 +107,7 @@ public class ReserveVO {
 	public void setSale(Long sale) {
 		this.sale = sale;
 	}
+	
 
 	@Override
 	public String toString() {

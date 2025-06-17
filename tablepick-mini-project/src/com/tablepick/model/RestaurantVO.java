@@ -1,5 +1,7 @@
 package com.tablepick.model;
 
+import java.time.LocalTime;
+
 public class RestaurantVO {
 	
 	private int restaurantId;
@@ -8,7 +10,22 @@ public class RestaurantVO {
 	private String type;
 	private String address;
 	private String tel;
+	private LocalTime openTime;
 	
+	
+	
+	public RestaurantVO(int restaurantId, String accountId, String name, String type, String address, String tel,
+			LocalTime openTime) {
+		super();
+		this.restaurantId = restaurantId;
+		this.accountId = accountId;
+		this.name = name;
+		this.type = type;
+		this.address = address;
+		this.tel = tel;
+		this.openTime = openTime;
+	}
+
 	public RestaurantVO(String accountId, String name, String type, String address, String tel) {
 		super();
 		this.accountId = accountId;
@@ -77,11 +94,20 @@ public class RestaurantVO {
 		this.tel = tel;
 	}
 
+	public LocalTime getOpenTime() {
+		return openTime;
+	}
+
+	public void setOpenTime(LocalTime openTime) {
+		this.openTime = openTime;
+	}
+
 	@Override
 	public String toString() {
 		return "RestaurantVO [restaurantId=" + restaurantId + ", accountId=" + accountId + ", name=" + name + ", type="
-				+ type + ", address=" + address + ", tel=" + tel + "]";
+				+ type + ", address=" + address + ", tel=" + tel + ", openTime=" + openTime + "]";
 	}
+
 	
 
 }
