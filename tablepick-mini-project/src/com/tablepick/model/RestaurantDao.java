@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.tablepick.common.DatabaseUtil;
 import com.tablepick.exception.AccountNotFoundException;
+import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.exception.RestaurantNotFoundException;
 
@@ -297,7 +298,7 @@ public class RestaurantDao {
 		
 	}
 
-	
+	/**
 	 * 메뉴를 생성하는 메소드 입니다. 메뉴 데이터 뿐만 아니라 레스토랑 ID도 필요합니다.
 	 * 
 	 * @param menuVO
@@ -368,6 +369,139 @@ public class RestaurantDao {
 		}
 
 		return list;
+	}
+	
+	
+	/**
+	 * 메뉴를 찾는 메소드 입니다. 가격 수정 및 삭제 시 이 메소드가 먼저 호출됩니다.
+	 * @throws SQLException 
+	 * @throws AccountNotFoundException 
+	 */
+	
+	public boolean findMenu(int restaurantId, String name)
+			throws NotFoundMenuException, SQLException, AccountNotFoundException {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		boolean menuExist = true;
+
+
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "SELECT name, price FROM menu WHERE restaurant_idx =? AND name = ?;";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, restaurantId);
+			pstmt.setString(2, name);
+			rs = pstmt.executeQuery();
+
+			if (rs.next() == false) {
+				// 메뉴가 존재하지 않을 때
+				menuExist = false;
+				throw new AccountNotFoundException("메뉴가 존재하지 않습니다. 다시 입력하세요.");
+
+			}
+		}
+
+		finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+
+		return menuExist;
+	}
+	
+	/**
+	 * 메뉴의 가격을 수정하는 메소드 입니다. <br>
+	 * @param menuVO
+	 * @throws SQLException
+	 * @throws AccountNotFoundException 
+	 * @throws NotFoundMenuException 
+	 */
+
+	public void UpdateMenu(MenuVO menuVO) throws SQLException, NotFoundMenuException, AccountNotFoundException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		int result = 0;
+		
+		findMenu(menuVO.getRestaurantId(), menuVO.getName());
+	
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "UPDATE menu SET price = ? WHERE name = ?;";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, menuVO.getPrice());
+			pstmt.setString(2, menuVO.getName());
+		
+			result = pstmt.executeUpdate();
+			
+		}
+
+		finally {
+			DatabaseUtil.closeAll(pstmt, con);
+		}
+		
+	}
+
+	public void deleteMenu(int restaurantId, String name) throws SQLException, NotFoundMenuException, AccountNotFoundException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		findMenu(restaurantId, name);
+
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "DELETE FROM menu WHERE name = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.executeUpdate();
+
+		}
+
+		finally {
+			DatabaseUtil.closeAll(pstmt, con);
+		}
+
+		
+	}
+	
+	/**
+	 * 내 식당의 리뷰를 조회하는 메소드 입니다. 해당 식당의 id가 필요합니다.
+	 * @param restaurantId
+	 * @throws SQLException 
+	 */
+	public List checkMyRestaurantReview(int restaurantId) throws SQLException {
+		
+		List<Map<String, String>> list = new ArrayList<>();
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "SELECT account_id, star, comment, registerdate FROM review WHERE restaurant_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, restaurantId);
+			rs = pstmt.executeQuery();
+			
+				while (rs.next()) {
+					// 계속 맵을 만들어줘야 함
+					// 한 객체의 주솟값을 계속 받아버리면 이전의 데이터는 사라짐 (덮어쓰기가 되므로)
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("작성자", rs.getString("account_id"));
+					map.put("별점", rs.getString("star"));
+					map.put("내용", rs.getString("comment"));
+					map.put("작성일자", rs.getString("registerdate"));
+					list.add(map);
+				}
+		}
+
+		finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+
+		return list;
+
 	}
 
 }
