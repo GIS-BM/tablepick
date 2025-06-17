@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.tablepick.common.DatabaseUtil;
 import com.tablepick.exception.AccountNotFoundException;
@@ -13,12 +17,12 @@ import com.tablepick.exception.RestaurantNotFoundException;
 
 //레스토랑 Dao 입니다. 
 
-
 public class RestaurantDao {
-	
+
 	/**
 	 * 식당 삭제 시 본인의 아이디와 비밀번호를 다시 입력합니다. <br>
 	 * 이것이 일치해야 식당 삭제가 가능합니다. <br>
+	 * 
 	 * @param accountId
 	 * @param password
 	 * @return
@@ -26,13 +30,14 @@ public class RestaurantDao {
 	 * @throws AccountNotFoundException
 	 * @throws SQLException
 	 */
-	public boolean findAccount(String accountId, String password) throws NotMatchedPasswordException, AccountNotFoundException, SQLException {
-		
+	public boolean findAccount(String accountId, String password)
+			throws NotMatchedPasswordException, AccountNotFoundException, SQLException {
+
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		boolean loginSuccess = true;
-		
+
 		try {
 			con = DatabaseUtil.getConnection();
 			String sql = "SELECT password FROM account WHERE id = ?;";
@@ -41,18 +46,18 @@ public class RestaurantDao {
 			rs = pstmt.executeQuery();
 
 			if (rs.next() == false) {
-				//아이디가 존재하지 않을 때
-				loginSuccess = false; 
+				// 아이디가 존재하지 않을 때
+				loginSuccess = false;
 				throw new AccountNotFoundException("아이디가 존재하지 않습니다. 다시 입력하세요.");
 
 			} else {// 아이디가 존재하면 비밀번호 동일 여부 확인
 
 				if (password.equals(rs.getString("password")) == false) {
-					loginSuccess = false; 
+					loginSuccess = false;
 					throw new NotMatchedPasswordException("비밀번호가 일치하지 않습니다. 다시 입력하세요.");
-					
+
 				}
-				
+
 			}
 		}
 
@@ -62,7 +67,6 @@ public class RestaurantDao {
 
 		return loginSuccess;
 	}
-	
 
 	/**
 	 * 식당을 등록하는 메소드 입니다.<br>
@@ -71,7 +75,7 @@ public class RestaurantDao {
 	 * @return
 	 * @throws SQLException
 	 */
-	public int makeRes(RestaurantVO restaurantVO) throws SQLException {
+	public int makeRestaurant(RestaurantVO restaurantVO) throws SQLException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -102,16 +106,18 @@ public class RestaurantDao {
 	/**
 	 * //등록된 식당을 삭제하는 메소드 입니다. <br>
 	 * 비밀번호가 다르면 NotMatchedPasswordException 발생시키고 전파 <br>
+	 * 
 	 * @param accountId
 	 * @param password
 	 * @throws SQLException
-	 * @throws AccountNotFoundException 
-	 * @throws NotMatchedPasswordException 
+	 * @throws AccountNotFoundException
+	 * @throws NotMatchedPasswordException
 	 */
-	public void deleteMyRes(String accountId, String password) throws SQLException, NotMatchedPasswordException, AccountNotFoundException {
+	public void deleteMyRestaurant(String accountId, String password)
+			throws SQLException, NotMatchedPasswordException, AccountNotFoundException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		
+
 		findAccount(accountId, password);
 
 		try {
@@ -128,8 +134,9 @@ public class RestaurantDao {
 		}
 
 	}
-	
-	/** 해당 아이디로 식당이 존재하는지 확인하는 메서드
+
+	/**
+	 * 해당 아이디로 식당이 존재하는지 확인하는 메서드
 	 * 
 	 * @param accountId
 	 * @return
@@ -169,14 +176,14 @@ public class RestaurantDao {
 		sql.append("FROM restaurant ");
 		sql.append("WHERE account_id = ?");
 
-		try(Connection con = DatabaseUtil.getConnection();
-			PreparedStatement pstmt = con.prepareStatement(sql.toString())
-		) {
+		try (Connection con = DatabaseUtil.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql.toString())) {
 			pstmt.setString(1, accountId);
-			try(ResultSet rs = pstmt.executeQuery()) {
+			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 //				while (rs.next()) {
-					res = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), rs.getString("address"), rs.getString("tel"));
+					res = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
+							rs.getString("type"), rs.getString("address"), rs.getString("tel"));
 //					res.setRestaurantId(rs.getInt("idx"));
 //					res.setAccountId(rs.getString("account_id"));
 //					res.setName(rs.getString("name"));
@@ -187,7 +194,7 @@ public class RestaurantDao {
 				}
 			}
 		}
-		
+
 		return res;
 //		return resList;
 	}
@@ -203,7 +210,8 @@ public class RestaurantDao {
 	 * @throws RestaurantNotFoundException
 	 * @throws SQLException
 	 */
-	public void changeMyRes(String accountId, String name, String type, String address, String tel) throws RestaurantNotFoundException, SQLException {
+	public void changeMyRes(String accountId, String name, String type, String address, String tel)
+			throws RestaurantNotFoundException, SQLException {
 		if (existRes(accountId) == false) {
 			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
@@ -211,16 +219,15 @@ public class RestaurantDao {
 		sql.append("UPDATE restaurant ");
 		sql.append("SET name = ?, type = ?, address = ?, tel = ? ");
 		sql.append("WHERE account_id = ?");
-				
-		try(Connection con = DatabaseUtil.getConnection();
-			PreparedStatement pstmt = con.prepareStatement(sql.toString());
-		) {
+
+		try (Connection con = DatabaseUtil.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
 			pstmt.setString(1, name);
 			pstmt.setString(2, type);
 			pstmt.setString(3, address);
 			pstmt.setString(4, tel);
 			pstmt.setString(5, accountId);
-			
+
 			pstmt.executeUpdate();
 		}
 	}
@@ -291,5 +298,76 @@ public class RestaurantDao {
 	}
 
 	
+	 * 메뉴를 생성하는 메소드 입니다. 메뉴 데이터 뿐만 아니라 레스토랑 ID도 필요합니다.
+	 * 
+	 * @param menuVO
+	 * @throws SQLException
+	 */
+	public void createMenu(MenuVO menuVO) throws SQLException {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int menuId = 0;
+
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "INSERT INTO menu(restaurant_idx, name, price) VALUES(?,?,?);";
+			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			pstmt.setInt(1, menuVO.getRestaurantId());
+			pstmt.setString(2, menuVO.getName());
+			pstmt.setInt(3, menuVO.getPrice());
+
+			pstmt.executeUpdate();
+			rs = pstmt.getGeneratedKeys(); // 발급된 메뉴 id를 반환받는다.
+			if (rs.next())
+				menuId = rs.getInt(1);
+		}
+
+		finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+	}
+
+	/**
+	 * 메뉴를 조회하는 메소드 입니다.
+	 * 
+	 * @param restaurantId
+	 * @throws SQLException
+	 * @throws RestaurantNotFoundException
+	 */
+	public List<Map<String, String>> checkMenu(int restaurantId) throws SQLException {
+		List<Map<String, String>> list = new ArrayList<>();
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "SELECT name, price FROM menu WHERE restaurant_idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, restaurantId);
+			rs = pstmt.executeQuery();
+
+			
+				while (rs.next()) {
+					// 계속 맵을 만들어줘야 함
+					// 한 객체의 주솟값을 계속 받아버리면 이전의 데이터는 사라짐 (덮어쓰기가 되므로)
+					Map<String, String> map = new HashMap<String, String>();
+					map.put("메뉴", rs.getString("name"));
+					map.put("가격", rs.getString("price"));
+					list.add(map);
+				}
+
+		
+		}
+
+		finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+
+		return list;
+	}
 
 }
