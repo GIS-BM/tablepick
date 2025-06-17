@@ -169,9 +169,7 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 */
 	public RestaurantVO checkMyRes(String accountId) throws SQLException {
-//	public ArrayList<RestaurantVO> checkMyRes(String accountId) throws SQLException {
 		RestaurantVO res = null;
-//		ArrayList<RestaurantVO> resList = new ArrayList<>();
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT idx, account_id, name, type, address, tel ");
 		sql.append("FROM restaurant ");
@@ -182,22 +180,13 @@ public class RestaurantDao {
 			pstmt.setString(1, accountId);
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
-//				while (rs.next()) {
 					res = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
 							rs.getString("type"), rs.getString("address"), rs.getString("tel"));
-//					res.setRestaurantId(rs.getInt("idx"));
-//					res.setAccountId(rs.getString("account_id"));
-//					res.setName(rs.getString("name"));
-//					res.setType(rs.getString("type"));
-//					res.setAddress(rs.getString("address"));
-//					res.setTel(rs.getString("tel"));
-//					resList.add(new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), rs.getString("address"), rs.getString("tel")));
+
 				}
 			}
 		}
-
 		return res;
-//		return resList;
 	}
 
 	/**
@@ -236,6 +225,7 @@ public class RestaurantDao {
 	/**
 	 * 식당 정보 조회 및 식당 별 매출액 조회하는 메서드
 	 * 내 식당이 존재하는지 먼저 확인 후 쿼리문을 실행한다.
+	 * 내 식당 조회 시 정보, 매출액(매출액 구하는 메서드에서 가져와서 총 매출액) 출력
 	 * 
 	 * @param accountId
 	 * @param reservationIdx
@@ -243,34 +233,34 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException 
 	 */
-	public RestaurantVO checkMyRestaurantAndReservation(String accountId, int restaurantIdx) throws SQLException, RestaurantNotFoundException {
-		if (existRes(accountId) == false) {
-			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
-		}
-		RestaurantVO resVO = null;
-		TotalSalesVO ttlVO = null;
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT r.idx, r.account_id, r.name, r.type, r.address, r.tel, t.sales as totalsales ");
-		sql.append("FROM restaurant r ");
-		sql.append("INNER JOIN total_sales t ON r.idx = t.restaurant_idx ");
-		sql.append("WHERE r.idx = ? AND r.account_id = ?");
-		
-		try(Connection con = DatabaseUtil.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(sql.toString());
-				){
-			pstmt.setInt(1, restaurantIdx);
-			pstmt.setString(2, accountId);
-			try(ResultSet rs = pstmt.executeQuery()) {
-				if (rs.next()) {
-					resVO = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), rs.getString("address"), rs.getString("tel"));
-					ttlVO = new TotalSalesVO(rs.getInt("idx"), restaurantIdx, rs.getInt("totalsales"));
-					resVO.setTotalSalesVO(ttlVO);
-				}
-			} 
-		}
-
-		return resVO;
-	}
+//	public RestaurantVO checkMyRestaurantAndReservation(String accountId, int restaurantIdx) throws SQLException, RestaurantNotFoundException {
+//		if (existRes(accountId) == false) {
+//			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+//		}
+//		RestaurantVO resVO = null;
+//		SalesVO saleVO = null;
+//		StringBuilder sql = new StringBuilder();
+//		sql.append("SELECT r.idx, r.account_id, r.name, r.type, r.address, r.tel, t.sales as totalsales ");
+//		sql.append("FROM restaurant r ");
+//		sql.append("INNER JOIN total_sales t ON r.idx = t.restaurant_idx ");
+//		sql.append("WHERE r.idx = ? AND r.account_id = ?");
+//		
+//		try(Connection con = DatabaseUtil.getConnection();
+//				PreparedStatement pstmt = con.prepareStatement(sql.toString());
+//				){
+//			pstmt.setInt(1, restaurantIdx);
+//			pstmt.setString(2, accountId);
+//			try(ResultSet rs = pstmt.executeQuery()) {
+//				if (rs.next()) {
+//					resVO = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"), rs.getString("type"), rs.getString("address"), rs.getString("tel"));
+//					saleVO = new SalesVO(rs.getInt("idx"), restaurantIdx, rs.getInt("totalsales"));
+//					resVO.setTotalSalesVO(saleVO);
+//				}
+//			} 
+//		}
+//
+//		return resVO;
+//	}
 
 	/**
 	 * 식당의 매출액을 입력시 업데이트 해주는 메서드 (디폴트 값 0이기때문에 update 쿼리를 이용)
@@ -503,5 +493,34 @@ public class RestaurantDao {
 		return list;
 
 	}
+
+	
+	
+	
+	
+	
+	
+	public List<ReserveVO> checkMyRestaurantReservationList() throws SQLException {
+		List<ReserveVO> rList = new ArrayList<ReserveVO>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT account_id, restaurant_idx, reservepeople, reservedate, reservetime, registerdate FROM reserve WHERE restaurant_idx = ?;");
+		
+		try(Connection con = DatabaseUtil.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql.toString());
+				){
+			try(ResultSet rs = pstmt.executeQuery()) {
+				pstmt.setInt(1, restaurantId);
+				while (rs.next()) {
+				    ReserveVO reserveVO = new ReserveVO(rs.getString("account_id"), rs.getInt("restaurant_idx"), rs.getInt("reservepeople"), rs.getInt("reservetime"), rs.getTimestamp("reservedate").toLocalDateTime());
+				    rList.add(reserveVO);
+				}
+			} 
+		}
+		return rList;
+	}
+	
+	
+	
+	
 
 }
