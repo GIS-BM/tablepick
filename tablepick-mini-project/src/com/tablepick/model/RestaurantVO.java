@@ -9,6 +9,8 @@ public class RestaurantVO {
 	private String address;
 	private String tel;
 	
+	private TotalSalesVO totalSalesVO;
+	
 	public RestaurantVO(String accountId, String name, String type, String address, String tel) {
 		super();
 		this.accountId = accountId;
@@ -77,11 +79,18 @@ public class RestaurantVO {
 		this.tel = tel;
 	}
 
+	public TotalSalesVO getTotalSalesVO() {
+		return totalSalesVO;
+	}
+
+	public void setTotalSalesVO(TotalSalesVO totalSalesVO) {
+		this.totalSalesVO = totalSalesVO;
+	}
+
 	@Override
 	public String toString() {
-		return "RestaurantVO [restaurantId=" + restaurantId + ", accountId=" + accountId + ", name=" + name + ", type="
-				+ type + ", address=" + address + ", tel=" + tel + "]";
+		return "RestaurantVO [restaurantId=" + restaurantId + ", accountId=" + accountId + ", name=" + name + ", type=" + type
+				+ ", address=" + address + ", tel=" + tel + ", totalSalesVO=" + totalSalesVO + "]";
 	}
-	
 
 }
