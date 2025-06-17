@@ -1,15 +1,15 @@
 package com.tablepick.model;
 
-public class TotalSales {
+public class TotalSalesVO {
 	private int  idx;
 	private int restaurantId;
 	private int sales;
 	
-	public TotalSales() {
+	public TotalSalesVO() {
 		super();
 	}
 
-	public TotalSales(int idx, int restaurantId, int sales) {
+	public TotalSalesVO(int idx, int restaurantId, int sales) {
 		super();
 		this.idx = idx;
 		this.restaurantId = restaurantId;
