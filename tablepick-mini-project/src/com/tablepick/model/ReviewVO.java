@@ -1,14 +1,13 @@
 package com.tablepick.model;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class ReviewVO {
 	private int idx;
-	private int reserve_idx;
+	private int reserveIdx;
 	private int star;
 	private String comment;
-	private Timestamp registerdate;
+	private LocalDateTime registerDate;
 	// sql datetime 데이터형은 자바에서 Timestamp로 사용한다.
 	// sql date 데이터형은 자바에서 Date로 사용한다.
 	
@@ -18,15 +17,14 @@ public class ReviewVO {
 		
 	}
 	// 매개변수 추가된 생성자
-	public ReviewVO(int idx, int reserve_idx, int star, String comment, Timestamp registerdate) {
+	public ReviewVO(int idx, int reserveIdx, int star, String comment, LocalDateTime registerDate) {
 		super();
 		this.idx = idx;
-		this.reserve_idx = reserve_idx;
+		this.reserveIdx = reserveIdx;
 		this.star = star;
 		this.comment = comment;
-		this.registerdate = registerdate;
-	}
-	
+		this.registerDate = registerDate;
+	}	
 	//getter, setter 메서드
 	public int getIdx() {
 		return idx;
@@ -34,11 +32,11 @@ public class ReviewVO {
 	public void setIdx(int idx) {
 		this.idx = idx;
 	}
-	public int getReserve_idx() {
-		return reserve_idx;
+	public int getReserveIdx() {
+		return reserveIdx;
 	}
-	public void setReserve_idx(int reserve_idx) {
-		this.reserve_idx = reserve_idx;
+	public void setReserveIdx(int reserveIdx) {
+		this.reserveIdx = reserveIdx;
 	}
 	public int getStar() {
 		return star;
@@ -52,22 +50,19 @@ public class ReviewVO {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public Timestamp getRegisterdate() {
-		return registerdate;
+	public LocalDateTime getRegisterDate() {
+		return registerDate;
 	}
-	public void setRegisterdate(Timestamp registerdate) {
-		this.registerdate = registerdate;
+	public void setRegisterDate(LocalDateTime registerDate) {
+		this.registerDate = registerDate;
 	}
-	
+
 	// toString() 메서드 선언
 	@Override
 	public String toString() {
-		return "ReviewVO [idx=" + idx + ", reserve_idx=" + reserve_idx + ", star=" + star + ", comment=" + comment
-				+ ", registerdate=" + registerdate + "]";
+		return "ReviewVO [idx=" + idx + ", reserveIdx=" + reserveIdx + ", star=" + star + ", comment=" + comment
+				+ ", registerDate=" + registerDate + "]";
 	}
-	
-	
-	
 	
 	
 }
