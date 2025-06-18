@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -200,6 +201,31 @@ public class RestaurantDao {
 		return existRes;
 	}
 	
+    /**
+     * 예약자 명단 유무 조회하는 메서드
+     * 
+     * @param reservationIdx
+     * @return
+     * @throws SQLException
+     */
+    public boolean existReservation(int reservationIdx) throws SQLException {
+        boolean existReservation = false;
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            con = DatabaseUtil.getConnection();
+            String sql = "SELECT 1 FROM reserve WHERE restaurant_idx = ?";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, reservationIdx);
+            rs = pstmt.executeQuery();
+            existReservation = rs.next();
+        } finally {
+            DatabaseUtil.closeAll(rs, pstmt, con);
+        }
+        return existReservation;
+    }
+	
 	/**
 	 *  내 식당의 예약 리스트를 조회하는 메서드
 	 *  내 식당이 존재하는지 먼저 확인 후 쿼리문 실행
@@ -216,13 +242,15 @@ public class RestaurantDao {
 		
 		List<Map<String, String>> reservationList = new ArrayList<Map<String,String>>();
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT rt.idx AS restaurant_idx, rt.name AS restaurant_name, rt.account_id AS owner, rs.idx AS reserve_idx, rs.account_id, ");
-		sql.append("a.name AS customer_name, rs.reservepeople, rs.reservedate, rs.reservetime, rs.registerdate ");
+		sql.append("SELECT rs.idx AS reserve_idx, rs.account_id AS customer_id, a.name AS customer_name, rs.reservepeople, rs.reservedate, ");
+		sql.append("rs.reservetime, rs.registerdate, rt.idx AS restaurant_idx, rt.name AS restaurant_name, o.name AS owner_name ");
 		sql.append("FROM reserve rs ");
 		sql.append("LEFT JOIN restaurant rt ON rs.restaurant_idx = rt.idx ");
 		sql.append("LEFT JOIN account a ON rs.account_id = a.id ");
+		sql.append("LEFT JOIN account o ON rt.account_id = o.id ");
 		sql.append("WHERE rt.account_id = ? ");
 		sql.append("ORDER BY rs.reservedate, rs.reservetime;");
+		
 		
 		try(Connection con = DatabaseUtil.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql.toString());
@@ -230,15 +258,15 @@ public class RestaurantDao {
 			pstmt.setString(1, accountId);
 			try(ResultSet rs = pstmt.executeQuery()){
 				while (rs.next()) {
-					Map<String, String> map = new HashMap<String, String>();
-					map.put("식당 이름", rs.getString("restaurant_name"));
-					map.put("식당 대표자", rs.getString("owner"));
+					Map<String, String> map = new LinkedHashMap<String, String>();
 					map.put("예약 번호", Integer.toString(rs.getInt("reserve_idx")));
-					map.put("예약자 아이디", rs.getString("account_id"));
+					map.put("예약 일자", rs.getTimestamp("registerdate").toString());
+					map.put("예약 시간", String.format("%02d:00", rs.getInt("reservetime")));
+					map.put("예약자 아이디", rs.getString("customer_id"));
 					map.put("예약자 명", rs.getString("customer_name"));
 					map.put("예약 인원", rs.getString("reservepeople"));
-					map.put("예약 시간", String.format("%02d:00", rs.getInt("reservetime")));
-					map.put("예약 일자", rs.getTimestamp("registerdate").toString());
+					map.put("식당 이름", rs.getString("restaurant_name"));
+					map.put("식당 대표자", rs.getString("owner_name"));
 					
 					reservationList.add(map);
 				}
@@ -668,20 +696,26 @@ public class RestaurantDao {
 
 	 
 
-	public void createCustomerSale(String accountId, int reservationIdx) throws RestaurantNotFoundException, SQLException {
+	public void createCustomerSale(String accountId, int reservationIdx, int newSale) throws RestaurantNotFoundException, SQLException {
 		if (existReservation(reservationIdx) == false) {
 			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
 		StringBuilder sql = new StringBuilder();
-		sql.append("");
-		sql.append("");
-		sql.append("");
-		//INSERT INTO sales (reserve_idx, sales) VALUES (1, 2000); 
+		sql.append("INSERT INTO sales (reserve_idx, sales) VALUES ( ? ,  ? );");
+		try(Connection con = DatabaseUtil.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql.toString());
+				){
+			pstmt.setInt(1, reservationIdx);
+			pstmt.setInt(2, newSale);
+			
+			int row = pstmt.executeUpdate();
+	        if (row == 0) {
+	            throw new SQLException("매출 정보 삽입에 실패했습니다.");
+	        }
+		}
+		
 	}
 
-	private boolean existReservation(int reservationIdx) {
-		return false;
-	}
 
 	
 
