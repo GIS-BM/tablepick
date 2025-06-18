@@ -19,43 +19,53 @@ public class ReserveCRUDUnitTest {
 	}
 
 	public static void main(String[] args) {
-		try {
-			ReserveCRUDUnitTest crud = new ReserveCRUDUnitTest();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	    try {
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	        new ReserveCRUDUnitTest().run(reader);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	public void run(BufferedReader reader) {
+	    try {
+	        while (true) {
+	            System.out.println("\n=== 식당 예약 서비스 ===");
+	            System.out.println("1. 식당 예약");
+	            System.out.println("2. 예약 확인");
+	            System.out.println("3: 예약 변경");
+	            System.out.println("4: 예약 삭제");
+	            System.out.println("5. 뒤로가기");
+	            System.out.println("exit: 종료");
+	            System.out.print("입력 : ");
 
-			while (true) {
-				System.out.println("\n=== Reserve 예약 메뉴 ===");
-				System.out.println("c: 식당 예약");
-				System.out.println("r: 예약 확인");
-				System.out.println("u: 예약 변경");
-				System.out.println("d: 예약 삭제");
-				System.out.println("exit: 종료");
-				System.out.print("입력 : ");
-
-				String main = reader.readLine().trim();
-				switch (main) {
-				case "c":
-					crud.reserveRestaurantView(reader);
-					break;
-				case "r":
-					crud.readReserveView(reader);
-					break;
-				case "u":
-					crud.reserveUpdateView(reader);
-					break;
-				case "d":
-					crud.reserveDeleteView(reader);
-					break;
-				case "exit":
-					System.out.println("종료합니다.");
-					return;
-				default:
-					System.out.println("잘못된 입력입니다.");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	            String main = reader.readLine().trim();
+	            switch (main) {
+	                case "1":
+	                    reserveRestaurantView(reader);
+	                    break;
+	                case "2":
+	                    readReserveView(reader);
+	                    break;
+	                case "3":
+	                    reserveUpdateView(reader);
+	                    break;
+	                case "4":
+	                    reserveDeleteView(reader);
+	                    break;
+	                case "5":
+	                	System.out.println("Customer 메인 페이지로 돌아갑니다.");
+	                	return;
+	                case "exit":
+	                    System.out.println("종료합니다.");
+	                    System.exit(0);
+	                    break;
+	                default:
+	                    System.out.println("잘못된 입력입니다.");
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	// 식당 예약
@@ -82,7 +92,7 @@ public class ReserveCRUDUnitTest {
 			}
 			ReserveVO reserveVO = new ReserveVO(id, restaurantId, count, registerDate, time);
 			if (accountdao.insertReserve(reserveVO)) {
-				System.out.println("예약이 성공적으로 등록되었습니다.");
+				System.out.println("예약이 성공하였습니다.");
 			} else {
 				System.out.println("예약 등록 실패");
 			}
