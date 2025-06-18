@@ -76,10 +76,10 @@ public class ReviewDao {
 					if (selectRs.next()) {
 						review = new ReviewVO();
 						review.setIdx(selectRs.getInt("idx"));
-						review.setReserve_idx(selectRs.getInt("reserve_idx"));
+						review.setReserveIdx(selectRs.getInt("reserve_idx"));
 						review.setStar(selectRs.getInt("star"));
 						review.setComment(selectRs.getString("comment"));
-						review.setRegisterdate(selectRs.getTimestamp("registerdate"));
+						review.setRegisterDate(selectRs.getTimestamp("registerdate").toLocalDateTime());
 					}
 				}
 			}
@@ -112,7 +112,7 @@ public class ReviewDao {
 
 			while (rs.next()) {
 				ReviewVO review = new ReviewVO(rs.getInt("idx"), rs.getInt("reserve_idx"), rs.getInt("star"),
-						rs.getString("comment"), rs.getTimestamp("registerdate"));
+						rs.getString("comment"), rs.getTimestamp("registerdate").toLocalDateTime());
 				reviewList.add(review);
 			}
 		} finally {

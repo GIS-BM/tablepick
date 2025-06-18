@@ -103,7 +103,28 @@ public class RestaurantDao {
 
 		return restaurantId;
 	}// makeRes
+	public RestaurantVO checkMyRes(String accountId) throws SQLException {
+		RestaurantVO res = null;
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT idx, account_id, name, type, address, tel, opentime");
+		sql.append("FROM restaurant ");
+		sql.append("WHERE account_id = ?");
 
+		try (Connection con = DatabaseUtil.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql.toString())) {
+			pstmt.setString(1, accountId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					
+					res = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
+							rs.getString("type"), rs.getString("address"), rs.getString("tel"), rs.getTime("opentime").toLocalTime());
+				}
+			}
+		}
+
+		return res;
+
+	}
 	/**
 	 * //등록된 식당을 삭제하는 메소드 입니다. <br>
 	 * 비밀번호가 다르면 NotMatchedPasswordException 발생시키고 전파 <br>
