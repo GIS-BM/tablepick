@@ -45,7 +45,8 @@ public class OwnerReviewDetail {
 			System.out.println(
 					"============================================================================================");
 			System.out.println("                          ");
-			System.out.println("                  내 식당의 리뷰를 조회할 수 있는 화면입니다.");
+			System.out.println("                  *** 내 식당의 리뷰를 조회할 수 있는 화면입니다. ***");
+			System.out.println("                  ");
 			System.out.println("                          1. 리뷰 조회하기");
 			System.out.println("                          2. 뒤로 가기");
 			System.out.println("                          3. 프로그램 종료하기");

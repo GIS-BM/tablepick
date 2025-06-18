@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -211,19 +212,44 @@ public class AccountDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		int reserveId = 0;
 		try {
+			
+		
 			con = getConnection();
+		
 			String sql = "INSERT INTO reserve (account_id, restaurant_idx, reservepeople,"
 					+ " reservedate, reservetime) VALUES (?, ?, ?, ?, ?)";
-			pstmt = con.prepareStatement(sql);
+			
+			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, reserveVO.getAccountId());
 			pstmt.setInt(2, reserveVO.getRestaurantId());
 			pstmt.setInt(3, reserveVO.getReservePeople());
 			pstmt.setDate(4, java.sql.Date.valueOf(reserveVO.getReserveDate()));
 			pstmt.setInt(5, reserveVO.getReserveTime());
 			int rows = pstmt.executeUpdate();
+			rs = pstmt.getGeneratedKeys(); // 발급된 reserve id를 반환받는다.
+			 if (rs.next()) {
+				 reserveId = rs.getInt(1);  // 첫 번째 컬럼에서 reserve_idx 얻기
+			    }
+			 
 			result = rows > 0;
-		} finally {
+			
+		    rs.close(); // 먼저 닫기
+			pstmt.close();
+			
+			
+			
+			String salesSql = "INSERT INTO sales(reserve_idx, sales) VALUES (?,?)";
+			pstmt = con.prepareStatement(salesSql);
+			pstmt.setInt(1,reserveId);
+			pstmt.setInt(2,0);
+			pstmt.executeUpdate();
+			
+	
+		}finally {
+		
+			
 			closeAll(rs, pstmt, con);
 		}
 		return result;
