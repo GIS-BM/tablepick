@@ -55,7 +55,7 @@ public class OwnerMainDetail {
 				OwnerMenuDetail.getInstance().run();
 				break;
 			case "3":
-				TestSelectReservationListByOwner.getInstance().run();
+				OwnerReserveCustomerDetail.getInstance().run();
 				break;
 			case "4":
 				OwnerReviewDetail.getInstance().run();

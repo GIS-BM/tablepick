@@ -7,9 +7,11 @@ import java.util.Map;
 
 import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.exception.RestaurantNotFoundException;
+import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.model.RestaurantVO;
 import com.tablepick.model.SalesVO;
+import com.tablepick.service.TablePickSerivceCommon;
 
 public class TestUpdateSales {
 	public static void main(String[] args) throws RestaurantNotFoundException {
@@ -17,8 +19,21 @@ public class TestUpdateSales {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			RestaurantDao resDao = new RestaurantDao();
-			String accountId = "owner01";
-			int reservationIdx = 1;
+			
+			AccountVO loginData = null;
+			
+			try {
+				loginData = TablePickSerivceCommon.getInstance().getLoginData();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			String accountId = loginData.getId();
+			
+			int reservationIdx = resDao.checkMyRestaurant(accountId).getRestaurantId();
+			
 			
 			List<Map<String, String>> existList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
 			String inputSales = null;

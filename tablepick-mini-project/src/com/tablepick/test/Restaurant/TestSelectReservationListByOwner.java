@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.tablepick.exception.NoReservationException;
+import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
+import com.tablepick.service.TablePickSerivceCommon;
 
 public class TestSelectReservationListByOwner {
 	
@@ -19,11 +21,22 @@ public class TestSelectReservationListByOwner {
 		// 식당 주인이 조회하는 예약 리스트
 				try {
 					RestaurantDao restaurantDao = new RestaurantDao();
-					String accountId = "owner01";
+					AccountVO loginData = null;
+					
+					try {
+						loginData = TablePickSerivceCommon.getInstance().getLoginData();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+					String accountId = loginData.getId();
+					
 					
 					List<Map<String, String>> reservationList = restaurantDao.checkMyRestaurantReservationList(accountId);
 					
-					System.out.println("                  *** 내 식당 예약자 명단 *** ");
+					System.out.println("                        *** 내 식당 예약자 명단 *** ");
 					for (int i = 0; i < reservationList.size(); i++) {
 						System.out.println(reservationList.get(i));
 					}

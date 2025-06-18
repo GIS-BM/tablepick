@@ -666,7 +666,40 @@ public class RestaurantDao {
 
 	}
 
-	
+	/**
+	 * 최다 예약자를 조회할 수 있는 메소드 입니다.
+	 * 수정할 필요가 있습니다.
+	 * @param accountId
+	 * @return
+	 * @throws RestaurantNotFoundException
+	 * @throws SQLException
+	 */
+	public List<Map<String, String>> checkMyRestaurantReservationMostList(String accountId) throws RestaurantNotFoundException, SQLException {
+		if (existRes(accountId) == false) {
+			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+		}
+		
+		List<Map<String, String>> reservationList = new ArrayList<Map<String,String>>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT rs.account_id, a.name AS customer_name, COUNT(*) AS reserve_count FROM reserve rs LEFT JOIN account a ON rs.account_id = a.id GROUP BY rs.account_id, a.name ORDER BY reserve_count DESC LIMIT 1;");
+		
+		try(Connection con = DatabaseUtil.getConnection();
+				PreparedStatement pstmt = con.prepareStatement(sql.toString());
+				){
+			pstmt.setString(1, accountId);
+			try(ResultSet rs = pstmt.executeQuery()){
+				while (rs.next()) {
+					Map<String, String> map = new HashMap<String, String>();
+					 map.put("예약자 아이디", rs.getString("rs.account_id"));
+		                map.put("예약자 명", rs.getString("customer_name"));
+		                map.put("총 예약 횟수", Integer.toString(rs.getInt("reserve_count")));
+
+					reservationList.add(map);
+				}
+			}
+		}
+		return reservationList;
+	}
 
 
 
