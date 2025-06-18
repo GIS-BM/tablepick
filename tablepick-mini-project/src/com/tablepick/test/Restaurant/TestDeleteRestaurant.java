@@ -11,6 +11,12 @@ import com.tablepick.service.TablePickSerivceCommon;
 
 public class TestDeleteRestaurant {
 	// 식당 삭제를 테스트하는 클래스 입니다.
+	private static TestDeleteRestaurant instance = new TestDeleteRestaurant();
+	private TestDeleteRestaurant() {
+	}
+	public static TestDeleteRestaurant getInstance() {
+		return instance;
+	}
 
 	public void run() {
 		RestaurantDao dao = new RestaurantDao();
