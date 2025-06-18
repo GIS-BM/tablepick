@@ -1,6 +1,7 @@
 package com.tablepick.test.ReserveCRUDView;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -90,16 +91,20 @@ public class ReserveCRUDUnitTest {
 		}
 	}
 
-	// 모든 예약 조회
-	private void readReserveView(BufferedReader reader) {
+	// 식당 예약 조회
+	private void readReserveView(BufferedReader reader) throws IOException {
 		String id = "cust01";
 		try {
-			System.out.println("[전체 예약 조회]");
-			ArrayList<ReserveVO> list = accountdao.getAllReserves(id);
+			System.out.println("[식당 예약 조회]");
+			System.out.println("조회할 식당 이름을 입력하세요.");
+			String name = reader.readLine();
+			int idx = accountdao.findRestaurantIdByName(name);
+			ArrayList<ReserveVO> list = accountdao.getRestaurantReserves(idx);
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (list.isEmpty()) {
 				System.out.println("등록된 예약이 없습니다.");
 			} else {
+				System.out.println(name+" 식당에 등록된 예약");
 				for (ReserveVO vo : list) {
 					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
 					System.out.println("식당명: " + accountdao.findRestaurantNameById(vo.getRestaurantId()) + " 인원 수: "
@@ -117,7 +122,7 @@ public class ReserveCRUDUnitTest {
 		String id = "cust01";
 		try {
 			System.out.println("등록된 예약 목록");
-			ArrayList<ReserveVO> list = accountdao.getAllReserves(id);
+			ArrayList<ReserveVO> list = accountdao.getAccountReserves(id);
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (list.isEmpty()) {
 				System.out.println("등록된 예약이 없습니다.");
@@ -168,7 +173,7 @@ public class ReserveCRUDUnitTest {
 		String id = "cust01";
 		try {
 			System.out.print("등록된 예약 목록");
-			ArrayList<ReserveVO> list = accountdao.getAllReserves(id);
+			ArrayList<ReserveVO> list = accountdao.getAccountReserves(id);
 			if (list.isEmpty()) {
 				System.out.println("등록된 예약이 없습니다.");
 			} else {
