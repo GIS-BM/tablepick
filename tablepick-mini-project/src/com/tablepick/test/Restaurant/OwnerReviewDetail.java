@@ -5,17 +5,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.tablepick.exception.RestaurantNotFoundException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.service.TablePickSerivceCommon;
 
 //식당 주인이 자신의 식당의 리뷰를 조회할 수 있습니다.
 
-public class TestReview {
+public class OwnerReviewDetail {
+	
+	private static OwnerReviewDetail instance = new OwnerReviewDetail();
+	private OwnerReviewDetail() {
+	}
+	public static OwnerReviewDetail getInstance() {
+		return instance;
+	}
+	
 	public void run() {
 		Scanner sc = new Scanner(System.in);
 		RestaurantDao dao = new RestaurantDao();
-		OwnerMainDetail omd = new OwnerMainDetail();
 		List list = new ArrayList<>();
 		boolean exit = false;
 
@@ -33,6 +41,10 @@ public class TestReview {
 		String accountId = loginData.getId();
 
 		while (!exit) {
+			System.out.println("                          ");
+			System.out.println(
+					"============================================================================================");
+			System.out.println("                          ");
 			System.out.println("                  내 식당의 리뷰를 조회할 수 있는 화면입니다.");
 			System.out.println("                          1. 리뷰 조회하기");
 			System.out.println("                          2. 뒤로 가기");
@@ -44,21 +56,30 @@ public class TestReview {
 				System.out.println("내 식당의 리뷰 목록을 조회합니다.");
 				try {
 					list = dao.checkMyRestaurantReview(accountId);
-					for (int i = 0; i < list.size(); i++) {
+					if (list.isEmpty()) {
+						System.out.println("등록된 리뷰가 없습니다.");
+					}else {
+						for (int i = 0; i < list.size(); i++) {
 						System.out.println(list.get(i));
 					}
+					}
+					
 				} catch (SQLException e) {
+					e.printStackTrace();
+				} catch (RestaurantNotFoundException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				break;
 			case "2":
 				System.out.println("이전 화면으로 돌아갑니다.");
 				exit = true;
-				new OwnerMainDetail().run();
+				OwnerMainDetail.getInstance().run();
 				break;
 			case "3":
 				System.out.println("프로그램을 종료합니다.");
 				exit = true;
+				System.exit(0); // 시스템 종료
 				break;
 			default:
 				System.out.println("없는 선택지 입니다. 다시 선택해 주세요.");
@@ -69,6 +90,6 @@ public class TestReview {
 	}
 
 	public static void main(String[] args) {
-		new TestReview().run();
+		new OwnerReviewDetail().run();
 	}
 }

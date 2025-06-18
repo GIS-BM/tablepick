@@ -1,16 +1,27 @@
 package com.tablepick.test.Restaurant;
 
+import java.sql.SQLException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
+import com.tablepick.model.RestaurantVO;
 import com.tablepick.service.TablePickSerivceCommon;
 
 //식당 등록을 테스트하는 클래스 입니다.
 
 public class TestCreateRestaurant {
 	
+	private static TestCreateRestaurant instance = new TestCreateRestaurant();
+	private TestCreateRestaurant() {
+	}
+	public static TestCreateRestaurant getInstance() {
+		return instance;
+	}
+
 	public void run() {
 
 		AccountVO loginData = null;
@@ -40,11 +51,11 @@ public class TestCreateRestaurant {
 		String type = null;
 		String address;
 		String tel;
-		String opentime;
+		String time;
 
 		boolean typeIsCorrect = true;
 
-		System.out.println("                  식당을 등록합니다.");
+		System.out.println("                        ***  식당을 등록합니다.  *** ");
 
 		System.out.println("1. 식당 이름을 입력하세요: ");
 		name = sc.nextLine();
@@ -65,28 +76,29 @@ public class TestCreateRestaurant {
 		System.out.println("4. 식당 전화번호를 입력하세요: ");
 		tel = sc.nextLine();
 		System.out.println("5. 식당 오픈 시간을 입력하세요. 예시: 09:00");
-		opentime = sc.nextLine();
-		opentime = opentime + ":00";
+		time = sc.nextLine();
 		
-		//RestaurantDao 업데이트시 주석 해제
-		//RestaurantVO vo1 = new RestaurantVO(accountId, name, type, address, tel, opentime);
+		
+       
 
-//		try {
-			//RestaurantDao 업데이트시 주석 해제
+		LocalTime opentime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+
+
+		RestaurantVO vo1 = new RestaurantVO(accountId, name, type, address, tel, opentime);
+
+		try {
+
 			System.out.println("식당이 등록되었습니다.");
-			//System.out.println("id + " + dao.makeRestaurant(vo1));
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+			System.out.println("내 식당 등록 번호 : " + dao.makeRestaurant(vo1));
+		} catch (SQLException e) {
 
+			e.printStackTrace();
+		}
 
-
-		
 	}
-	
+
 	public static void main(String[] args) {
-		
+
 		new TestCreateRestaurant().run();
 	}
 

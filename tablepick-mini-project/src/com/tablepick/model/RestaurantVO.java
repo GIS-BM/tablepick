@@ -26,13 +26,14 @@ public class RestaurantVO {
 		this.openTime = openTime;
 	}
 
-	public RestaurantVO(String accountId, String name, String type, String address, String tel) {
+	public RestaurantVO(String accountId, String name, String type, String address, String tel, LocalTime openTime) {
 		super();
 		this.accountId = accountId;
 		this.name = name;
 		this.type = type;
 		this.address = address;
 		this.tel = tel;
+		this.openTime = openTime; 
 	}
 	
 	public RestaurantVO(int restaurantId, String accountId, String name, String type, String address, String tel) {
