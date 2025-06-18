@@ -99,16 +99,20 @@ public class ReviewDao {
 		try {
 			con = getConnection();
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT r.* ");
-			sql.append("FROM review r ");
-			sql.append("JOIN reserve re ON r.reserve_idx = re.idx ");
-			sql.append("WHERE re.account_id = ?"); // 파라미터 바인딩
+			sql.append("select r.* ");
+			sql.append("from review r ");
+			sql.append("JOIN reserve rs ON r.reserve_idx = rs.idx ");
+			// idx를 기준으로 예약 테이블과 리뷰 테이블을 조인
+			// 조인하면 두 테이블이 합쳐지므로 account_id으로 해당하는 review 테이블의 데이터를 찾을 수 있다.
+			sql.append("WHERE rs.account_id = ? ");
 
 			pstmt = con.prepareStatement(sql.toString());
 			// StringBuilder → String
 			pstmt.setString(1, accountId);
 			// ? 에 accountId 값 바인딩
 			rs = pstmt.executeQuery();
+			// sql문이 입력되고 값 바인딩도 끝난 prepareStatement 객체 executeQuery() 메서드 사용해서
+			// DB에서 sql문 실행 반환값 ResultSet 객체에 저장
 
 			while (rs.next()) {
 				ReviewVO review = new ReviewVO(rs.getInt("idx"), rs.getInt("reserve_idx"), rs.getInt("star"),
@@ -122,19 +126,92 @@ public class ReviewDao {
 		return reviewList;
 	}
 
-	// 내 리뷰 변경
+	/**
+	 * changeMyReviewById 메서드 내 리뷰 변경 기능을 수행한다. 매개변수로 아이디, 별점, 댓글 3가지를 받는다. 받은 값을
+	 * 이용해 데이터베이스에 해당 아이디에 해당하는 리뷰 데이터를 찾는다. 리뷰 목록이 나오면 리뷰중 하나를 선택해서 update 해서 변경한다.
+	 * update해서 변경한다. 반환값으로 변경된 리뷰 값이나 결과값을 boolean 으로 출력
+	 */
 	/*
-	UPDATE review r
-	JOIN reserve re ON r.reserve_idx = re.idx
-	SET r.star = 2,
-	    r.comment = '리테 맛좋다!'
-	WHERE re.account_id = 'cust05'
-	  AND r.idx = 12;
-	*/
-	
-	
-	
-	
-	// 내 리뷰 삭제
+	 * UPDATE review r JOIN reserve rs ON r.reserve_idx = rs.idx SET r.star = 3,
+	 * r.comment = '가격에 비해서 너무 음식이 질이 낮습니다.' WHERE rs.account_id = 'cust05' AND
+	 * r.idx = 5;
+	 */
+	public ReviewVO changeMyReviewById(String accountId, int reviewIdx, int star, String comment) throws SQLException {
+		ReviewVO updatedReview = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = getConnection();
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE review r ");
+			sql.append("JOIN reserve rs ON r.reserve_idx = rs.idx ");
+			sql.append("SET r.star = ?, r.comment = ? ");
+			sql.append("WHERE rs.account_id = ? AND r.idx = ? ");
+
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setInt(1, star);
+			pstmt.setString(2, comment);
+			pstmt.setString(3, accountId);
+			pstmt.setInt(4, reviewIdx);
+
+			int result = pstmt.executeUpdate();
+			if (result > 0) {
+				updatedReview = getReviewById(reviewIdx);
+			}
+		} finally {
+			closeAll(pstmt, con);
+		}
+		return updatedReview;
+	}
+
+	// reviewIdx로 리뷰 데이터 가져오는 메서드
+	public ReviewVO getReviewById(int reviewIdx) throws SQLException {
+		ReviewVO review = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = getConnection();
+			String sql = "SELECT * FROM review WHERE idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, reviewIdx);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				review = new ReviewVO(rs.getInt("idx"), rs.getInt("reserve_idx"), rs.getInt("star"), rs.getString("comment"),
+						rs.getTimestamp("registerdate").toLocalDateTime());
+			}
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+
+		return review;
+	}
+
+	/**
+	 * 내 리뷰 삭제 내 리뷰 목록 출력 후 삭제하고 싶은 리뷰 idx 입력해서 삭제
+	 */
+
+	public boolean deleteReviewById(int reviewIdx) throws SQLException {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			con = getConnection();
+			String sql = "delete FROM review WHERE idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, reviewIdx);
+			int affectedRows = pstmt.executeUpdate();
+			result = (affectedRows > 0); // 하나 이상의 행이 삭제되면 ture 입력
+			
+		} finally {
+			closeAll(pstmt, con);
+		}
+		return result;
+	}
 
 }

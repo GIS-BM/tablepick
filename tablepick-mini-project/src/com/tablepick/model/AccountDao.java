@@ -184,25 +184,26 @@ public class AccountDao {
 		}
 		return name;
 	}
-	//  review 테이블에서 레스토랑 idx 찾는 메서드
-		public int findRestaurantNameByIdFromReview(int num) throws SQLException {
-			int name = 0;
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			try {
-				con = getConnection();
-				String sql = "SELECT restaurant_idx from reserve where idx = ?";
-				pstmt = con.prepareStatement(sql);
-				pstmt.setInt(1, num);
-				rs = pstmt.executeQuery();
-				if (rs.next())
-					name = rs.getInt("restaurant_idx");
-			} finally {
-				closeAll(rs, pstmt, con);
-			}
-			return name;
+
+	// review 테이블에서 레스토랑 idx 찾는 메서드
+	public int findRestaurantNameByIdFromReview(int num) throws SQLException {
+		int name = 0;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT restaurant_idx from reserve where idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				name = rs.getInt("restaurant_idx");
+		} finally {
+			closeAll(rs, pstmt, con);
 		}
+		return name;
+	}
 
 	// 예약 등록
 	public boolean insertReserve(ReserveVO reserveVO) throws SQLException {
@@ -228,8 +229,8 @@ public class AccountDao {
 		return result;
 	}
 
-	// 모든 예약 조회
-	public ArrayList<ReserveVO> getAllReserves(String id) throws SQLException {
+	// 식당 예약 조회
+	public ArrayList<ReserveVO> getRestaurantReserves(int idx) throws SQLException {
 		ArrayList<ReserveVO> list = new ArrayList<ReserveVO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -237,7 +238,37 @@ public class AccountDao {
 		try {
 			con = getConnection();
 			String sql = "SELECT idx, account_id, restaurant_idx, reservepeople ,"
-					+ " reservedate, reservetime , registerdate FROM reserve where account_id = ?";
+					+ " reservedate, reservetime , registerdate FROM reserve where idx = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Date reserveDateTime = rs.getDate("reservedate");
+				Timestamp registerDateTime = rs.getTimestamp("registerdate");
+				LocalDate reserveDate = reserveDateTime.toLocalDate();
+				LocalDateTime registerDate = registerDateTime.toLocalDateTime();
+
+				list.add(new ReserveVO(rs.getInt("idx"), rs.getString("account_id"), rs.getInt("restaurant_idx"),
+						rs.getInt("reservepeople"), reserveDate, rs.getInt("reservetime"), registerDate));
+			}
+
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return list;
+	}
+
+	// 계정 예약 조회
+	public ArrayList<ReserveVO> getAccountReserves(String id) throws SQLException {
+		ArrayList<ReserveVO> list = new ArrayList<ReserveVO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT idx, account_id, restaurant_idx, reservepeople ,"
+					+ " reservedate, reservetime , registerdate FROM reserve where idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -246,7 +277,7 @@ public class AccountDao {
 				Date reserveDateTime = rs.getDate("reservedate");
 				Timestamp registerDateTime = rs.getTimestamp("registerdate");
 				LocalDate reserveDate = reserveDateTime.toLocalDate();
-				LocalDateTime registerDate= registerDateTime.toLocalDateTime();
+				LocalDateTime registerDate = registerDateTime.toLocalDateTime();
 
 				list.add(new ReserveVO(rs.getInt("idx"), rs.getString("account_id"), rs.getInt("restaurant_idx"),
 						rs.getInt("reservepeople"), reserveDate, rs.getInt("reservetime"), registerDate));
@@ -370,8 +401,8 @@ public class AccountDao {
 					registerDate = registerDateTime.toLocalDateTime();
 				}
 
-				list.add(new ReviewVO(rs.getInt("v.idx"), rs.getInt("v.reserve_idx"),
-						rs.getInt("v.star"), rs.getString("v.comment"), registerDate));
+				list.add(new ReviewVO(rs.getInt("v.idx"), rs.getInt("v.reserve_idx"), rs.getInt("v.star"),
+						rs.getString("v.comment"), registerDate));
 			}
 
 		} finally {
