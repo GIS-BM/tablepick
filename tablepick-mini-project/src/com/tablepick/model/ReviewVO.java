@@ -14,7 +14,6 @@ public class ReviewVO {
 	// 기본 생성자
 	public ReviewVO() {
 		super();
-		
 	}
 	// 매개변수 추가된 생성자
 	public ReviewVO(int idx, int reserveIdx, int star, String comment, LocalDateTime registerDate) {
@@ -63,6 +62,5 @@ public class ReviewVO {
 		return "ReviewVO [idx=" + idx + ", reserveIdx=" + reserveIdx + ", star=" + star + ", comment=" + comment
 				+ ", registerDate=" + registerDate + "]";
 	}
-	
 	
 }
