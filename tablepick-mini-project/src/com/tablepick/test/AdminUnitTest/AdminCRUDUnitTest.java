@@ -1,4 +1,4 @@
-package com.tablepick.AdminUnitTest;
+package com.tablepick.test.AdminUnitTest;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -7,11 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.AdminDao;
 import com.tablepick.model.ReserveVO;
-import com.tablepick.test.SearchRestaurant.SearchRestaurantUnitTest;
 
 public class AdminCRUDUnitTest {
 	private AdminDao admindao;
@@ -20,17 +18,20 @@ public class AdminCRUDUnitTest {
 		admindao = new AdminDao();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		new AdminCRUDUnitTest().run(reader);	
+		}
+	public void run(BufferedReader reader) {
 		try {
-			AdminCRUDUnitTest admin = new AdminCRUDUnitTest();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
 			while (true) {
-				System.out.println("\n=== 관리자 관리 서비스 ===");
+				AdminCRUDUnitTest admin = new AdminCRUDUnitTest();
+				System.out.println("\n=== admin 관리 서비스 ===");
 				System.out.println("1. 전체 회원 조회");
 				System.out.println("2. 회원 정보 검색");
 				System.out.println("3. 전체 예약 목록");
 				System.out.println("4. 최대 예약자 조회");
+				System.out.println("5. 뒤로가기");
 				System.out.println("exit: 종료");
 				System.out.print("입력 : ");
 
@@ -48,9 +49,12 @@ public class AdminCRUDUnitTest {
 				case "4":
 					admin.searchMostReserveView();
 					break;
+				case "5":
+                	System.out.println("로그아웃합니다.");
+                    return;
 				case "exit":
 					System.out.println("종료합니다.");
-					return;
+					System.exit(0);
 				default:
 					System.out.println("잘못된 입력입니다.");
 				}
