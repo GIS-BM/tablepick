@@ -54,12 +54,12 @@ public class OwnerMain {
 		System.out.println("                       , lllll､|￣￣|￣￣|￣￣|￣￣|￣￣| 　 ");
 		System.out.println("                          l三三l O  | W  | N | E　| R  | 　 ");
 		System.out.println("                          |三三|＿＿|＿＿|＿＿|＿＿|＿＿|＼");
-		System.out.println("                          ヽ三ﾉ.||.ﾐ;._,.;:.　 　 　　|| Ω");
+		System.out.println("                          ヽ三ﾉ.||.ﾐ;._,.;:.　 　 　　 || Ω");
 		System.out.println("                       ∬_＿_ﾂｰ ||（｀・ω・´）　　∬　∬  || []");
 		System.out.println("                        ＼≠／三.||O　　 　と彡|￣￣￣| ||");
-		System.out.println("                       〔二二二二二二二二二二二二二二二二〕");
-		System.out.println("                          |_＿＿＿＿＿＿＿＿＿＿＿__|");
-		System.out.println("                          | |ヽ.;;;;:::::::;;;,ノ| |");
+		System.out.println("                         〔二二二二二二二二二二二二二二二二〕");
+		System.out.println("                             |_＿＿＿＿＿＿＿＿＿＿＿__|");
+		System.out.println("                             | |ヽ.;;;;:::::::;;;,ノ| |");
 
 		System.out.println(
 				"============================================================================================");

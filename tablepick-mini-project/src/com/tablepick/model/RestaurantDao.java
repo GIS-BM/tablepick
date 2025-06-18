@@ -333,7 +333,7 @@ public class RestaurantDao {
 	}
 
 	/**
-	 * 식당 정보 및 매출액 업데이트
+	 * 식당 정보 업데이트
 	 * 
 	 * @param accountId
 	 * @param reservationIdx 
@@ -346,7 +346,7 @@ public class RestaurantDao {
 	 * @throws RestaurantNotFoundException
 	 */
 	public void changeMyRestaurantInfoAndSales(String accountId, int reservationIdx, String newName, String newType, String newAddress,
-			String newTel, int newSales) throws SQLException, RestaurantNotFoundException {
+			String newTel) throws SQLException, RestaurantNotFoundException {
 		
 		System.out.println(accountId);
 		System.out.println(reservationIdx);
@@ -354,7 +354,7 @@ public class RestaurantDao {
 		System.out.println(newType);
 		System.out.println(newAddress);
 		System.out.println(newTel);
-		System.out.println(newSales);
+		//System.out.println(newSales);
 		
 		
 		if (existRes(accountId) == false) {
@@ -365,10 +365,10 @@ public class RestaurantDao {
 		PreparedStatement pstmt = null;
 		try {
 			
-			con.setAutoCommit(false); // 트랜젝션 처리를 위한 자동 커밋 모드 해제
+			//con.setAutoCommit(false); // 트랜젝션 처리를 위한 자동 커밋 모드 해제
 			
 			String updateRestaurantInfoSql = "UPDATE restaurant SET name = ?, type = ?, address = ?, tel = ? WHERE account_id = ?";
-			String updateSalesSql = "UPDATE sales SET sales = ? WHERE reserve_idx = ?";
+			//String updateSalesSql = "UPDATE sales SET sales = ? WHERE reserve_idx = ?";
 			
 			pstmt = con.prepareStatement(updateRestaurantInfoSql);
 			pstmt.setString(1, newName);
@@ -383,18 +383,18 @@ public class RestaurantDao {
 				System.out.println("레스토랑 업데이트 완료. 코드 : " + newInfoResult);
 			}
 			pstmt.close();
+//			
+//			pstmt = con.prepareStatement(updateSalesSql);
+//			pstmt.setInt(1, newSales);
+//			pstmt.setInt(2, reservationIdx);
+//			
+//			int newSalesResult = pstmt.executeUpdate();
+//			if (newSalesResult > 0) {
+//				System.out.println("매출액 업데이트 완료. 코드 : " + newSalesResult);
+//			}
 			
-			pstmt = con.prepareStatement(updateSalesSql);
-			pstmt.setInt(1, newSales);
-			pstmt.setInt(2, reservationIdx);
-			
-			int newSalesResult = pstmt.executeUpdate();
-			if (newSalesResult > 0) {
-				System.out.println("매출액 업데이트 완료. 코드 : " + newSalesResult);
-			}
-			
-			con.commit(); // 정보 업데이트 내의 모든 세부 작업 정상 처리
-			System.out.println("모두 업데이트 완. commit");
+			//con.commit(); // 정보 업데이트 내의 모든 세부 작업 정상 처리
+			System.out.println("내 식당 정보가 업데이트되었습니다.");
 		} catch (Exception e) {
 			con.rollback();
 			throw e;

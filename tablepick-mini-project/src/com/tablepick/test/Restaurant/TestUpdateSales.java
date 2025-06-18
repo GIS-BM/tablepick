@@ -24,7 +24,7 @@ public class TestUpdateSales {
 			String inputSales = null;
 			
 			if (existList != null) {
-				System.out.println("** 현재 식당 정보 **");
+				System.out.println("*** 현재 식당 정보 ***");
 				for (int i = 0; i < existList.size(); i++) {
 					Map<String, String> map = existList.get(i);
 					

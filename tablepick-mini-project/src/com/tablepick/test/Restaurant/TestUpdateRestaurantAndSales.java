@@ -72,28 +72,16 @@ public class TestUpdateRestaurantAndSales {
 					newAddress = br.readLine();
 					System.out.print("전화번호 (현재 : " + tel + ") : ");
 					newTel = br.readLine();
-					System.out.print("매출액 (현재 : " + sales + ") : ");
-					inputSales = br.readLine();
+					
 				}
 				
 				// 필수 정보 입력 확인
 				if (newName.isBlank() || newType.isBlank() || newAddress.isBlank() || newTel.isBlank()) {
 					throw new InfoNotEnoughException("모든 항목을 입력하세요");
 				}
-				// 매출액 비어 있으면 0 처리
-				int newSales = 0;
-				if (!inputSales.isBlank()) {
-				    try {
-				        newSales = Integer.parseInt(inputSales);
-				        System.out.println(newSales);
-				        
-				    } catch (NumberFormatException e) {
-				        System.out.println("매출액은 숫자로 입력하세요. 기본값 0으로 처리됩니다.");
-				    }
-				}
-				 System.out.println(newSales);
+			
 				// 변경
-				resDao.changeMyRestaurantInfoAndSales(accountId, reservationIdx, newName, newType, newAddress, newTel, newSales);
+				resDao.changeMyRestaurantInfoAndSales(accountId, reservationIdx, newName, newType, newAddress, newTel);
 				System.out.println("식당 정보가 성공적으로 변경되었습니다.");
 			}
 			
