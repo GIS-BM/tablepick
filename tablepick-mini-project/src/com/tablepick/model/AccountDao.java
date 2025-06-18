@@ -268,7 +268,7 @@ public class AccountDao {
 		try {
 			con = getConnection();
 			String sql = "SELECT idx, account_id, restaurant_idx, reservepeople ,"
-					+ " reservedate, reservetime , registerdate FROM reserve where idx = ?";
+					+ " reservedate, reservetime , registerdate FROM reserve where account_id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
