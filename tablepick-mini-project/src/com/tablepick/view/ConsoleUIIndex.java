@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
+import com.tablepick.test.CustomerView.CustomerViewUnitTest;
 
 public class ConsoleUIIndex {
     private final AccountDao accountDao;
@@ -65,17 +67,27 @@ public class ConsoleUIIndex {
                 // 사용자 타입에 따라 분기
                 switch (loginData.getType().toLowerCase()) {
                     case "customer":
-                    	System.out.println("CustomerView 구현해야 한다");
-                        // new CustomerView().run(reader);
-                        break;
+                    	try {
+                    		CustomerViewUnitTest cust = new CustomerViewUnitTest();
+                            cust.run(reader);
+                        } catch (Exception e) {
+                            System.out.println("customer 실행 중 오류가 발생했습니다.");
+                            e.printStackTrace();
+                        }
+                    	break;
                     case "owner":
                     	System.out.println("ownerView 구현해야 한다");
                         // new OwnerView().run(reader);
                         break;
                     case "admin":
-                    	System.out.println("adminView 구현해야 한다");
-                        // new AdminView().run(reader);
-                        break;
+                    	try {
+                    		AdminCRUDUnitTest admin = new AdminCRUDUnitTest();
+                            admin.run(reader);
+                        } catch (Exception e) {
+                            System.out.println("admin 실행 중 오류가 발생했습니다.");
+                            e.printStackTrace();
+                        }
+                    	break;
                     default:
                         System.out.println("알 수 없는 사용자 유형입니다.");
                 }

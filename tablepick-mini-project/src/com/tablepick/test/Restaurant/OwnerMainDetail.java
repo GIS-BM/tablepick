@@ -37,9 +37,10 @@ public class OwnerMainDetail {
 
 			System.out.println("                          1. 식당 상세 정보 변경");
 			System.out.println("                          2. 식당 메뉴 관리");
-			System.out.println("                          3. 내 식당 리뷰 조회하기");
-			System.out.println("                          4. 뒤로가기");
-			System.out.println("                          5. 프로그램 종료하기");
+			System.out.println("                          3. 내 식당 예약자 조회하기");
+			System.out.println("                          4. 내 식당 리뷰 조회하기");
+			System.out.println("                          5. 뒤로가기");
+			System.out.println("                          6. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -54,14 +55,15 @@ public class OwnerMainDetail {
 				OwnerMenuDetail.getInstance().run();
 				break;
 			case "3":
-				OwnerReviewDetail.getInstance().run();
+				OwnerReserveCustomerDetail.getInstance().run();
 				break;
 			case "4":
-				System.out.println("이전 화면으로 돌아갑니다.");
-				exit = true;
-				OwnerMain.getInstance().run();
+				OwnerReviewDetail.getInstance().run();
 				break;
 			case "5":
+				OwnerMain.getInstance().run();
+				break;
+			case "6":
 				System.out.println("프로그램을 종료합니다.");
 				exit = true;
 				System.exit(0); // 시스템 종료

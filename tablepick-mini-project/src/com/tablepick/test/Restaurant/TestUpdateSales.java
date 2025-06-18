@@ -1,0 +1,78 @@
+package com.tablepick.test.Restaurant;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Map;
+
+import com.tablepick.exception.InfoNotEnoughException;
+import com.tablepick.exception.RestaurantNotFoundException;
+import com.tablepick.model.AccountVO;
+import com.tablepick.model.RestaurantDao;
+import com.tablepick.model.RestaurantVO;
+import com.tablepick.model.SalesVO;
+import com.tablepick.service.TablePickSerivceCommon;
+
+public class TestUpdateSales {
+	public static void main(String[] args) throws RestaurantNotFoundException {
+		// 식당 정보와 총 매출액을 조회한다.
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			RestaurantDao resDao = new RestaurantDao();
+			
+			AccountVO loginData = null;
+			
+			try {
+				loginData = TablePickSerivceCommon.getInstance().getLoginData();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			String accountId = loginData.getId();
+			
+			int reservationIdx = resDao.checkMyRestaurant(accountId).getRestaurantId();
+			
+			
+			List<Map<String, String>> existList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
+			String inputSales = null;
+			
+			if (existList != null) {
+				System.out.println("*** 현재 식당 정보 ***");
+				for (int i = 0; i < existList.size(); i++) {
+					Map<String, String> map = existList.get(i);
+					
+					String name = map.get("name");
+					String type = map.get("type");
+					String address = map.get("address");
+					String tel = map.get("tel");
+					String sales = map.get("sales");
+					System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 매출액: " + sales);
+
+					System.out.print("매출액 (" + sales + ") : ");
+					inputSales = br.readLine();
+				}
+
+				// 매출액 비어 있으면 0 처리
+				int newSales = 0;
+				if (!inputSales.isBlank()) {
+				    try {
+				        newSales = Integer.parseInt(inputSales);
+				    } catch (NumberFormatException e) {
+				        System.out.println("매출액은 숫자로 입력하세요. 기본값 0으로 처리됩니다.");
+				    }
+				}
+
+				// 변경
+				resDao.updateRestaurantSales(accountId, reservationIdx, newSales);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("식당 정보가 성공적으로 변경되었습니다.");
+	}
+
+}
