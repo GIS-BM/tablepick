@@ -1,8 +1,10 @@
 package com.tablepick.test.Restaurant;
 
+import java.util.List;
+import java.util.Map;
+
 import com.tablepick.exception.RestaurantNotFoundException;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.model.RestaurantVO;
 
 public class TestSelectRestaurantAndSales {
 	public static void main(String[] args) throws RestaurantNotFoundException {
@@ -11,12 +13,20 @@ public class TestSelectRestaurantAndSales {
 			RestaurantDao resDao = new RestaurantDao();
 
 			String accountId = "owner01";
-//		String password = "own01";
 			int reservationIdx = 1;
-			RestaurantVO res = resDao.checkMyRestaurantAndReservation(accountId, reservationIdx);
-			if (res != null) {
-				System.out.println("** 내 식당 조회 **");
-				System.out.println(res);
+			
+			List<Map<String, String>> resList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
+			
+			for (int i = 0; i < resList.size(); i++) {
+				Map<String, String> map = resList.get(i);
+				
+				String name = map.get("name");
+				String type = map.get("type");
+				String address = map.get("address");
+				String tel = map.get("tel");
+				String sales = map.get("sales");
+				System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 매출액: " + sales);
+
 			}
 			
 		} catch (Exception e) {

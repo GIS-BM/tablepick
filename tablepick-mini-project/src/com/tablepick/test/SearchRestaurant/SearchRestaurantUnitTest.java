@@ -132,7 +132,7 @@ public class SearchRestaurantUnitTest {
 			} else {
 				for (ReviewVO rvo : reviewList) {
 					String formattedRegisterDate = rvo.getRegisterDate().format(dateTimeFormatter);
-					System.out.println("식당명: "+accountdao.findRestaurantNameById(rvo.getRestaurantId())+ " 별점: "+ rvo.getStar()+"점 "
+					System.out.println("식당명: "+accountdao.findRestaurantNameById(accountdao.findRestaurantNameByIdFromReview(rvo.getReserveIdx()))+ " 별점: "+ rvo.getStar()+"점 "
 							+" 내용: "+ rvo.getComment()+" 등록일: "+ formattedRegisterDate);
 				}
 			}

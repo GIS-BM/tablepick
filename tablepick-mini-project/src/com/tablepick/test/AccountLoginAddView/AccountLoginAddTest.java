@@ -9,18 +9,18 @@ import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.TablePickSerivceCommon;
 
-public class AccountLoginAdd {
+public class AccountLoginAddTest {
 	private AccountDao accountdao;
 	private TablePickSerivceCommon tablePickServiceCommon;
 	
-	public AccountLoginAdd() throws ClassNotFoundException {
+	public AccountLoginAddTest() throws ClassNotFoundException {
 		accountdao = new AccountDao();
     this.tablePickServiceCommon = TablePickSerivceCommon.getInstance();
 	}
 	
 	public static void main(String[] args) {
 		try {
-			AccountLoginAdd accountLoginAdd = new AccountLoginAdd();
+			AccountLoginAddTest accountLoginAdd = new AccountLoginAddTest();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 			
 			while (true) {

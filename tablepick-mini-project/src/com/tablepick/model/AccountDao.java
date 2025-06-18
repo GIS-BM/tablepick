@@ -184,6 +184,25 @@ public class AccountDao {
 		}
 		return name;
 	}
+	//  review 테이블에서 레스토랑 idx 찾는 메서드
+		public int findRestaurantNameByIdFromReview(int num) throws SQLException {
+			int name = 0;
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			try {
+				con = getConnection();
+				String sql = "SELECT restaurant_idx from reserve where idx = ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, num);
+				rs = pstmt.executeQuery();
+				if (rs.next())
+					name = rs.getInt("restaurant_idx");
+			} finally {
+				closeAll(rs, pstmt, con);
+			}
+			return name;
+		}
 
 	// 예약 등록
 	public boolean insertReserve(ReserveVO reserveVO) throws SQLException {
@@ -339,7 +358,7 @@ public class AccountDao {
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT v.idx, v.account_id, v.restaurant_idx, v.star, v.comment , v.registerdate "
+			String sql = "SELECT v.idx, v.reserve_idx, v.star, v.comment , v.registerdate "
 					+ "  FROM restaurant r inner join review v on r.idx = v.restaurant_idx where r.idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, restaurantId);
@@ -351,7 +370,7 @@ public class AccountDao {
 					registerDate = registerDateTime.toLocalDateTime();
 				}
 
-				list.add(new ReviewVO(rs.getInt("v.idx"), rs.getString("v.account_id"), rs.getInt("v.restaurant_idx"),
+				list.add(new ReviewVO(rs.getInt("v.idx"), rs.getInt("v.reserve_idx"),
 						rs.getInt("v.star"), rs.getString("v.comment"), registerDate));
 			}
 

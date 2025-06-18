@@ -107,7 +107,4 @@ public class RestaurantVO {
 		return "RestaurantVO [restaurantId=" + restaurantId + ", accountId=" + accountId + ", name=" + name + ", type="
 				+ type + ", address=" + address + ", tel=" + tel + ", openTime=" + openTime + "]";
 	}
-
-	
-
 }
