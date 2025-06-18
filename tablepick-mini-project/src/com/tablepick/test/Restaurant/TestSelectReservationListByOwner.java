@@ -15,6 +15,7 @@ public class TestSelectReservationListByOwner {
 			
 			List<Map<String, String>> reservationList = restaurantDao.checkMyRestaurantReservationList(accountId);
 			
+			System.out.println("** 식당 예약 자 명단 ** ");
 			for (int i = 0; i < reservationList.size(); i++) {
 				System.out.println(reservationList.get(i));
 			}
