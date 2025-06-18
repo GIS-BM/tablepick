@@ -14,13 +14,14 @@ public class MostReservedCustomersTest {
 			RestaurantDao restaurantDao = new RestaurantDao();
 			String accountId = "owner01";
 			
-			List<Map<String, String>> mostReservationList = restaurantDao.checkMyRestaurantReservationList(accountId);
+			List<Map<String, String>> mostReservationList = restaurantDao.checkMostReservedCustomersTest(accountId);
+//			List<Map<String, String>> mostReservationList = restaurantDao.checkMyRestaurantReservationList(accountId);
 			
 			System.out.println("** 우리 식당 최다 예약자 ** ");
 			for (int i = 0; i < mostReservationList.size(); i++) {
 				System.out.println(mostReservationList.get(i));
 			}
-			
+//			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

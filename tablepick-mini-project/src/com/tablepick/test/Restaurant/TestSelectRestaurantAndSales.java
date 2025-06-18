@@ -38,9 +38,7 @@ public class TestSelectRestaurantAndSales {
 					
 					int reservationIdx = resDao.checkMyRestaurant(accountId).getRestaurantId();
 		
-//					String accountId = "owner01";
-//					int reservationIdx = 1;
-//					
+					
 					List<Map<String, String>> resList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
 					
 					for (int i = 0; i < resList.size(); i++) {
@@ -50,8 +48,8 @@ public class TestSelectRestaurantAndSales {
 						String type = map.get("type");
 						String address = map.get("address");
 						String tel = map.get("tel");
-						String totalSales = map.get("sales");
-						System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 총 매출액: " + totalSales);
+						String sales = map.get("sales");
+						System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 매출액: " + sales);
 
 					}
 					

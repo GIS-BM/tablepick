@@ -32,7 +32,7 @@ public class OwnerMain {
 		
 		try {
 			
-			TablePickSerivceCommon.getInstance().login("owner01", "owner");
+			TablePickSerivceCommon.getInstance().login("owner01", "pw1234");
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

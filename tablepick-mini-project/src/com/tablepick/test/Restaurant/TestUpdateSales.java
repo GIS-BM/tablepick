@@ -13,7 +13,7 @@ import com.tablepick.model.SalesVO;
 
 public class TestUpdateSales {
 	public static void main(String[] args) throws RestaurantNotFoundException {
-		// 예약 별 매출액 수정 가능하게 하는 서비스
+		// 식당 정보와 총 매출액을 조회한다.
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			RestaurantDao resDao = new RestaurantDao();
