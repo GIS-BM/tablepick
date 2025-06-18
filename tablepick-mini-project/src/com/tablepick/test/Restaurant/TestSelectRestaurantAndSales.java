@@ -4,34 +4,62 @@ import java.util.List;
 import java.util.Map;
 
 import com.tablepick.exception.RestaurantNotFoundException;
+import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
+import com.tablepick.service.TablePickSerivceCommon;
 
 public class TestSelectRestaurantAndSales {
-	public static void main(String[] args) throws RestaurantNotFoundException {
+	
+	private static TestSelectRestaurantAndSales instance = new TestSelectRestaurantAndSales();
+	private TestSelectRestaurantAndSales() {
+	}
+	public static TestSelectRestaurantAndSales getInstance() {
+		return instance;
+	}
+	
+	public void run() {
+		
 		// 식당 정보와 총 매출액을 조회한다.
-		try {
-			RestaurantDao resDao = new RestaurantDao();
-
-			String accountId = "owner01";
-			int reservationIdx = 1;
-			
-			List<Map<String, String>> resList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
-			
-			for (int i = 0; i < resList.size(); i++) {
-				Map<String, String> map = resList.get(i);
+				try {
+					RestaurantDao resDao = new RestaurantDao();
+					//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
+					//1. 따라서 로그인 정보의 accountId를 받아온 후
+					//2. 이 정보를 가지고 restaurantId 를 조회합니다.
+					AccountVO loginData = null;
 				
-				String name = map.get("name");
-				String type = map.get("type");
-				String address = map.get("address");
-				String tel = map.get("tel");
-				String sales = map.get("sales");
-				System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 매출액: " + sales);
+					try {
+						loginData = TablePickSerivceCommon.getInstance().getLoginData();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					String accountId = loginData.getId();
+					
+					int reservationIdx = resDao.checkMyRestaurant(accountId).getRestaurantId();
+		
+					
+					List<Map<String, String>> resList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
+					
+					for (int i = 0; i < resList.size(); i++) {
+						Map<String, String> map = resList.get(i);
+						
+						String name = map.get("name");
+						String type = map.get("type");
+						String address = map.get("address");
+						String tel = map.get("tel");
+						String sales = map.get("sales");
+						System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 매출액: " + sales);
 
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		
+	}
+	public static void main(String[] args) throws RestaurantNotFoundException {
+		new TestSelectRestaurantAndSales().run();
 	}
 
 }
