@@ -666,6 +666,23 @@ public class RestaurantDao {
 
 	}
 
+	 
+
+	public void createCustomerSale(String accountId, int reservationIdx) throws RestaurantNotFoundException, SQLException {
+		if (existReservation(reservationIdx) == false) {
+			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+		}
+		StringBuilder sql = new StringBuilder();
+		sql.append("");
+		sql.append("");
+		sql.append("");
+		//INSERT INTO sales (reserve_idx, sales) VALUES (1, 2000); 
+	}
+
+	private boolean existReservation(int reservationIdx) {
+		return false;
+	}
+
 	
 
 
