@@ -1,6 +1,7 @@
 package com.tablepick.model;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -461,23 +462,23 @@ public class RestaurantDao {
 	 * @param newSales
 	 * @throws SQLException
 	 */
-	public void updateRestaurantSales(String accountId, int reservationIdx, int newSales) throws SQLException {
-		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE sales s  ");
-		sql.append("JOIN reserve rv ON s.reserve_idx = rv.idx ");
-		sql.append("JOIN restaurant r ON rv.restaurant_idx = r.idx ");
-		sql.append("SET s.sales = ? ");
-		sql.append("WHERE s.idx > 0 AND r.account_id = ?");
-
-		try (Connection con = DatabaseUtil.getConnection();
-				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
-			pstmt.setInt(1, newSales);
-			pstmt.setString(2, accountId);
-
-			pstmt.executeUpdate();
-		}
-
-	}
+//	public void updateRestaurantSales(String accountId, int reservationIdx, int newSales) throws SQLException {
+//		StringBuilder sql = new StringBuilder();
+//		sql.append("UPDATE sales s  ");
+//		sql.append("JOIN reserve rv ON s.reserve_idx = rv.idx ");
+//		sql.append("JOIN restaurant r ON rv.restaurant_idx = r.idx ");
+//		sql.append("SET s.sales = ? ");
+//		sql.append("WHERE s.idx > 0 AND r.account_id = ?");
+//
+//		try (Connection con = DatabaseUtil.getConnection();
+//				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
+//			pstmt.setInt(1, newSales);
+//			pstmt.setString(2, accountId);
+//
+//			pstmt.executeUpdate();
+//		}
+//
+//	}
 
 	/**
 	 * 메뉴를 생성하는 메소드 입니다. 메뉴 데이터 뿐만 아니라 레스토랑 ID도 필요합니다.

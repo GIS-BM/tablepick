@@ -1,6 +1,7 @@
 package com.tablepick.RestaurantOwner.View;
 
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,7 +9,11 @@ import java.util.Scanner;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
+
+import com.tablepick.session.SessionManager;
+
 import com.tablepick.service.CommonService;
+
 
 //식당 주인이 자신의 식당의 리뷰를 조회할 수 있습니다.
 
@@ -28,18 +33,13 @@ public class OwnerReviewDetail {
 		boolean exit = false;
 
 		String console;
-		// 메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
-		// 1. 따라서 로그인 정보의 accountId를 받아온 후
-		// 2. 이 정보를 가지고 restaurantId 를 조회합니다.
-		AccountVO loginData = null;
-		try {
-			loginData = CommonService.getInstance().getLoginData();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String accountId = loginData.getId();
 
+
+
+		//세션으로 id 가져오기
+				String accountId = SessionManager.getLoginDataSession().getId();
+				
+		
 		while (!exit) {
 			System.out.println("                          ");
 			System.out.println(
