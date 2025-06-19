@@ -5,8 +5,7 @@ import java.util.Scanner;
 
 import com.tablepick.Restaurant.UnitTest.TestCreateRestaurant;
 import com.tablepick.Restaurant.UnitTest.TestDeleteRestaurant;
-import com.tablepick.service.TablePickSerivceCommon;
-import com.tablepick.session.SessionManager;
+import com.tablepick.service.CommonService;
 
 //식당 주인의 메인 화면 입니다.
 //식당 등록 화면, 식당 상세 정보 화면으로 이동할 수 있습니다. 
@@ -34,7 +33,7 @@ public class OwnerMain {
 		
 		try {
 			
-			TablePickSerivceCommon.getInstance().login("owner01", "pw1234");
+			CommonService.getInstance().login("owner01", "pw1234");
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -98,7 +97,7 @@ public class OwnerMain {
 			break;
 		case "4":
 			try {
-				TablePickSerivceCommon.getInstance().logout();
+				CommonService.getInstance().logout();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

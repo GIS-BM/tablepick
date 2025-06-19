@@ -11,17 +11,17 @@ import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.ReserveVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 public class ReserveCRUDUnitTest {
 	private AccountDao accountdao;
-	private final TablePickSerivceCommon tablePickServiceCommon;
+	private final CommonService commonService;
 	private static ReserveCRUDUnitTest instance = new ReserveCRUDUnitTest();
 
 	private ReserveCRUDUnitTest() {
 		try {
 			accountdao = new AccountDao();
-			this.tablePickServiceCommon = TablePickSerivceCommon.getInstance();
+			this.commonService = CommonService.getInstance();
 		} catch (ClassNotFoundException e) {
 			System.err.println("DB 드라이버 로딩 실패: " + e.getMessage());
 			e.printStackTrace();
@@ -50,7 +50,7 @@ public class ReserveCRUDUnitTest {
 			LocalDate registerDate = LocalDate.parse(date, formatter);
 			int restaurantId = accountdao.findRestaurantIdByName(name);
 
-			AccountVO loginData = tablePickServiceCommon.getLoginData();
+			AccountVO loginData = commonService.getLoginData();
 			ReserveVO reserveVO = new ReserveVO(loginData.getId(), restaurantId, count, registerDate, time);
 			if (accountdao.insertReserve(reserveVO)) {
 				System.out.println("예약이 성공하였습니다.");
@@ -93,7 +93,7 @@ public class ReserveCRUDUnitTest {
 	public void reserveUpdateView(BufferedReader reader) {
 		try {
 			System.out.println("등록된 예약 목록");
-			AccountVO loginData = tablePickServiceCommon.getLoginData();
+			AccountVO loginData = commonService.getLoginData();
 			ArrayList<ReserveVO> list = accountdao.getAccountReserves(loginData.getId());
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (list.isEmpty()) {
@@ -144,7 +144,7 @@ public class ReserveCRUDUnitTest {
 	public void reserveDeleteView(BufferedReader reader) {
 		try {
 			System.out.print("등록된 예약 목록");
-			AccountVO loginData = tablePickServiceCommon.getLoginData();
+			AccountVO loginData = commonService.getLoginData();
 			ArrayList<ReserveVO> list = accountdao.getAccountReserves(loginData.getId());
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (list.isEmpty()) {

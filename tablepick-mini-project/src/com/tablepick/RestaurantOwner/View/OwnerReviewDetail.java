@@ -8,7 +8,7 @@ import java.util.Scanner;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 //식당 주인이 자신의 식당의 리뷰를 조회할 수 있습니다.
 
@@ -33,7 +33,7 @@ public class OwnerReviewDetail {
 		// 2. 이 정보를 가지고 restaurantId 를 조회합니다.
 		AccountVO loginData = null;
 		try {
-			loginData = TablePickSerivceCommon.getInstance().getLoginData();
+			loginData = CommonService.getInstance().getLoginData();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

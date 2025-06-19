@@ -6,7 +6,7 @@ import java.util.Map;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 public class TestSelectRestaurantAndSales {
 	
@@ -28,10 +28,9 @@ public class TestSelectRestaurantAndSales {
 					AccountVO loginData = null;
 				
 					try {
-						loginData = TablePickSerivceCommon.getInstance().getLoginData();
+						loginData = CommonService.getInstance().getLoginData();
 					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					}
 					
 					String accountId = loginData.getId();
@@ -54,7 +53,7 @@ public class TestSelectRestaurantAndSales {
 					}
 					
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 		
 	}

@@ -28,8 +28,7 @@ public class TestCreateRestaurant {
 		try {
 			loginData = TablePickSerivceCommon.getInstance().getLoginData();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
 		String accountId = loginData.getId();
@@ -103,14 +102,12 @@ public class TestCreateRestaurant {
 					System.out.println("식당이 등록되었습니다.");
 					System.out.println("내 식당 등록 번호 : " + dao.createRestaurant(vo1));
 				} catch (SQLException e) {
-
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				} 
 				
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 		

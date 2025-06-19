@@ -7,20 +7,20 @@ import java.sql.SQLException;
 
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
 import com.tablepick.test.CustomerView.UIAdminMain;
 import com.tablepick.test.CustomerView.UICustomerMain;
 
 public class ConsoleUIIndex {
     private final AccountDao accountDao;
-    private final TablePickSerivceCommon tablePickServiceCommon;
+    private final CommonService tablePickServiceCommon;
     private final BufferedReader reader;
 
     public ConsoleUIIndex() {
         try {
             this.accountDao = new AccountDao();
-            this.tablePickServiceCommon = TablePickSerivceCommon.getInstance();
+            this.tablePickServiceCommon = CommonService.getInstance();
             this.reader = new BufferedReader(new InputStreamReader(System.in));
         } catch (ClassNotFoundException e) {
             System.err.println("DB 드라이버 로딩 실패: " + e.getMessage());
