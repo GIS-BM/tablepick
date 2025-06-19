@@ -1,4 +1,4 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.Restaurant.UnitTest;
 
 import java.util.List;
 import java.util.Map;
@@ -35,8 +35,10 @@ public class MostReservedCustomersTest {
 			}
 
 			String accountId = loginData.getId();
+			
+			//System.out.println(accountId);
 
-			List<Map<String, String>> mostReservationList = restaurantDao.checkMyRestaurantReservationMostList(accountId);
+			List<Map<String, String>> mostReservationList = restaurantDao.findMyRestaurantReservationMostList(accountId);
 
 			System.out.println("                  *** 내 식당의 최다 예약자를 확인합니다. ***");
 			System.out.println("                  ");

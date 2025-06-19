@@ -1,7 +1,10 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.RestaurantOwner.View;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import com.tablepick.Restaurant.UnitTest.TestSelectRestaurantAndSales;
+import com.tablepick.Restaurant.UnitTest.TestUpdateRestaurantAndSales;
 
 //식당 상세 정보 화면입니다.
 //식당주인 메인 화면에서 넘어옵니다.
@@ -70,6 +73,7 @@ public class OwnerMainDetail {
 				break;
 			default:
 				System.out.println("없는 선택지 입니다. 다시 선택해 주세요.");
+				
 				break;
 			}
 		}
