@@ -217,6 +217,7 @@ public class AccountDao {
 			
 		
 			con = getConnection();
+			con.setAutoCommit(false);
 		
 			String sql = "INSERT INTO reserve (account_id, restaurant_idx, reservepeople,"
 					+ " reservedate, reservetime) VALUES (?, ?, ?, ?, ?)";
@@ -246,10 +247,12 @@ public class AccountDao {
 			pstmt.setInt(2,0);
 			pstmt.executeUpdate();
 			
+			con.commit();
 	
+		}catch(Exception e) {
+			con.rollback();
+			throw e;
 		}finally {
-		
-			
 			closeAll(rs, pstmt, con);
 		}
 		return result;
@@ -322,6 +325,7 @@ public class AccountDao {
 		PreparedStatement pstmt = null;
 		try {
 			con = getConnection();
+			con.setAutoCommit(false);
 			String sql = "UPDATE reserve SET restaurant_idx = ?, reservepeople = ?, reservedate = ?, reservetime = ? WHERE idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, updated.getRestaurantId());
@@ -331,7 +335,11 @@ public class AccountDao {
 			pstmt.setInt(5, updated.getReserveId());
 			int rows = pstmt.executeUpdate();
 			result = rows > 0;
-		} finally {
+			con.commit();
+		} catch(Exception e){
+			con.rollback();
+			throw e;
+		}finally {
 			closeAll(pstmt, con);
 		}
 		return result;
@@ -344,12 +352,17 @@ public class AccountDao {
 		PreparedStatement pstmt = null;
 		try {
 			con = getConnection();
+			con.setAutoCommit(false);
 			String sql = "DELETE FROM reserve WHERE idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, old.getReserveId());
 			int rows = pstmt.executeUpdate();
 			result = rows > 0;
-		} finally {
+			con.commit();
+		} catch(Exception e){
+			con.rollback();
+			throw e;
+		}finally {
 			closeAll(pstmt, con);
 		}
 		return result;

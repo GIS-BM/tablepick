@@ -88,6 +88,7 @@ public class AdminDao {
 		PreparedStatement pstmt = null;
 		try {
 			con = getConnection();
+			con.setAutoCommit(false);
 			String sql = "UPDATE account SET type = ?, name = ?, password = ?, tel = ? WHERE id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, accountVO.getType());
@@ -97,7 +98,11 @@ public class AdminDao {
 			pstmt.setString(5, accountVO.getId());
 			int rows = pstmt.executeUpdate();
 			result = rows > 0;
-		} finally {
+			con.commit();
+		} catch(Exception e){
+			con.rollback();
+			throw e;
+		}finally {
 			closeAll(pstmt, con);
 		}
 		return result;
@@ -110,12 +115,17 @@ public class AdminDao {
 		PreparedStatement pstmt = null;
 		try {
 			con = getConnection();
+			con.setAutoCommit(false);
 			String sql = "DELETE FROM account WHERE id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			int rows = pstmt.executeUpdate();
 			result = rows > 0;
-		} finally {
+			con.commit();
+		} catch(Exception e){
+			con.rollback();
+			throw e;
+		}finally {
 			closeAll(pstmt, con);
 		}
 		return result;
