@@ -9,7 +9,7 @@ import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
 import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
-import com.tablepick.test.CustomerView.CustomerViewUnitTest;
+import com.tablepick.test.customer.CustomerViewUnitTest;
 
 public class ConsoleUIIndex {
     private final AccountDao accountDao;

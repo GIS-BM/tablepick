@@ -1,4 +1,4 @@
-package com.tablepick.test.accountLogout;
+package com.tablepick.test.common;
 
 import java.sql.SQLException;
 

@@ -1,4 +1,4 @@
-package com.tablepick.test.ReviewCRUD;
+package com.tablepick.test.customer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,11 +6,11 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.tablepick.model.ReviewDao;
+import com.tablepick.model.CustomerDao;
 import com.tablepick.model.ReviewVO;
 
 public class ReviewCRUDUnitTest {
-	ReviewDao reviewDao = new ReviewDao();
+	CustomerDao customerDao = new CustomerDao();
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class ReviewCRUDUnitTest {
 	public void registerReviewTest() {
 		try {
 			System.out.println("registerReviewTest 테스트");
-			ReviewVO reviewresult = reviewDao.registerReview(5, 3, "리뷰테스트");
+			ReviewVO reviewresult = customerDao.registerReview(5, 3, "리뷰테스트");
 			System.out.println(reviewresult);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class ReviewCRUDUnitTest {
 	public void findMyReviewByIdTest() {
 		try {
 			System.out.println("findMyReviewByIdTest 테스트");
-			System.out.println(reviewDao.findMyReviewById("cust01"));
+			System.out.println(customerDao.findMyReviewById("cust01"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -49,7 +49,7 @@ public class ReviewCRUDUnitTest {
 		try {
 			String accountId = br.readLine();
 
-			List<ReviewVO> reviews = reviewDao.findMyReviewById(accountId);
+			List<ReviewVO> reviews = customerDao.findMyReviewById(accountId);
 
 			if (reviews.isEmpty()) {
 				System.out.println("작성한 리뷰가 없습니다.");
@@ -76,7 +76,7 @@ public class ReviewCRUDUnitTest {
 			String newComment = br.readLine();
 
 			// 리뷰 수정 시도
-			ReviewVO updatedReview = reviewDao.changeMyReviewById(accountId, reviewIdx, newStar, newComment);
+			ReviewVO updatedReview = customerDao.changeMyReviewById(accountId, reviewIdx, newStar, newComment);
 
 			if (updatedReview != null) {
 				System.out.println("\n 리뷰가 성공적으로 수정되었습니다.");
@@ -104,7 +104,7 @@ public class ReviewCRUDUnitTest {
 		try {
 			String accountId = br.readLine();
 			
-			List<ReviewVO> reviews = reviewDao.findMyReviewById(accountId);
+			List<ReviewVO> reviews = customerDao.findMyReviewById(accountId);
 			
 			if (reviews.isEmpty()) {
 				System.out.println("작성한 리뷰가 없습니다.");
@@ -123,7 +123,7 @@ public class ReviewCRUDUnitTest {
 			
 			// reviewIdx가 존재하지 않을 경우 메시지 추가
 			
-			if(reviewDao.deleteReviewById(reviewIdx))
+			if(customerDao.deleteReviewById(reviewIdx))
 				System.out.println("리뷰 삭제가 성공했습니다.");
 			else {
 				System.out.println("리뷰 삭제가 실패했습니다.");

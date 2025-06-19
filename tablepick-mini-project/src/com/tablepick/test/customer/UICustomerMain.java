@@ -1,4 +1,4 @@
-package com.tablepick.test.CustomerView;
+package com.tablepick.test.customer;
 
 // UI가 시작되는 클래스
 public class UICustomerMain {
