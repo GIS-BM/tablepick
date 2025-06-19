@@ -1,4 +1,4 @@
-package com.tablepick.test.AccountLoginAddView;
+package com.tablepick.test.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.tablepick.test.AccountCRUDView;
+package com.tablepick.test.common;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

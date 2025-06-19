@@ -1,4 +1,4 @@
-package com.tablepick.test;
+package com.tablepick.test.common;
 
 import java.util.ArrayList;
 
