@@ -1,4 +1,4 @@
-package com.tablepick.test.ReviewCRUD;
+package com.tablepick.test.customer;
 
 import java.io.BufferedReader;
 import java.io.IOException;

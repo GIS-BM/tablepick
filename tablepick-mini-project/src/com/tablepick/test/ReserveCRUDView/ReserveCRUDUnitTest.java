@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.ReserveVO;
@@ -122,7 +123,7 @@ public class ReserveCRUDUnitTest {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (RestaurantNotFoundException e) {
+		} catch (NotFoundRestaurantException e) {
 			e.printStackTrace();
 		}
 	}

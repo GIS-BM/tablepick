@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tablepick.common.DbConfig;
-import com.tablepick.exception.RestaurantNotFoundException;
+import com.tablepick.exception.NotFoundRestaurantException;
 
 public class AccountDao {
 	public AccountDao() throws ClassNotFoundException {
@@ -148,7 +148,7 @@ public class AccountDao {
 	}
 
 	// 레스토랑 idx 찾는 메서드
-	public int findRestaurantIdByName(String name) throws SQLException, RestaurantNotFoundException {
+	public int findRestaurantIdByName(String name) throws SQLException, NotFoundRestaurantException {
 		int restaurantId = 0;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -162,7 +162,7 @@ public class AccountDao {
 			if (rs.next())
 				restaurantId = rs.getInt("idx");
 			if(restaurantId==0)
-				throw new RestaurantNotFoundException(name+" 식당이 존재하지 않습니다.");
+				throw new NotFoundRestaurantException(name+" 식당이 존재하지 않습니다.");
 		} finally {
 			closeAll(rs, pstmt, con);
 		}
@@ -170,7 +170,7 @@ public class AccountDao {
 	}
 
 	// 레스토랑 name 찾는 메서드
-	public String findRestaurantNameById(int num) throws SQLException, RestaurantNotFoundException {
+	public String findRestaurantNameById(int num) throws SQLException, NotFoundRestaurantException {
 		String name = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -184,7 +184,7 @@ public class AccountDao {
 			if (rs.next())
 				name = rs.getString("name");
 			if(name==null)
-				throw new RestaurantNotFoundException("식당이 존재하지 않습니다.");
+				throw new NotFoundRestaurantException("식당이 존재하지 않습니다.");
 		} finally {
 			closeAll(rs, pstmt, con);
 		}

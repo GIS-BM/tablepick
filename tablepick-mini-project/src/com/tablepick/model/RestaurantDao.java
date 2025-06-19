@@ -15,8 +15,8 @@ import com.tablepick.common.DatabaseUtil;
 import com.tablepick.exception.AccountNotFoundException;
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.exception.NotFoundMenuException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.exception.NotMatchedPasswordException;
-import com.tablepick.exception.RestaurantNotFoundException;
 
 //레스토랑 Dao 입니다. 
 
@@ -131,10 +131,10 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
-	public RestaurantVO findMyRestaurant(String accountId) throws SQLException, RestaurantNotFoundException {
+	public RestaurantVO findMyRestaurant(String accountId) throws SQLException, NotFoundRestaurantException {
 
 		if (existRestaurant(accountId) == false) {
-			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
 
 		RestaurantVO res = null;
@@ -251,9 +251,9 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 */
 	public List<Map<String, String>> findMyRestaurantReservationList(String accountId)
-			throws RestaurantNotFoundException, SQLException {
+			throws NotFoundRestaurantException, SQLException {
 		if (existRestaurant(accountId) == false) {
-			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
 
 		List<Map<String, String>> reservationList = new ArrayList<Map<String, String>>();
@@ -344,9 +344,9 @@ public class RestaurantDao {
 	 * @throws RestaurantNotFoundException
 	 */
 	public List<Map<String, String>> findMyRestaurantAndSales(String accountId, int restaurantIdx)
-			throws SQLException, RestaurantNotFoundException {
+			throws SQLException, NotFoundRestaurantException {
 		if (existRestaurant(accountId) == false) {
-			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
 
 		List<Map<String, String>> listM = new ArrayList<Map<String, String>>();
@@ -396,7 +396,7 @@ public class RestaurantDao {
 	 * @throws RestaurantNotFoundException
 	 */
 	public void updateMyRestaurantInfoAndSales(String accountId, int reservationIdx, String newName, String newType,
-			String newAddress, String newTel) throws SQLException, RestaurantNotFoundException {
+			String newAddress, String newTel) throws SQLException, NotFoundRestaurantException {
 
 //		System.out.println(accountId);
 //		System.out.println(reservationIdx);
@@ -407,7 +407,7 @@ public class RestaurantDao {
 		// System.out.println(newSales);
 
 		if (existRestaurant(accountId) == false) {
-			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
 
 		Connection con = DatabaseUtil.getConnection();
@@ -485,7 +485,7 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
-	public void createMenu(String accountId, String name, int price) throws SQLException, RestaurantNotFoundException {
+	public void createMenu(String accountId, String name, int price) throws SQLException, NotFoundRestaurantException {
 		RestaurantVO restaurantVo = findMyRestaurant(accountId);
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -519,7 +519,7 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
-	public List<Map<String, String>> findMenu(String accountId) throws SQLException, RestaurantNotFoundException {
+	public List<Map<String, String>> findMenu(String accountId) throws SQLException, NotFoundRestaurantException {
 
 		RestaurantVO restaurantVo = findMyRestaurant(accountId);
 
@@ -563,7 +563,7 @@ public class RestaurantDao {
 	 */
 
 	public boolean findMenuDetail(String accountId, String name)
-			throws NotFoundMenuException, SQLException, AccountNotFoundException, RestaurantNotFoundException {
+			throws NotFoundMenuException, SQLException, AccountNotFoundException, NotFoundRestaurantException {
 		RestaurantVO restaurantVo = findMyRestaurant(accountId);
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -604,7 +604,7 @@ public class RestaurantDao {
 	 */
 
 	public void updateMenu(String accountId, String name, int price)
-			throws SQLException, NotFoundMenuException, AccountNotFoundException, RestaurantNotFoundException {
+			throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -641,7 +641,7 @@ public class RestaurantDao {
 	 */
 
 	public void deleteMenu(String accountId, String name)
-			throws SQLException, NotFoundMenuException, AccountNotFoundException, RestaurantNotFoundException {
+			throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
@@ -670,7 +670,7 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
-	public List findMyRestaurantReview(String accountId) throws SQLException, RestaurantNotFoundException {
+	public List findMyRestaurantReview(String accountId) throws SQLException, NotFoundRestaurantException {
 
 		List<Map<String, String>> list = new ArrayList<>();
 
@@ -821,9 +821,9 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 */
 	public List<Map<String, String>> findMyRestaurantReservationMostList(String accountId)
-			throws RestaurantNotFoundException, SQLException {
+			throws NotFoundRestaurantException, SQLException {
 		if (existRestaurant(accountId) == false) {
-			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
+			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
 
 		List<Map<String, String>> reservationList = new ArrayList<Map<String, String>>();

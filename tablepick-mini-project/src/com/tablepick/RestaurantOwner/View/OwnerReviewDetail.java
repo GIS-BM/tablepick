@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.tablepick.exception.RestaurantNotFoundException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.service.CommonService;
@@ -71,7 +71,7 @@ public class OwnerReviewDetail {
 					
 				} catch (SQLException e) {
 					e.printStackTrace();
-				} catch (RestaurantNotFoundException e) {
+				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

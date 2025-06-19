@@ -3,7 +3,7 @@ package com.tablepick.Restaurant.UnitTest;
 import java.util.List;
 import java.util.Map;
 
-import com.tablepick.exception.RestaurantNotFoundException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.service.CommonService;
@@ -57,7 +57,7 @@ public class TestSelectRestaurantAndSales {
 				}
 		
 	}
-	public static void main(String[] args) throws RestaurantNotFoundException {
+	public static void main(String[] args) throws NotFoundRestaurantException{
 		new TestSelectRestaurantAndSales().run();
 	}
 

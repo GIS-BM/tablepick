@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.tablepick.exception.RestaurantNotFoundException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.RestaurantVO;
 import com.tablepick.model.ReviewVO;
@@ -142,7 +142,7 @@ public class SearchRestaurantUnitTest {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (RestaurantNotFoundException e) {
+		} catch (NotFoundRestaurantException e) {
 			e.printStackTrace();
 		}
 	}

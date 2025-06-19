@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import com.tablepick.exception.AccountNotFoundException;
 import com.tablepick.exception.NotFoundMenuException;
-import com.tablepick.exception.RestaurantNotFoundException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.service.CommonService;
@@ -88,7 +88,7 @@ public class OwnerMenuDetail {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (RestaurantNotFoundException e) {
+				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -113,7 +113,7 @@ public class OwnerMenuDetail {
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					} catch (RestaurantNotFoundException e) {
+					} catch (NotFoundRestaurantException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -147,7 +147,7 @@ public class OwnerMenuDetail {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (RestaurantNotFoundException e) {
+				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -171,7 +171,7 @@ public class OwnerMenuDetail {
 				} catch (AccountNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (RestaurantNotFoundException e) {
+				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -201,7 +201,7 @@ public class OwnerMenuDetail {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (RestaurantNotFoundException e) {
+				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -222,7 +222,7 @@ public class OwnerMenuDetail {
 				} catch (AccountNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (RestaurantNotFoundException e) {
+				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

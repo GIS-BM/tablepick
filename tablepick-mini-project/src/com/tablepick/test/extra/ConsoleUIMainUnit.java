@@ -1,4 +1,4 @@
-package com.tablepick.view;
+package com.tablepick.test.extra;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,15 +8,13 @@ import java.sql.SQLException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
-import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
-import com.tablepick.test.customer.CustomerViewUnitTest;
 
-public class ConsoleUIIndex {
+public class ConsoleUIMainUnit {
     private final AccountDao accountDao;
     private final CommonService tablePickServiceCommon;
     private final BufferedReader reader;
 
-    public ConsoleUIIndex() {
+    public ConsoleUIMainUnit() {
         try {
             this.accountDao = new AccountDao();
             this.tablePickServiceCommon = CommonService.getInstance();
@@ -67,27 +65,17 @@ public class ConsoleUIIndex {
                 // 사용자 타입에 따라 분기
                 switch (loginData.getType().toLowerCase()) {
                     case "customer":
-                    	try {
-                    		CustomerViewUnitTest cust = new CustomerViewUnitTest();
-                            cust.run(reader);
-                        } catch (Exception e) {
-                            System.out.println("customer 실행 중 오류가 발생했습니다.");
-                            e.printStackTrace();
-                        }
-                    	break;
+                    	System.out.println("CustomerView 구현해야 한다");
+                        // new CustomerView().run(reader);
+                        break;
                     case "owner":
                     	System.out.println("ownerView 구현해야 한다");
                         // new OwnerView().run(reader);
                         break;
                     case "admin":
-                    	try {
-                    		AdminCRUDUnitTest admin = new AdminCRUDUnitTest();
-                            admin.run(reader);
-                        } catch (Exception e) {
-                            System.out.println("admin 실행 중 오류가 발생했습니다.");
-                            e.printStackTrace();
-                        }
-                    	break;
+                    	System.out.println("adminView 구현해야 한다");
+                        // new AdminView().run(reader);
+                        break;
                     default:
                         System.out.println("알 수 없는 사용자 유형입니다.");
                 }

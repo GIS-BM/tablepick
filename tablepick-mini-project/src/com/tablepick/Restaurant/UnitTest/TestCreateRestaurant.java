@@ -6,19 +6,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.tablepick.exception.RestaurantNotFoundException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.model.RestaurantVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 //식당 등록을 테스트하는 클래스 입니다.
 
 public class TestCreateRestaurant {
-	
+
 	private static TestCreateRestaurant instance = new TestCreateRestaurant();
+
 	private TestCreateRestaurant() {
 	}
+
 	public static TestCreateRestaurant getInstance() {
 		return instance;
 	}
@@ -27,7 +28,7 @@ public class TestCreateRestaurant {
 
 		AccountVO loginData = null;
 		try {
-			loginData = TablePickSerivceCommon.getInstance().getLoginData();
+			loginData = CommonService.getInstance().getLoginData();
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
@@ -55,20 +56,16 @@ public class TestCreateRestaurant {
 
 		boolean typeIsCorrect = true;
 
-	
-		
 		try {
-			
-			
+
 			if (dao.existRestaurant(accountId) == true) {
 				System.out.println("                          ");
 				System.out.println("이미 식당이 존재합니다. 새로 등록하시려면 기존 식당을 삭제하세요.");
 				System.out.println("                          ");
 			} else {
-				
+
 				System.out.println("                        ***  식당을 등록합니다.  *** ");
-				
-				
+
 				System.out.println("1. 식당 이름을 입력하세요: ");
 				name = sc.nextLine();
 
@@ -89,12 +86,8 @@ public class TestCreateRestaurant {
 				tel = sc.nextLine();
 				System.out.println("5. 식당 오픈 시간을 입력하세요. 예시: 09:00");
 				time = sc.nextLine();
-				
-				
-			   
 
 				LocalTime opentime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
-
 
 				RestaurantVO vo1 = new RestaurantVO(accountId, name, type, address, tel, opentime);
 
@@ -104,18 +97,12 @@ public class TestCreateRestaurant {
 					System.out.println("내 식당 등록 번호 : " + dao.createRestaurant(vo1));
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
-				} 
-				
+				}
+
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		
-		
-		
-		
-
-		
 
 	}
 
