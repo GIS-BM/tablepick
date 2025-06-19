@@ -1,5 +1,12 @@
 package com.tablepick.service;
 
+import java.sql.SQLException;
+
+import com.tablepick.exception.AccountNotFoundException;
+import com.tablepick.exception.NoReservationException;
+import com.tablepick.exception.NotFoundMenuException;
+import com.tablepick.exception.NotFoundRestaurantException;
+import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.model.RestaurantVO;
 
@@ -11,45 +18,56 @@ public class OwnerService {
 	private String accountId;
 	private String password;
 	private RestaurantVO restaurantVO;
+	private int reservationIdx;
+	private int restaurantIdx;
+	private String newName;
+	private String newType;
+	private String newAddress;
+	private String newTel;
+	private int newSales;
+	private String name;
+	private int price;
+
 	
 	
-	public void findAccount() {
+	public void findAccount() throws NotMatchedPasswordException, AccountNotFoundException, SQLException {
 		restaurantDao.findAccount(accountId, password);
 	}
 	
-	public void createRestaurant() {
+	public void createRestaurant() throws SQLException {
 		restaurantDao.createRestaurant(restaurantVO);
 	}
 	
-	public void findMyRestaurant() {
+	public void findMyRestaurant() throws SQLException, NotFoundRestaurantException {
 		restaurantDao.findMyRestaurant(accountId);
 		
 	}
-	public void deleteMyRestaurant() {
+	public void deleteMyRestaurant() throws SQLException, NotMatchedPasswordException, AccountNotFoundException {
 		restaurantDao.deleteMyRestaurant(accountId,password);
 		
 	}
 	
-	public void existRestaurant(accountId) {
+	public void existRestaurant() throws SQLException {
 		restaurantDao.existRestaurant(accountId);
 		
 	}
 	
-	public void existRestaurantReservation(reservationIdx) {
+	public void existRestaurantReservation() throws SQLException {
 		restaurantDao.existRestaurantReservation(reservationIdx);
 		
 	}
-	public void findMyRestaurantReservationList(accountId) {
+	public void findMyRestaurantReservationList() throws NotFoundRestaurantException, SQLException {
 		restaurantDao.findMyRestaurantReservationList(accountId);
 		
 	}
 	
-	public void findMyRestaurantAndSales(accountId, restaurantIdx) {
+	public void findMyRestaurantAndSales() throws SQLException, NotFoundRestaurantException {
+		
 		restaurantDao.findMyRestaurantAndSales(accountId, restaurantIdx);
 		
 	}
 	
-	public void updateMyRestaurantInfoAndSales() {
+	public void updateMyRestaurantInfoAndSales() throws SQLException, NotFoundRestaurantException {
 		restaurantDao.updateMyRestaurantInfoAndSales(accountId,  reservationIdx, newName, newType,
 				newAddress,  newTel);
 		
@@ -59,31 +77,31 @@ public class OwnerService {
 //		restaurantDao.updateRestaurantSales( accountId,  reservationIdx,  newSales);
 //	}
 	
-	public void createMenu() {
+	public void createMenu() throws SQLException, NotFoundRestaurantException {
 		restaurantDao.createMenu(accountId, name, price);
 	}
 	
-	public void findMenu() {
+	public void findMenu() throws SQLException, NotFoundRestaurantException {
 		restaurantDao.findMenu(accountId);
 	}
 	
-	public void findMenuDetail() {
+	public void findMenuDetail() throws NotFoundMenuException, SQLException, AccountNotFoundException, NotFoundRestaurantException {
 		restaurantDao.findMenuDetail(accountId, name);
 	}
 	
-	public void updateMenu() {
+	public void updateMenu() throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
 		restaurantDao.updateMenu(accountId, name, price);
 	}
 	
-	public void deleteMenu() {
+	public void deleteMenu() throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
 		restaurantDao.deleteMenu(accountId, name);
 	}
 	
-	public void findMyRestaurantReview() {
+	public void findMyRestaurantReview() throws SQLException, NotFoundRestaurantException {
 		restaurantDao.findMyRestaurantReview(accountId);
 	}
 	
-	public void updateCustomerSale() {
+	public void updateCustomerSale() throws NoReservationException, SQLException {
 		restaurantDao.updateCustomerSale(accountId, reservationIdx,  newSales);
 	}
 }
