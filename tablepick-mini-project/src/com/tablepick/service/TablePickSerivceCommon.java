@@ -148,5 +148,25 @@ public class TablePickSerivceCommon {
 			return false;
 		}
 	}
+	
+	/** 로그인한 계정의 타입을 판별해서 그에 맞는 View로 보내는 메서드
+	**/
+	public void checkAccountTypeAndMovePage(AccountVO logindata) {
+		String accountType = logindata.getType();
+		switch (accountType) {
+			case "customer" :
+				System.out.println("고객 메인 페이지 출력");
+				// customerView().run();
+				break;
+			case "owner" :
+				System.out.println("음식점 주인 메인 페이지 출력");
+				// ownerView().run();
+				break;
+			case "admin" :
+				System.out.println("관리자 메인 페이지 출력");
+				// adminView().run();
+				break;
+		}
+	}
 
 }
