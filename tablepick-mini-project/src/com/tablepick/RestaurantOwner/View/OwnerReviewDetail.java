@@ -1,4 +1,4 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.RestaurantOwner.View;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -50,13 +50,17 @@ public class OwnerReviewDetail {
 			System.out.println("                          1. 리뷰 조회하기");
 			System.out.println("                          2. 뒤로 가기");
 			System.out.println("                          3. 프로그램 종료하기");
+			System.out.println("                          ");
+			System.out.println(
+					"============================================================================================");
 		
 			console = sc.nextLine();
 			switch (console) {
 			case "1":
 				System.out.println("내 식당의 리뷰 목록을 조회합니다.");
+				System.out.println("                          ");
 				try {
-					list = dao.checkMyRestaurantReview(accountId);
+					list = dao.findMyRestaurantReview(accountId);
 					if (list.isEmpty()) {
 						System.out.println("등록된 리뷰가 없습니다.");
 					}else {
