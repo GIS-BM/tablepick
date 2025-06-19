@@ -34,8 +34,7 @@ public class TestUpdateRestaurantAndSales {
 			try {
 				loginData = CommonService.getInstance().getLoginData();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 			
 			
@@ -86,7 +85,7 @@ public class TestUpdateRestaurantAndSales {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 		
