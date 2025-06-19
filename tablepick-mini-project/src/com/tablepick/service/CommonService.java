@@ -12,8 +12,8 @@ import com.tablepick.model.AccountVO;
 import com.tablepick.session.SessionManager;
 
 // 싱글톤 처리
-public class TablePickSerivceCommon {
-	private static TablePickSerivceCommon instance;
+public class CommonService {
+	private static CommonService instance;
 	// 싱글톤 패턴을 위한 TablePickSerivceCommon 객체 instance 선언
 
 	AccountDao accountDao = null;
@@ -22,7 +22,7 @@ public class TablePickSerivceCommon {
 	// 인스턴스 변수 AccountVO 데이터형의 logindata 선언
 
 	// [] 생성자 선언 : 싱글톤 패턴이므로 private로 선언, 외부에서 객체 생성 불가능 하게 막는다.
-	private TablePickSerivceCommon() throws ClassNotFoundException {
+	private CommonService() throws ClassNotFoundException {
 		accountDao = new AccountDao();
 		// 객체 생성시 accountDao 객체에 값 들어가게 함
 		Class.forName(DbConfig.DRIVER);
@@ -31,9 +31,9 @@ public class TablePickSerivceCommon {
 	// getInstance() 메서드 선언
 	// 외부에서 TablePickSerivceCommon.getInstance()으로 호출, 이 클래스의 객체를 요청하는 유일한 메서드이다.
 	// 객체가 존재하지 않을 때만 새로운 객체를 만드므로, 한번 객체가 생성되면 항상 같은 객체가 생성되게 된다.
-	public static synchronized TablePickSerivceCommon getInstance() throws ClassNotFoundException {
+	public static synchronized CommonService getInstance() throws ClassNotFoundException {
 		if (instance == null) {
-			instance = new TablePickSerivceCommon();
+			instance = new CommonService();
 		}
 		return instance;
 	}

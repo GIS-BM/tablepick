@@ -7,7 +7,7 @@ import com.tablepick.exception.AccountNotFoundException;
 import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 public class TestDeleteRestaurant {
 	// 식당 삭제를 테스트하는 클래스 입니다.
@@ -23,7 +23,7 @@ public class TestDeleteRestaurant {
 		Scanner sc = new Scanner(System.in);
 		AccountVO loginData = null;
 		try {
-			loginData = TablePickSerivceCommon.getInstance().getLoginData();
+			loginData = CommonService.getInstance().getLoginData();
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}

@@ -6,7 +6,7 @@ import java.util.Map;
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 public class TestSelectReservationListByOwner {
 	
@@ -24,7 +24,7 @@ public class TestSelectReservationListByOwner {
 					AccountVO loginData = null;
 					
 					try {
-						loginData = TablePickSerivceCommon.getInstance().getLoginData();
+						loginData = CommonService.getInstance().getLoginData();
 					} catch (ClassNotFoundException e) {
 						System.out.println(e.getMessage());
 					}

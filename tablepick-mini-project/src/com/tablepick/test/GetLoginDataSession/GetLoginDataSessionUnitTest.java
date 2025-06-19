@@ -3,7 +3,7 @@ package com.tablepick.test.GetLoginDataSession;
 import java.sql.SQLException;
 
 import com.tablepick.model.AccountVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
 
 public class GetLoginDataSessionUnitTest {
@@ -13,7 +13,7 @@ public class GetLoginDataSessionUnitTest {
 	public static void main(String[] args) {
 		AccountVO loginData = null;
 		try {
-			if(TablePickSerivceCommon.getInstance().loginSessionManager("owner02", "pw1234")!=null) {
+			if(CommonService.getInstance().loginSessionManager("owner02", "pw1234")!=null) {
 				System.out.println("로그인 성공");
 			}
 			System.out.println("로그인된 데이터 가져오기 : "+SessionManager.getLoginDataSession());

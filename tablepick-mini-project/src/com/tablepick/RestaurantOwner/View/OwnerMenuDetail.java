@@ -11,7 +11,7 @@ import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.RestaurantNotFoundException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 //메뉴를 조회 및 생성하는 클래스 입니다.
 public class OwnerMenuDetail {
@@ -36,7 +36,7 @@ public class OwnerMenuDetail {
 		AccountVO loginData = null;
 
 		try {
-			loginData = TablePickSerivceCommon.getInstance().getLoginData();
+			loginData = CommonService.getInstance().getLoginData();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
