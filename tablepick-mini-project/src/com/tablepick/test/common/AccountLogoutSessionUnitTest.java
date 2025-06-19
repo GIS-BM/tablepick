@@ -1,4 +1,4 @@
-package com.tablepick.test.GetLoginDataSession;
+package com.tablepick.test.common;
 
 import java.sql.SQLException;
 

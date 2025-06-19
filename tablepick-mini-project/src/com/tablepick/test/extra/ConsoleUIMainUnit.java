@@ -1,4 +1,4 @@
-package com.tablepick.test.GetLoginData;
+package com.tablepick.test.extra;
 
 import java.io.BufferedReader;
 import java.io.IOException;
