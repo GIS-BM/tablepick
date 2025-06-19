@@ -9,7 +9,7 @@ import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.model.RestaurantVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 public class TestUpdateRestaurantAndSales {
 	
@@ -32,7 +32,7 @@ public class TestUpdateRestaurantAndSales {
 			AccountVO loginData = null;
 		
 			try {
-				loginData = TablePickSerivceCommon.getInstance().getLoginData();
+				loginData = CommonService.getInstance().getLoginData();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
