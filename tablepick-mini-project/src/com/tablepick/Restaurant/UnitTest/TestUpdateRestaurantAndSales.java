@@ -1,6 +1,7 @@
 package com.tablepick.Restaurant.UnitTest;
 
 import java.io.BufferedReader;
+
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,11 @@ import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.model.RestaurantVO;
-import com.tablepick.service.TablePickSerivceCommon;
+
 import com.tablepick.session.SessionManager;
+
+import com.tablepick.service.CommonService;
+
 
 public class TestUpdateRestaurantAndSales {
 	
@@ -32,6 +36,7 @@ public class TestUpdateRestaurantAndSales {
 			//2. 이 정보를 가지고 restaurantId 를 조회합니다.
 			AccountVO loginData = null;
 		
+
 //			try {
 //				loginData = TablePickSerivceCommon.getInstance().getLoginData();
 //			} catch (ClassNotFoundException e) {
@@ -43,6 +48,7 @@ public class TestUpdateRestaurantAndSales {
 //			String accountId = loginData.getId();
 			//세션으로 id 가져오기
 			String accountId = SessionManager.getLoginDataSession().getId();
+
 			
 			
 			int reservationIdx = resDao.findMyRestaurant(accountId).getRestaurantId();
@@ -90,7 +96,7 @@ public class TestUpdateRestaurantAndSales {
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 		

@@ -7,15 +7,15 @@ import java.sql.SQLException;
 
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 public class AccountLoginAddTest {
 	private AccountDao accountdao;
-	private TablePickSerivceCommon tablePickServiceCommon;
+	private CommonService tablePickServiceCommon;
 	
 	public AccountLoginAddTest() throws ClassNotFoundException {
 		accountdao = new AccountDao();
-    this.tablePickServiceCommon = TablePickSerivceCommon.getInstance();
+    this.tablePickServiceCommon = CommonService.getInstance();
 	}
 	
 	public static void main(String[] args) {

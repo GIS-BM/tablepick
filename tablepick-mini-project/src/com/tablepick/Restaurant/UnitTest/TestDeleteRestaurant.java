@@ -1,14 +1,18 @@
 package com.tablepick.Restaurant.UnitTest;
 
 import java.sql.SQLException;
+
 import java.util.Scanner;
 
 import com.tablepick.exception.AccountNotFoundException;
 import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
+
 import com.tablepick.session.SessionManager;
+
+import com.tablepick.service.CommonService;
+
 
 public class TestDeleteRestaurant {
 	// 식당 삭제를 테스트하는 클래스 입니다.
@@ -23,6 +27,7 @@ public class TestDeleteRestaurant {
 		RestaurantDao dao = new RestaurantDao();
 		Scanner sc = new Scanner(System.in);
 		AccountVO loginData = null;
+
 //		try {
 //			loginData = TablePickSerivceCommon.getInstance().getLoginData();
 //		} catch (ClassNotFoundException e) {
@@ -33,6 +38,7 @@ public class TestDeleteRestaurant {
 		//세션으로 id 가져오기
 		String accountId = SessionManager.getLoginDataSession().getId();
 				
+
 		String writeAccountId;
 		boolean restaurantDelete = false;
 		String password;
@@ -58,13 +64,10 @@ public class TestDeleteRestaurant {
 				System.out.println("등록된 식당을 삭제했습니다.");
 				restaurantDelete=true;
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			} catch (AccountNotFoundException e) {
-				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());
 			} catch (NotMatchedPasswordException e) {
-				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());
 			}
 		}

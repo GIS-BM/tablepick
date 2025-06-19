@@ -7,8 +7,11 @@ import java.util.Map;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
+
 import com.tablepick.session.SessionManager;
+
+import com.tablepick.service.CommonService;
+
 
 public class TestSelectRestaurantAndSales {
 	
@@ -28,6 +31,7 @@ public class TestSelectRestaurantAndSales {
 					//1. 따라서 로그인 정보의 accountId를 받아온 후
 					//2. 이 정보를 가지고 restaurantId 를 조회합니다.
 					AccountVO loginData = null;
+
 //				
 //					try {
 //						loginData = TablePickSerivceCommon.getInstance().getLoginData();
@@ -39,6 +43,7 @@ public class TestSelectRestaurantAndSales {
 //					String accountId = loginData.getId();
 					//세션으로 id 가져오기
 					String accountId = SessionManager.getLoginDataSession().getId();
+
 					
 					
 					int reservationIdx = resDao.findMyRestaurant(accountId).getRestaurantId();
@@ -59,7 +64,7 @@ public class TestSelectRestaurantAndSales {
 					}
 					
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 		
 	}

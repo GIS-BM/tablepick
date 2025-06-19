@@ -6,8 +6,11 @@ import java.util.Map;
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
+
 import com.tablepick.session.SessionManager;
+
+import com.tablepick.service.CommonService;
+
 
 public class MostReservedCustomersTest {
 
@@ -28,6 +31,7 @@ public class MostReservedCustomersTest {
 
 			AccountVO loginData = null;
 
+
 //			try {
 //				loginData = TablePickSerivceCommon.getInstance().getLoginData();
 //			} catch (ClassNotFoundException e) {
@@ -38,6 +42,7 @@ public class MostReservedCustomersTest {
 //			String accountId = loginData.getId();
 			//세션으로 id 가져오기
 			String accountId = SessionManager.getLoginDataSession().getId();
+
 			
 			//System.out.println(accountId);
 
@@ -50,7 +55,7 @@ public class MostReservedCustomersTest {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
 	}

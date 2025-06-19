@@ -8,20 +8,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import com.tablepick.exception.RestaurantNotFoundException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.ReserveVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 public class ReserveCRUDUnitTest {
 	private AccountDao accountdao;
-    private final TablePickSerivceCommon tablePickServiceCommon;
+    private final CommonService tablePickServiceCommon;
 
 	public ReserveCRUDUnitTest() throws ClassNotFoundException {
 		try {
 			accountdao = new AccountDao();
-			this.tablePickServiceCommon = TablePickSerivceCommon.getInstance();	
+			this.tablePickServiceCommon = CommonService.getInstance();	
 		}catch (ClassNotFoundException e){
 			System.err.println("DB 드라이버 로딩 실패: " + e.getMessage());
             e.printStackTrace();

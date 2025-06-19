@@ -86,5 +86,5 @@ public class OwnerService {
 	public void updateCustomerSale() {
 		restaurantDao.updateCustomerSale(accountId, reservationIdx,  newSales);
 	}
-	
 }
+

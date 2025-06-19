@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 
 import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 /**
  * 콘솔 UI 메인 클래스 싱글톤 패턴으로 작성
@@ -22,7 +22,7 @@ public class ConsoleUIIndex {
 	private static ConsoleUIIndex instance;
 	// 싱글톤 패턴을 위한 ConsoleUIIndex 객체 instacne 선언
 	// 외부에서 객체에 직접 접근 불가능 하게 한다.
-	private TablePickSerivceCommon tablePickServiceCommon;
+	private CommonService tablePickServiceCommon;
 	private BufferedReader reader;
 	// TablePickSerivceCommon 객체 선언
 
@@ -30,7 +30,7 @@ public class ConsoleUIIndex {
 	// 접근제어자 private로 외부에서 객체 생성 불가능하게 한다.
 	private ConsoleUIIndex() throws ClassNotFoundException {
 		// [] 생성자 호출시 필요한 객체가 선언되게 한다.
-		this.tablePickServiceCommon = TablePickSerivceCommon.getInstance();
+		this.tablePickServiceCommon = CommonService.getInstance();
 		this.reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 

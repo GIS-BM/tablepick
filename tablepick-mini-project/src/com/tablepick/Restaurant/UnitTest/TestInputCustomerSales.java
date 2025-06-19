@@ -1,6 +1,7 @@
 package com.tablepick.Restaurant.UnitTest;
 
 import java.io.BufferedReader;
+
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,6 @@ import java.util.Map;
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
-import com.tablepick.service.TablePickSerivceCommon;
 import com.tablepick.session.SessionManager;
 
 public class TestInputCustomerSales {
@@ -34,6 +34,7 @@ public class TestInputCustomerSales {
 
 				AccountVO loginData = null;
 
+
 //				try {
 //					loginData = TablePickSerivceCommon.getInstance().getLoginData();
 //				} catch (ClassNotFoundException e) {
@@ -44,7 +45,7 @@ public class TestInputCustomerSales {
 //				String accountId = loginData.getId();
 				//세션으로 id 가져오기
 				String accountId = SessionManager.getLoginDataSession().getId();
-				
+
 
 				String reservationIdxStr = null;
 				String sale = null;
@@ -89,7 +90,7 @@ public class TestInputCustomerSales {
 			} catch (NoReservationException e) {
 				System.out.println("해당하는 예약 번호는 존재하지 않습니다. 다시 입력하세요.");
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 
 		} // while
