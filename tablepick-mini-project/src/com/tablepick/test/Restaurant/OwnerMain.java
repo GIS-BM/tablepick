@@ -3,7 +3,7 @@ package com.tablepick.test.Restaurant;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
 
 //식당 주인의 메인 화면 입니다.
@@ -32,7 +32,7 @@ public class OwnerMain {
 		
 		try {
 			
-			TablePickSerivceCommon.getInstance().login("owner01", "pw1234");
+			CommonService.getInstance().login("owner01", "pw1234");
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

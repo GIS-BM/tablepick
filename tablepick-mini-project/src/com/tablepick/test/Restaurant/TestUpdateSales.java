@@ -11,7 +11,7 @@ import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.model.RestaurantVO;
 import com.tablepick.model.SalesVO;
-import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.service.CommonService;
 
 public class TestUpdateSales {
 	public static void main(String[] args) throws RestaurantNotFoundException {
@@ -23,7 +23,7 @@ public class TestUpdateSales {
 			AccountVO loginData = null;
 			
 			try {
-				loginData = TablePickSerivceCommon.getInstance().getLoginData();
+				loginData = CommonService.getInstance().getLoginData();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
