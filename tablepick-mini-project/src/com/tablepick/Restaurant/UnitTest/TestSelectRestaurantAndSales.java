@@ -30,8 +30,7 @@ public class TestSelectRestaurantAndSales {
 					try {
 						loginData = TablePickSerivceCommon.getInstance().getLoginData();
 					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					}
 					
 					String accountId = loginData.getId();
@@ -54,7 +53,7 @@ public class TestSelectRestaurantAndSales {
 					}
 					
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 		
 	}

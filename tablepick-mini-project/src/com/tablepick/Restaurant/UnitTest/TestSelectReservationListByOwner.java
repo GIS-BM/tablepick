@@ -26,8 +26,7 @@ public class TestSelectReservationListByOwner {
 					try {
 						loginData = TablePickSerivceCommon.getInstance().getLoginData();
 					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					}
 					
 					
@@ -42,7 +41,7 @@ public class TestSelectReservationListByOwner {
 					}
 					
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 			}
 		

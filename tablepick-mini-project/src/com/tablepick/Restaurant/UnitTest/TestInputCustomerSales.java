@@ -36,8 +36,7 @@ public class TestInputCustomerSales {
 				try {
 					loginData = TablePickSerivceCommon.getInstance().getLoginData();
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 
 				String accountId = loginData.getId();
@@ -85,7 +84,7 @@ public class TestInputCustomerSales {
 			} catch (NoReservationException e) {
 				System.out.println("해당하는 예약 번호는 존재하지 않습니다. 다시 입력하세요.");
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 
 		} // while

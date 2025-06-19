@@ -30,8 +30,8 @@ public class MostReservedCustomersTest {
 			try {
 				loginData = TablePickSerivceCommon.getInstance().getLoginData();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());
+//				e.printStackTrace();
 			}
 
 			String accountId = loginData.getId();
@@ -47,7 +47,7 @@ public class MostReservedCustomersTest {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 
 	}
