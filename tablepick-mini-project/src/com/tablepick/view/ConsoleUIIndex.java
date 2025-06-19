@@ -9,6 +9,7 @@ import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.TablePickSerivceCommon;
 import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
+import com.tablepick.test.CustomerView.UIAdminMain;
 import com.tablepick.test.CustomerView.UICustomerMain;
 
 public class ConsoleUIIndex {
@@ -74,13 +75,7 @@ public class ConsoleUIIndex {
                         // new OwnerView().run(reader);
                         break;
                     case "admin":
-                    	try {
-                    		AdminCRUDUnitTest admin = new AdminCRUDUnitTest();
-                            admin.run(reader);
-                        } catch (Exception e) {
-                            System.out.println("admin 실행 중 오류가 발생했습니다.");
-                            e.printStackTrace();
-                        }
+                    	UIAdminMain.getInstance().run(reader);
                     	break;
                     default:
                         System.out.println("알 수 없는 사용자 유형입니다.");

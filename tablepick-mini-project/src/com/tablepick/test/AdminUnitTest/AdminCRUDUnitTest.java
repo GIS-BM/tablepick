@@ -31,16 +31,16 @@ public class AdminCRUDUnitTest {
 				String main = reader.readLine().trim();
 				switch (main) {
 				case "1":
-					searchAllAccountView();
+					searchAllAccount();
 					break;
 				case "2":
-					searchAccountView(reader);
+					searchAccount(reader);
 					break;
 				case "3":
-					searchAllReserveView();
+					searchAllReserve();
 					break;
 				case "4":
-					searchMostReserveView();
+					searchMostReserve();
 					break;
 				case "5":
                 	System.out.println("로그아웃합니다.");
@@ -58,7 +58,7 @@ public class AdminCRUDUnitTest {
 
 	}
 
-	private void searchAllAccountView() {
+	private void searchAllAccount() {
 		try {
 			System.out.println("[전체 계정 조회]");
 			ArrayList<AccountVO> list = admindao.getAllAccounts();
@@ -75,7 +75,7 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void searchAccountView(BufferedReader reader) {
+	private void searchAccount(BufferedReader reader) {
 		try {
 			System.out.println("[회원 정보 관리 시스템]");
 			System.out.print("조회할 ID 입력: ");
@@ -91,14 +91,14 @@ public class AdminCRUDUnitTest {
 					String choice = reader.readLine().trim();
 					switch (choice) {
 					case "1":
-						updateAccountView(vo, reader);
+						updateAccount(vo, reader);
 						return;
 					case "2":
-						deleteAccountView(vo, reader);
+						deleteAccount(vo, reader);
 						return;
 					case "3":
 						System.out.println("회원 정보 관리 시스템으로 돌아갑니다.\n");
-						searchAccountView(reader);
+						searchAccount(reader);
 						break;
 					case "4":
 						System.out.println("관리자 페이지로 돌아갑니다.");
@@ -117,7 +117,7 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void updateAccountView(AccountVO vo, BufferedReader reader) {
+	private void updateAccount(AccountVO vo, BufferedReader reader) {
 		try {
 			AccountVO old = vo;
 			if (old == null) {
@@ -148,7 +148,7 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void deleteAccountView(AccountVO vo, BufferedReader reader) {
+	private void deleteAccount(AccountVO vo, BufferedReader reader) {
 		try {
 			while (true) {
 				System.out.print(vo.getId() + " 계정을 삭제하시겠습니까?");
@@ -167,7 +167,7 @@ public class AdminCRUDUnitTest {
 					return;
 				case "3":
 					System.out.println("회원 정보 관리 시스템으로 돌아갑니다.\n");
-					searchAccountView(reader);
+					searchAccount(reader);
 					break;
 				case "4":
 					System.out.println("관리자 페이지로 돌아갑니다.");
@@ -182,7 +182,7 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void searchAllReserveView() {
+	private void searchAllReserve() {
 		try {
 			System.out.println("[전체 예약 조회]");
 			ArrayList<ReserveVO> list = admindao.getAllReserves();
@@ -202,7 +202,7 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void searchMostReserveView() {
+	private void searchMostReserve() {
 		try {
 			System.out.println("[최대 예약자 조회]");
 			Map<String, Integer> map = admindao.getMostReservesAccount();

@@ -19,13 +19,14 @@ public class SearchRestaurantUnitTest {
 	private SearchRestaurantUnitTest() {
 		try {
 			accountdao = new AccountDao();
-		}catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 		}
 	}
 
 	public static SearchRestaurantUnitTest getInstance() {
 		return instance;
 	}
+
 	public void searchAllRestaurant() {
 		try {
 			System.out.println("[식당 전체 조회]");

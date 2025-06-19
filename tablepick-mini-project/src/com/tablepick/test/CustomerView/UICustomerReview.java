@@ -2,22 +2,23 @@ package com.tablepick.test.CustomerView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import com.tablepick.test.SearchRestaurant.SearchRestaurantUnitTest;
 
-public class UICustomerSearch {
-	private static UICustomerSearch instance = new UICustomerSearch();
+import com.tablepick.test.ReviewCRUD.ReviewCRUDUnitTest;
 
-	private UICustomerSearch() {
+public class UICustomerReview {
+	private static UICustomerReview instance = new UICustomerReview();
+
+	private UICustomerReview() {
 	}
 
-	public static UICustomerSearch getInstance() {
+	public static UICustomerReview getInstance() {
 		return instance;
 	}
 
 	public static void main(String[] args) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			new UICustomerSearch().run(reader);
+			new UICustomerReview().run(reader);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -30,16 +31,16 @@ public class UICustomerSearch {
 				String main = reader.readLine().trim();
 				switch (main) {
 				case "1":
-					SearchRestaurantUnitTest.getInstance().searchAllRestaurant();
+					ReviewCRUDUnitTest.getInstance().registerReviewTest();
 					break;
 				case "2":
-					SearchRestaurantUnitTest.getInstance().searchRestaurantByType(reader);
+					ReviewCRUDUnitTest.getInstance().findMyReviewByIdTest();
 					break;
 				case "3":
-					SearchRestaurantUnitTest.getInstance().searchRestaurantReview(reader);
+					ReviewCRUDUnitTest.getInstance().updateReviewByIdTest();
 					break;
 				case "4":
-					SearchRestaurantUnitTest.getInstance().searchRestaurantByStar(reader);
+					ReviewCRUDUnitTest.getInstance().deleteMyReviewByIdTest();
 					break;
 				case "5":
 					System.out.println("Customer 메인 페이지로 돌아갑니다.");
@@ -59,13 +60,13 @@ public class UICustomerSearch {
 	private void printSearchRestaurantMenu() {
 		System.out.println(
 				"\n============================================================================================");
-		System.out.println("                               *** Customer 조회 서비스 ***");
+		System.out.println("                               *** Customer 리뷰 서비스 ***");
 		System.out.println(
 				"============================================================================================");
-		System.out.println("                                    1. 식당 전체 조회");
-		System.out.println("                                    2. 식당 타입별 조회");
-		System.out.println("                                    3. 해당 식당 리뷰 조회");
-		System.out.println("                                    4: 평균 별점 높은순 식당 조회");
+		System.out.println("                                    1. 식당 리뷰 등록");
+		System.out.println("                                    2. 내 리뷰 검색");
+		System.out.println("                                    3. 내 리뷰 수정");
+		System.out.println("                                    4: 내 리뷰 삭제");
 		System.out.println("                                    5. 뒤로가기");
 		System.out.println("                                    6. 서비스 종료하기");
 		System.out.println(
