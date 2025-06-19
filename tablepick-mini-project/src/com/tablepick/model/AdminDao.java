@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tablepick.common.DbConfig;
+import com.tablepick.exception.AccountNotFoundException;
 
 public class AdminDao {
 	public AdminDao() throws ClassNotFoundException {
@@ -61,7 +62,7 @@ public class AdminDao {
 	}
 
 	// 하나의 계정 출력
-	public AccountVO findAccountById(String accountId) throws SQLException {
+	public AccountVO findAccountById(String accountId) throws SQLException, AccountNotFoundException {
 		AccountVO accountVO = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -72,9 +73,12 @@ public class AdminDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, accountId);
 			rs = pstmt.executeQuery();
-			if (rs.next())
+			if (!rs.next())
+				throw new AccountNotFoundException(accountId + " 해당 ID의 계정이 존재하지 않습니다.");
+			else {
 				accountVO = new AccountVO(rs.getString("id"), rs.getString("type"), rs.getString("name"),
 						rs.getString("password"), rs.getString("tel"));
+			}
 		} finally {
 			closeAll(rs, pstmt, con);
 		}

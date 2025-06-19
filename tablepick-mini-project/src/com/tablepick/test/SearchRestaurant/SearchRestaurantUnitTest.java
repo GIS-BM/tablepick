@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.tablepick.exception.RestaurantNotFoundException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.RestaurantVO;
 import com.tablepick.model.ReviewVO;
@@ -27,29 +28,20 @@ public class SearchRestaurantUnitTest {
 	public void run(BufferedReader reader) {
 		try {
 			while (true) {
-				SearchRestaurantUnitTest search = new SearchRestaurantUnitTest();
-				System.out.println("\n=== 식당 조회 서비스 ===");
-				System.out.println("1. 식당 전체 조회");
-				System.out.println("2. 식당 타입별 조회");
-				System.out.println("3. 해당 식당 리뷰 조회");
-				System.out.println("4. 평균 별점 높은순 식당 조회");
-				System.out.println("5. 뒤로가기");				
-				System.out.println("exit: 종료");
-				System.out.print("입력 : ");
-
+				printSearchRestaurantMenu();
 				String main = reader.readLine().trim();
 				switch (main) {
 				case "1":
-					search.searchAllRestaurantView();
+					searchAllRestaurantView();
 					break;
 				case "2":
-					search.searchRestaurantByTypeView(reader);
+					searchRestaurantByTypeView(reader);
 					break;
 				case "3":
-					search.searchRestaurantReviewView(reader);
+					searchRestaurantReviewView(reader);
 					break;
 				case "4":
-					search.searchRestaurantByStar(reader);
+					searchRestaurantByStar(reader);
 					break;
 				case "5":
 					System.out.println("Customer 메인 페이지로 돌아갑니다.");
@@ -143,13 +135,14 @@ public class SearchRestaurantUnitTest {
 				for (ReviewVO rvo : reviewList) {
 					String formattedRegisterDate = rvo.getRegisterDate().format(dateTimeFormatter);
 					System.out.println("식당명: "
-							+ accountdao.findRestaurantNameById(
-									accountdao.findRestaurantNameByIdFromReview(rvo.getReserveIdx()))
+							+ accountdao.findRestaurantNameById(vo.getRestaurantId())
 							+ " 별점: " + rvo.getStar() + "점 " + " 내용: " + rvo.getComment() + " 등록일: "
 							+ formattedRegisterDate);
 				}
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (RestaurantNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -157,18 +150,33 @@ public class SearchRestaurantUnitTest {
 	private void searchRestaurantByStar(BufferedReader reader) {
 		try {
 			System.out.println("[별점 높은순 조회]");
-			Map<RestaurantVO, Double> map = accountdao.searchRestaurantByStar();
+			Map<RestaurantVO, double[]> map = accountdao.searchRestaurantByStar();
 			if (map.isEmpty()) {
 				System.out.println("등록된 식당이 없습니다.");
 			} else {
 				for (RestaurantVO vo : map.keySet()) {
-					double avgStar = map.get(vo);
+					double[] values = map.get(vo);
+					double avgStar = values[0];
+					int count = (int)values[1];
 					System.out.println(vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: "
-							+ vo.getOpenTime() + " 평균 별점: " + avgStar);
+							+ vo.getOpenTime() + " 평균 별점: " + avgStar + " 예약자 수: "+count);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	private void printSearchRestaurantMenu() {
+        System.out.println("\n============================================================================================");
+        System.out.println("                               *** Customer 조회 서비스 ***");
+        System.out.println("============================================================================================");
+        System.out.println("                                    1. 식당 전체 조회");
+        System.out.println("                                    2. 식당 타입별 조회");
+        System.out.println("                                    3. 해당 식당 리뷰 조회");
+        System.out.println("                                    4: 평균 별점 높은순 식당 조회");
+        System.out.println("                                    5. 뒤로가기");
+        System.out.println("                                    6. 서비스 종료하기");
+        System.out.println("============================================================================================");
+        System.out.print("메뉴를 선택하세요: ");
 	}
 }
