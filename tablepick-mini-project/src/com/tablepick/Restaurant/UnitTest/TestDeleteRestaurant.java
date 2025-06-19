@@ -8,6 +8,7 @@ import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.service.TablePickSerivceCommon;
+import com.tablepick.session.SessionManager;
 
 public class TestDeleteRestaurant {
 	// 식당 삭제를 테스트하는 클래스 입니다.
@@ -22,13 +23,16 @@ public class TestDeleteRestaurant {
 		RestaurantDao dao = new RestaurantDao();
 		Scanner sc = new Scanner(System.in);
 		AccountVO loginData = null;
-		try {
-			loginData = TablePickSerivceCommon.getInstance().getLoginData();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String accountId = loginData.getId();
+//		try {
+//			loginData = TablePickSerivceCommon.getInstance().getLoginData();
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		String accountId = loginData.getId();
+		//세션으로 id 가져오기
+		String accountId = SessionManager.getLoginDataSession().getId();
+				
 		String writeAccountId;
 		boolean restaurantDelete = false;
 		String password;
