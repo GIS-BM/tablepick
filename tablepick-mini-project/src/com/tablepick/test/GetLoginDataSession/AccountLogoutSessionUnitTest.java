@@ -2,10 +2,10 @@ package com.tablepick.test.GetLoginDataSession;
 
 import java.sql.SQLException;
 
-import com.tablepick.exception.LogoutFailException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
+
 
 public class AccountLogoutSessionUnitTest {
 // 로그인 데이터 다른 클래스에서 유지되는지 테스트

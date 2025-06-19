@@ -1,6 +1,10 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.RestaurantOwner.View;
 
 import java.util.Scanner;
+
+import com.tablepick.Restaurant.UnitTest.MostReservedCustomersTest;
+import com.tablepick.Restaurant.UnitTest.TestInputCustomerSales;
+import com.tablepick.Restaurant.UnitTest.TestSelectReservationListByOwner;
 
 //식당을 예약한 예약자를 확인할수 있는 페이지 입니다.
 //여기서 예약을 확인한 다음, 예약의 매출액을 적을 수 있습니다.
@@ -32,8 +36,9 @@ public class OwnerReserveCustomerDetail {
 			System.out.println("                  ");
 			System.out.println("                          1. 예약자 전체 조회하기");
 			System.out.println("                          2. 가장 많이 예약한 사람 조회하기");
-			System.out.println("                          3. 뒤로 가기");
-			System.out.println("                          4. 프로그램 종료하기");
+			System.out.println("                          3. 예약 당 매출액 입력 및 수정하기");
+			System.out.println("                          4. 뒤로 가기");
+			System.out.println("                          5. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -48,9 +53,12 @@ public class OwnerReserveCustomerDetail {
 				MostReservedCustomersTest.getInstance().run();
 				break;
 			case "3":
-				OwnerMainDetail.getInstance().run();
+				TestInputCustomerSales.getInstance().run();
 				break;
 			case "4":
+				OwnerMainDetail.getInstance().run();
+				break;
+			case "5":
 				System.out.println("프로그램을 종료합니다.");
 				exit = true;
 				System.exit(0); // 시스템 종료

@@ -1,4 +1,4 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.Restaurant.UnitTest;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class TestSelectReservationListByOwner {
 					String accountId = loginData.getId();
 					
 					
-					List<Map<String, String>> reservationList = restaurantDao.checkMyRestaurantReservationList(accountId);
+					List<Map<String, String>> reservationList = restaurantDao.findMyRestaurantReservationList(accountId);
 					
 					System.out.println("                        *** 내 식당 예약자 명단 *** ");
 					for (int i = 0; i < reservationList.size(); i++) {

@@ -1,4 +1,4 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.RestaurantOwner.View;
 
 import java.sql.SQLException;
 
@@ -14,36 +14,36 @@ import com.tablepick.model.RestaurantDao;
 import com.tablepick.service.CommonService;
 
 //메뉴를 조회 및 생성하는 클래스 입니다.
-public class OwnerMenuDetail{
-	
+public class OwnerMenuDetail {
+
 	private static OwnerMenuDetail instance = new OwnerMenuDetail();
+
 	private OwnerMenuDetail() {
 	}
+
 	public static OwnerMenuDetail getInstance() {
 		return instance;
 	}
-	
-	public void run(){
-		
+
+	public void run() {
 
 		String console;
 		String name;
 		int price;
-		//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
-		//1. 따라서 로그인 정보의 accountId를 받아온 후
-		//2. 이 정보를 가지고 restaurantId 를 조회합니다.
+		// 메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
+		// 1. 따라서 로그인 정보의 accountId를 받아온 후
+		// 2. 이 정보를 가지고 restaurantId 를 조회합니다.
 		AccountVO loginData = null;
-	
+
 		try {
 			loginData = CommonService.getInstance().getLoginData();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		String accountId = loginData.getId();
-		
+
 		boolean create = true;
 
 		RestaurantDao dao = new RestaurantDao();
@@ -65,38 +65,34 @@ public class OwnerMenuDetail{
 			console = sc.nextLine();
 
 			switch (console) {
-			
+
 			case "1":
-			
+
 				try {
-					
-					List<Map<String, String>> list = dao.checkMenu(accountId);
+
+					List<Map<String, String>> list = dao.findMenu(accountId);
 
 					System.out.println("등록된 메뉴를 조회합니다.");
-					
+					System.out.println("                     ");
 					if (list.isEmpty()) {
-						System.out.println("등록된 메뉴가 없습니다.");
-					}else {
-						for(int i = 0; i<list.size();i++) {
-						System.out.println(list.get(i));
-					}
+						System.out.println("현재 등록된 메뉴가 없습니다.");
+					} else {
+						for (int i = 0; i < list.size(); i++) {
+							System.out.println(list.get(i));
+						}
+						System.out.println("                     ");
 					}
 
-					
-					
-					
 					break;
-					
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (RestaurantNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} 
-				
-				
-				
+				}
+
 			case "2":
 				System.out.println("새로운 메뉴를 등록합니다. 등록할 메뉴의 정보를 입력하세요.");
 
@@ -124,29 +120,54 @@ public class OwnerMenuDetail{
 
 				} else {
 
-					System.out.println("메뉴 등록을 취소했습니다.");
+					System.out.println("잘못된 입력입니다. 메뉴 등록을 취소했습니다.");
 
 				}
 
 				break;
 			case "3":
+				try {
+
+					List<Map<String, String>> list = dao.findMenu(accountId);
+
+					System.out.println("등록된 메뉴를 조회합니다.");
+					System.out.println("                     ");
+					if (list.isEmpty()) {
+						System.out.println("등록된 메뉴가 없습니다. 메뉴를 생성해 주세요.");
+						break;
+					} else {
+						for (int i = 0; i < list.size(); i++) {
+							System.out.println(list.get(i));
+						}
+					
+					}
+
 				
+
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (RestaurantNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				System.out.println("수정하려는 메뉴를 입력해 주세요.");
 				name = sc.nextLine();
 				System.out.println("수정하려는 가격을 입력해 주세요.");
 				price = sc.nextInt();
 				sc.nextLine();
-				
-			
+
 				try {
-					dao.UpdateMenu(accountId, name, price);
+					dao.updateMenu(accountId, name, price);
 					System.out.println("메뉴가 성공적으로 수정되었습니다.");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (NotFoundMenuException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
+					//e.printStackTrace();
 				} catch (AccountNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -156,21 +177,48 @@ public class OwnerMenuDetail{
 				}
 
 				break;
-				
-				
+
 			case "4":
+				
+				try {
+
+					List<Map<String, String>> list = dao.findMenu(accountId);
+
+					System.out.println("등록된 메뉴를 조회합니다.");
+					System.out.println("                     ");
+					if (list.isEmpty()) {
+						System.out.println("등록된 메뉴가 없습니다. 메뉴를 생성해 주세요.");
+						break;
+					} else {
+						for (int i = 0; i < list.size(); i++) {
+							System.out.println(list.get(i));
+						}
+						System.out.println("                     ");
+					}
+
+				
+
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (RestaurantNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				System.out.println("삭제하려는 메뉴를 입력해 주세요.");
 				name = sc.nextLine();
 				try {
 					dao.deleteMenu(accountId, name);
 					System.out.println("메뉴가 삭제되었습니다.");
-					
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (NotFoundMenuException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
+					//e.printStackTrace();
 				} catch (AccountNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -196,10 +244,9 @@ public class OwnerMenuDetail{
 		}
 	}
 
-
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
 		new OwnerMenuDetail().run();
-		
+
 	}
 }

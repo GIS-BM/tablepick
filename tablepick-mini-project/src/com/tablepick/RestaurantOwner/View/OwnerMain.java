@@ -1,10 +1,11 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.RestaurantOwner.View;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.tablepick.Restaurant.UnitTest.TestCreateRestaurant;
+import com.tablepick.Restaurant.UnitTest.TestDeleteRestaurant;
 import com.tablepick.service.CommonService;
-import com.tablepick.session.SessionManager;
 
 //식당 주인의 메인 화면 입니다.
 //식당 등록 화면, 식당 상세 정보 화면으로 이동할 수 있습니다. 
@@ -46,8 +47,6 @@ public class OwnerMain {
 		
 		String console;
 		//그림은 메인에서만 출력
-		while (!exit) {
-			
 		
 		System.out.println("                                ／三三三三三三三三＼");
 		System.out.println("                              ／三三三三三三三三三三＼");
@@ -65,6 +64,10 @@ public class OwnerMain {
 				"============================================================================================");
 				
 		System.out.println("                          ");
+		while (!exit) {
+			
+		
+	
 	
 
 		System.out.println("                 *** 어서오세요. 식당을 관리할 수 있는 페이지 입니다. ***             ");
@@ -93,10 +96,18 @@ public class OwnerMain {
 			TestDeleteRestaurant.getInstance().run();
 			break;
 		case "4":
-			System.out.println("로그아웃 합니다.");
+			try {
+				CommonService.getInstance().logout();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다. (로직 추가 필요)");
+			System.out.println("                          ");
 			break;
 		case "5":
 			System.out.println("이전 화면으로 돌아갑니다. (로직 추가 필요)");
+			System.out.println("                          ");
 			break;
 		case "6":
 			System.out.println("프로그램을 종료합니다.");
@@ -106,6 +117,7 @@ public class OwnerMain {
 			break;
 		default:
 			System.out.println("없는 선택지 입니다. 다시 선택해 주세요.");
+			System.out.println("                          ");
 			break;
 		}
 		}

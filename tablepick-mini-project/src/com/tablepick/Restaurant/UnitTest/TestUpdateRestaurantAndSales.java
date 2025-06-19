@@ -1,4 +1,4 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.Restaurant.UnitTest;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -41,11 +41,11 @@ public class TestUpdateRestaurantAndSales {
 			
 			String accountId = loginData.getId();
 			
-			int reservationIdx = resDao.checkMyRestaurant(accountId).getRestaurantId();
+			int reservationIdx = resDao.findMyRestaurant(accountId).getRestaurantId();
 			
 			//System.out.println(reservationIdx);
 			
-			List<Map<String, String>> existList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
+			List<Map<String, String>> existList = resDao.findMyRestaurantAndSales(accountId, reservationIdx);
 			String newName = null;
 			String newType = null;
 			String newAddress = null;
@@ -53,7 +53,7 @@ public class TestUpdateRestaurantAndSales {
 			String inputSales = null;
 			
 			if (existList != null) {
-				System.out.println("                          ** 식당의 상세 정보를 변경합니다. **");
+				System.out.println("                          *** 식당의 상세 정보를 변경합니다. ***");
 				for (int i = 0; i < existList.size(); i++) {
 					Map<String, String> map = existList.get(i);
 					
@@ -81,7 +81,7 @@ public class TestUpdateRestaurantAndSales {
 				}
 			
 				// 변경
-				resDao.changeMyRestaurantInfoAndSales(accountId, reservationIdx, newName, newType, newAddress, newTel);
+				resDao.updateMyRestaurantInfoAndSales(accountId, reservationIdx, newName, newType, newAddress, newTel);
 				System.out.println("식당 정보가 성공적으로 변경되었습니다.");
 			}
 			

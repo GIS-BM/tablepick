@@ -26,14 +26,7 @@ public class CustomerViewUnitTest {
 	public void run(BufferedReader reader) {
 	    try {
 	        while (true) {
-	            System.out.println("\n=== Customer 메인 페이지 ===");
-	            System.out.println("1. 식당 조회");
-	            System.out.println("2. 식당 예약");
-	            System.out.println("3. 식당 리뷰");
-	            System.out.println("4. 로그아웃");
-	            System.out.println("exit: 종료");
-	            System.out.print("입력 : ");
-
+	        	printCustomerMenu();
 	            String main = reader.readLine().trim();
 	            switch (main) {
 	                case "1":
@@ -48,7 +41,7 @@ public class CustomerViewUnitTest {
 	                case "4":
 	                	System.out.println("로그아웃합니다.");
 	                    return;
-	                case "exit":
+	                case "5":
 	                    System.out.println("종료합니다.");
 	                    System.exit(0);
 	                    break;
@@ -60,4 +53,25 @@ public class CustomerViewUnitTest {
 	        e.printStackTrace();
 	    }
 	}
+	private void printCustomerMenu() {
+        System.out.println("\n============================================================================================");
+		System.out.println("      /$$$$$$  /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$  /$$      /$$ /$$$$$$$$ /$$$$$$$ ");
+        System.out.println("     /$$__  $$| $$  | $$ /$$__  $$|__  $$__//$$__  $$| $$$    /$$$| $$_____/| $$__  $$");
+        System.out.println("    | $$  \\__/| $$  | $$| $$  \\__/   | $$  | $$  \\ $$| $$$$  /$$$$| $$      | $$  \\ $$");
+        System.out.println("    | $$      | $$  | $$|  $$$$$$    | $$  | $$  | $$| $$ $$/$$ $$| $$$$$   | $$$$$$$/");
+        System.out.println("    | $$      | $$  | $$ \\____  $$   | $$  | $$  | $$| $$  $$$| $$| $$__/   | $$__  $$");
+        System.out.println("    | $$    $$| $$  | $$ /$$  \\ $$   | $$  | $$  | $$| $$\\  $ | $$| $$      | $$  \\ $$");
+        System.out.println("    |  $$$$$$/|  $$$$$$/|  $$$$$$/   | $$  |  $$$$$$/| $$ \\/  | $$| $$$$$$$$| $$  | $$");
+        System.out.println("     \\______/  \\______/  \\______/    |__/   \\______/ |__/     |__/|________/|__/  |__/");
+        System.out.println("============================================================================================");
+        System.out.println("                               *** Customer 메인 서비스 ***");
+        System.out.println("============================================================================================");
+        System.out.println("                                    1. 식당 조회");
+        System.out.println("                                    2. 식당 예약");
+        System.out.println("                                    3. 식당 리뷰");
+        System.out.println("                                    4. 로그아웃");
+        System.out.println("                                    5. 서비스 종료하기");
+        System.out.println("============================================================================================");
+        System.out.print("메뉴를 선택하세요: ");
+    } 
 }

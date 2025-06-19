@@ -1,4 +1,4 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.Restaurant.UnitTest;
 
 import java.sql.SQLException;
 import java.util.Scanner;

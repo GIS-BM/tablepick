@@ -1,4 +1,4 @@
-package com.tablepick.test.Restaurant;
+package com.tablepick.Restaurant.UnitTest;
 
 import java.util.List;
 import java.util.Map;
@@ -36,10 +36,10 @@ public class TestSelectRestaurantAndSales {
 					
 					String accountId = loginData.getId();
 					
-					int reservationIdx = resDao.checkMyRestaurant(accountId).getRestaurantId();
+					int reservationIdx = resDao.findMyRestaurant(accountId).getRestaurantId();
 		
 					
-					List<Map<String, String>> resList = resDao.checkMyRestaurantAndSales(accountId, reservationIdx);
+					List<Map<String, String>> resList = resDao.findMyRestaurantAndSales(accountId, reservationIdx);
 					
 					for (int i = 0; i < resList.size(); i++) {
 						Map<String, String> map = resList.get(i);

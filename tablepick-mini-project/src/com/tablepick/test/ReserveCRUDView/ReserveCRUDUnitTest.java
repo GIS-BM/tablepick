@@ -39,14 +39,7 @@ public class ReserveCRUDUnitTest {
 	public void run(BufferedReader reader) {
 	    try {
 	        while (true) {
-	            System.out.println("\n=== 식당 예약 서비스 ===");
-	            System.out.println("1. 식당 예약");
-	            System.out.println("2. 예약 확인");
-	            System.out.println("3: 예약 변경");
-	            System.out.println("4: 예약 삭제");
-	            System.out.println("5. 뒤로가기");
-	            System.out.println("exit: 종료");
-	            System.out.print("입력 : ");
+	        	printReserveMenu();
 
 	            String main = reader.readLine().trim();
 	            switch (main) {
@@ -65,7 +58,7 @@ public class ReserveCRUDUnitTest {
 	                case "5":
 	                	System.out.println("Customer 메인 페이지로 돌아갑니다.");
 	                	return;
-	                case "exit":
+	                case "6":
 	                    System.out.println("종료합니다.");
 	                    System.exit(0);
 	                    break;
@@ -90,14 +83,11 @@ public class ReserveCRUDUnitTest {
 			String date = reader.readLine();
 			System.out.println("예약 시간:");
 			int time = Integer.parseInt(reader.readLine());
+			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate registerDate = LocalDate.parse(date, formatter);
-
 			int restaurantId = accountdao.findRestaurantIdByName(name);
-			if (restaurantId == -1) {
-				System.out.println("해당 식당이 존재하지 않습니다.");
-				return;
-			}
+			
 			AccountVO loginData = tablePickServiceCommon.getLoginData();
 			ReserveVO reserveVO = new ReserveVO(loginData.getId(), restaurantId, count, registerDate, time);
 			if (accountdao.insertReserve(reserveVO)) {
@@ -131,6 +121,8 @@ public class ReserveCRUDUnitTest {
 				}
 			}
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (RestaurantNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -219,5 +211,18 @@ public class ReserveCRUDUnitTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	private void printReserveMenu() {
+        System.out.println("\n============================================================================================");
+        System.out.println("                               *** Customer 예약 서비스 ***");
+        System.out.println("============================================================================================");
+        System.out.println("                                    1. 식당 예약");
+        System.out.println("                                    2. 예약 확인");
+        System.out.println("                                    3. 예약 변경");
+        System.out.println("                                    4: 예약 삭제");
+        System.out.println("                                    5. 뒤로가기");
+        System.out.println("                                    6. 서비스 종료하기");
+        System.out.println("============================================================================================");
+        System.out.print("메뉴를 선택하세요: ");
 	}
 }

@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tablepick.common.DbConfig;
+import com.tablepick.exception.RestaurantNotFoundException;
 
 public class AccountDao {
 	public AccountDao() throws ClassNotFoundException {
@@ -147,19 +148,21 @@ public class AccountDao {
 	}
 
 	// 레스토랑 idx 찾는 메서드
-	public int findRestaurantIdByName(String name) throws SQLException {
+	public int findRestaurantIdByName(String name) throws SQLException, RestaurantNotFoundException {
 		int restaurantId = 0;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT idx from restaurant where name = ?";
+			String sql = "SELECT idx FROM restaurant WHERE name = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, name);
 			rs = pstmt.executeQuery();
 			if (rs.next())
 				restaurantId = rs.getInt("idx");
+			if(restaurantId==0)
+				throw new RestaurantNotFoundException(name+" 식당이 존재하지 않습니다.");
 		} finally {
 			closeAll(rs, pstmt, con);
 		}
@@ -167,39 +170,21 @@ public class AccountDao {
 	}
 
 	// 레스토랑 name 찾는 메서드
-	public String findRestaurantNameById(int num) throws SQLException {
+	public String findRestaurantNameById(int num) throws SQLException, RestaurantNotFoundException {
 		String name = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT name from restaurant where idx = ?";
+			String sql = "SELECT name FROM restaurant WHERE idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, num);
 			rs = pstmt.executeQuery();
 			if (rs.next())
 				name = rs.getString("name");
-		} finally {
-			closeAll(rs, pstmt, con);
-		}
-		return name;
-	}
-
-	// review 테이블에서 레스토랑 idx 찾는 메서드
-	public int findRestaurantNameByIdFromReview(int num) throws SQLException {
-		int name = 0;
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			con = getConnection();
-			String sql = "SELECT restaurant_idx from reserve where idx = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, num);
-			rs = pstmt.executeQuery();
-			if (rs.next())
-				name = rs.getInt("restaurant_idx");
+			if(name==null)
+				throw new RestaurantNotFoundException("식당이 존재하지 않습니다.");
 		} finally {
 			closeAll(rs, pstmt, con);
 		}
@@ -217,6 +202,7 @@ public class AccountDao {
 			
 		
 			con = getConnection();
+			con.setAutoCommit(false);
 		
 			String sql = "INSERT INTO reserve (account_id, restaurant_idx, reservepeople,"
 					+ " reservedate, reservetime) VALUES (?, ?, ?, ?, ?)";
@@ -246,10 +232,12 @@ public class AccountDao {
 			pstmt.setInt(2,0);
 			pstmt.executeUpdate();
 			
+			con.commit();
 	
+		}catch(Exception e) {
+			con.rollback();
+			throw e;
 		}finally {
-		
-			
 			closeAll(rs, pstmt, con);
 		}
 		return result;
@@ -264,7 +252,7 @@ public class AccountDao {
 		try {
 			con = getConnection();
 			String sql = "SELECT idx, account_id, restaurant_idx, reservepeople ,"
-					+ " reservedate, reservetime , registerdate FROM reserve where idx = ?";
+					+ " reservedate, reservetime , registerdate FROM reserve WHERE restaurant_idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, idx);
 			rs = pstmt.executeQuery();
@@ -294,7 +282,7 @@ public class AccountDao {
 		try {
 			con = getConnection();
 			String sql = "SELECT idx, account_id, restaurant_idx, reservepeople ,"
-					+ " reservedate, reservetime , registerdate FROM reserve where account_id = ?";
+					+ " reservedate, reservetime , registerdate FROM reserve WHERE account_id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -322,6 +310,7 @@ public class AccountDao {
 		PreparedStatement pstmt = null;
 		try {
 			con = getConnection();
+			con.setAutoCommit(false);
 			String sql = "UPDATE reserve SET restaurant_idx = ?, reservepeople = ?, reservedate = ?, reservetime = ? WHERE idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, updated.getRestaurantId());
@@ -331,7 +320,11 @@ public class AccountDao {
 			pstmt.setInt(5, updated.getReserveId());
 			int rows = pstmt.executeUpdate();
 			result = rows > 0;
-		} finally {
+			con.commit();
+		} catch(Exception e){
+			con.rollback();
+			throw e;
+		}finally {
 			closeAll(pstmt, con);
 		}
 		return result;
@@ -344,12 +337,17 @@ public class AccountDao {
 		PreparedStatement pstmt = null;
 		try {
 			con = getConnection();
+			con.setAutoCommit(false);
 			String sql = "DELETE FROM reserve WHERE idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, old.getReserveId());
 			int rows = pstmt.executeUpdate();
 			result = rows > 0;
-		} finally {
+			con.commit();
+		} catch(Exception e){
+			con.rollback();
+			throw e;
+		}finally {
 			closeAll(pstmt, con);
 		}
 		return result;
@@ -363,7 +361,7 @@ public class AccountDao {
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT idx, account_id, name, type, address, " + " tel, opentime FROM restaurant";
+			String sql = "SELECT idx, account_id, name, type, address, tel, opentime FROM restaurant";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
@@ -389,7 +387,7 @@ public class AccountDao {
 		try {
 			con = getConnection();
 			String sql = "SELECT idx, account_id, name, type, address, "
-					+ " tel, opentime FROM restaurant where type = ?";
+					+ " tel, opentime FROM restaurant WHERE type = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, type);
 			rs = pstmt.executeQuery();
@@ -415,8 +413,8 @@ public class AccountDao {
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT v.idx, v.reserve_idx, v.star, v.comment , v.registerdate "
-					+ "  FROM restaurant r inner join review v on r.idx = v.restaurant_idx where r.idx = ?";
+			String sql = "SELECT v.idx, v.reserve_idx, v.star, v.comment , v.registerdate, r.restaurant_idx "
+					+ "FROM reserve r INNER JOIN review v ON r.idx = v.reserve_idx WHERE r.restaurant_idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, restaurantId);
 			rs = pstmt.executeQuery();
@@ -438,18 +436,18 @@ public class AccountDao {
 	}
 
 	// 별점 높은 순 조회
-	public Map<RestaurantVO, Double> searchRestaurantByStar() throws SQLException {
-		LinkedHashMap<RestaurantVO, Double> map = new LinkedHashMap<>();
+	public Map<RestaurantVO, double[]> searchRestaurantByStar() throws SQLException {
+		LinkedHashMap<RestaurantVO, double[]> map = new LinkedHashMap<>();
 		RestaurantVO vo = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "select r.idx, r.account_id, r.name, r.type, r.address, r.tel, r.opentime, round(avg(v.star), 2), "
-					+ " count(v.idx) from restaurant r left join review v on r.idx = v.restaurant_idx "
-					+ " group by r.idx, r.account_id,r.name, r.type, r.address, r.tel, r.opentime "
-					+ " order by round(avg(v.star), 2) desc;";
+			String sql = "SELECT r.idx, r.account_id, r.name, r.type, r.address, r.tel, r.opentime, round(avg(rv.star), 2), "
+					+ "count(rv.idx) FROM restaurant r LEFT JOIN reserve rs on r.idx = rs.restaurant_idx "
+					+ " LEFT JOIN review rv ON rs.idx = rv.reserve_idx GROUP BY r.idx, r.account_id, r.name, "
+					+ " r.type, r.address, r.tel, r.opentime ORDER BY round(avg(rv.star), 2) DESC;";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
@@ -458,8 +456,9 @@ public class AccountDao {
 
 				vo = new RestaurantVO(rs.getInt("r.idx"), rs.getString("r.account_id"), rs.getString("r.name"),
 						rs.getString("r.type"), rs.getString("r.address"), rs.getString("r.tel"), openTime);
-				double avgStar = rs.getDouble("round(avg(v.star), 2)");
-				map.put(vo, avgStar);
+				double avgStar = rs.getDouble("round(avg(rv.star), 2)");
+				int count = rs.getInt("count(rv.idx)");
+				map.put(vo, new double[] {avgStar,count});
 			}
 		} finally {
 			closeAll(rs, pstmt, con);
