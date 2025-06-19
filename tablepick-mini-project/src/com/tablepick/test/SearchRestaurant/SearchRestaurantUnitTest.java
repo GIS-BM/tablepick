@@ -20,6 +20,7 @@ public class SearchRestaurantUnitTest {
 		try {
 			accountdao = new AccountDao();
 		} catch (ClassNotFoundException e) {
+			
 		}
 	}
 

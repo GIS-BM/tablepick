@@ -2,7 +2,9 @@ package com.tablepick.test.CustomerView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+
 import com.tablepick.test.SearchRestaurant.SearchRestaurantUnitTest;
+import com.tablepick.test.customer.CustomerUnit;
 
 public class UICustomerSearch {
 	private static UICustomerSearch instance = new UICustomerSearch();
@@ -30,16 +32,16 @@ public class UICustomerSearch {
 				String main = reader.readLine().trim();
 				switch (main) {
 				case "1":
-					SearchRestaurantUnitTest.getInstance().searchAllRestaurant();
+					CustomerUnit.getInstance().searchAllRestaurant();
 					break;
 				case "2":
-					SearchRestaurantUnitTest.getInstance().searchRestaurantByType(reader);
+					CustomerUnit.getInstance().searchRestaurantByType(reader);
 					break;
 				case "3":
-					SearchRestaurantUnitTest.getInstance().searchRestaurantReview(reader);
+					CustomerUnit.getInstance().searchRestaurantReview(reader);
 					break;
 				case "4":
-					SearchRestaurantUnitTest.getInstance().searchRestaurantByStar(reader);
+					CustomerUnit.getInstance().searchRestaurantByStar(reader);
 					break;
 				case "5":
 					System.out.println("Customer 메인 페이지로 돌아갑니다.");

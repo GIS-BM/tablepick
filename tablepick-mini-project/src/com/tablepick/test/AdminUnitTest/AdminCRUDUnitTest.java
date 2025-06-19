@@ -1,7 +1,6 @@
 package com.tablepick.test.AdminUnitTest;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,50 +14,21 @@ import com.tablepick.model.ReserveVO;
 public class AdminCRUDUnitTest {
 	private AdminDao admindao;
 
-	public AdminCRUDUnitTest() throws ClassNotFoundException {
-		admindao = new AdminDao();
-	}
+	private static AdminCRUDUnitTest instance = new AdminCRUDUnitTest();
 
-	public static void main(String[] args) throws ClassNotFoundException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		new AdminCRUDUnitTest().run(reader);	
-		}
-	public void run(BufferedReader reader) {
+	public AdminCRUDUnitTest() {
 		try {
-			while (true) {
-				printAdminMenu();
+			admindao = new AdminDao();
+		} catch (ClassNotFoundException e) {
 
-				String main = reader.readLine().trim();
-				switch (main) {
-				case "1":
-					searchAllAccount();
-					break;
-				case "2":
-					searchAccount(reader);
-					break;
-				case "3":
-					searchAllReserve();
-					break;
-				case "4":
-					searchMostReserve();
-					break;
-				case "5":
-                	System.out.println("로그아웃합니다.");
-                    return;
-				case "6":
-					System.out.println("종료합니다.");
-					System.exit(0);
-				default:
-					System.out.println("잘못된 입력입니다.");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-
 	}
 
-	private void searchAllAccount() {
+	public static AdminCRUDUnitTest getInstance() {
+		return instance;
+	}
+
+	public void searchAllAccount() {
 		try {
 			System.out.println("[전체 계정 조회]");
 			ArrayList<AccountVO> list = admindao.getAllAccounts();
@@ -75,7 +45,7 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void searchAccount(BufferedReader reader) {
+	public void searchAccount(BufferedReader reader) {
 		try {
 			System.out.println("[회원 정보 관리 시스템]");
 			System.out.print("조회할 ID 입력: ");
@@ -110,14 +80,14 @@ public class AdminCRUDUnitTest {
 			} else {
 				System.out.println("해당 ID의 계정이 존재하지 않습니다.");
 			}
-		}catch (AccountNotFoundException e) {
+		} catch (AccountNotFoundException e) {
 			e.printStackTrace();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void updateAccount(AccountVO vo, BufferedReader reader) {
+	public void updateAccount(AccountVO vo, BufferedReader reader) {
 		try {
 			AccountVO old = vo;
 			if (old == null) {
@@ -148,7 +118,7 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void deleteAccount(AccountVO vo, BufferedReader reader) {
+	public void deleteAccount(AccountVO vo, BufferedReader reader) {
 		try {
 			while (true) {
 				System.out.print(vo.getId() + " 계정을 삭제하시겠습니까?");
@@ -182,7 +152,7 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void searchAllReserve() {
+	public void searchAllReserve() {
 		try {
 			System.out.println("[전체 예약 조회]");
 			ArrayList<ReserveVO> list = admindao.getAllReserves();
@@ -202,43 +172,21 @@ public class AdminCRUDUnitTest {
 		}
 	}
 
-	private void searchMostReserve() {
+	public void searchMostReserve() {
 		try {
 			System.out.println("[최대 예약자 조회]");
 			Map<String, Integer> map = admindao.getMostReservesAccount();
 			if (map.isEmpty()) {
 				System.out.println("예약한 사람이 없습니다.");
 			} else {
-				for(String key : map.keySet()) {
+				for (String key : map.keySet()) {
 					int value = map.get(key);
-					System.out.println("ID: "+key+" 예약 수: "+value);
+					System.out.println("ID: " + key + " 예약 수: " + value);
 				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private void printAdminMenu() {
-        System.out.println("\n============================================================================================");
-        System.out.println("                    /$$$$$$  /$$$$$$$  /$$      /$$ /$$$$$$ /$$   /$$");
-        System.out.println("                   /$$__  $$| $$__  $$| $$$    /$$$|_  $$_/| $$$ | $$");
-        System.out.println("                  | $$  \\ $$| $$  \\ $$| $$$$  /$$$$  | $$  | $$$$| $$");
-        System.out.println("                  | $$$$$$$$| $$  | $$| $$ $$/$$ $$  | $$  | $$ $$ $$");
-        System.out.println("                  | $$__  $$| $$  | $$| $$  $$$| $$  | $$  | $$  $$$$");
-        System.out.println("                  | $$  | $$| $$  | $$| $$\\  $ | $$  | $$  | $$\\  $$$");
-        System.out.println("                  | $$  | $$| $$$$$$$/| $$ \\/  | $$ /$$$$$$| $$ \\  $$");
-        System.out.println("                  |__/  |__/|_______/ |__/     |__/|______/|__/  \\__/");
-        System.out.println("============================================================================================");
-        System.out.println("                             *** Admin 메인 서비스 ***");
-        System.out.println("============================================================================================");
-        System.out.println("                                1. 전체 회원 조회");
-        System.out.println("                                2. 회원 정보 검색");
-        System.out.println("                                3. 전체 예약 목록");
-        System.out.println("                                4. 최대 예약자 조회");
-        System.out.println("                                5. 로그아웃");
-        System.out.println("                                6. 서비스 종료하기");
-        System.out.println("============================================================================================");
-        System.out.print("메뉴를 선택하세요: ");
-	}
+
 }

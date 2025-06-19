@@ -3,7 +3,7 @@ package com.tablepick.test.CustomerView;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.tablepick.test.ReserveCRUDView.ReserveCRUDUnitTest;
+import com.tablepick.test.customer.CustomerUnit;
 
 public class UICustomerReserve {
 	private static UICustomerReserve instance = new UICustomerReserve();
@@ -31,16 +31,16 @@ public class UICustomerReserve {
 				String main = reader.readLine().trim();
 				switch (main) {
 				case "1":
-					ReserveCRUDUnitTest.getInstance().reserveRestaurantView(reader);
+					CustomerUnit.getInstance().reserveRestaurantView(reader);
 					break;
 				case "2":
-					ReserveCRUDUnitTest.getInstance().readReserveView(reader);
+					CustomerUnit.getInstance().readReserveView(reader);
 					break;
 				case "3":
-					ReserveCRUDUnitTest.getInstance().reserveUpdateView(reader);
+					CustomerUnit.getInstance().reserveUpdateView(reader);
 					break;
 				case "4":
-					ReserveCRUDUnitTest.getInstance().reserveDeleteView(reader);
+					CustomerUnit.getInstance().reserveDeleteView(reader);
 					break;
 				case "5":
 					System.out.println("Customer 메인 페이지로 돌아갑니다.");
