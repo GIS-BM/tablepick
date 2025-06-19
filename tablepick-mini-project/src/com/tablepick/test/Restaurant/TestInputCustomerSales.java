@@ -27,20 +27,20 @@ public class TestInputCustomerSales {
             System.out.println("매출액 입력할 예약 번호 입력");
             System.out.print(">> ");
             reservationIdxStr = br.readLine();
-            int reservationIdx = Integer.parseInt(br.readLine());
+            int reservationIdx = Integer.parseInt(reservationIdxStr);
             
             // 예약자 조회
+            System.out.println("** 선택한 예약자 정보 **");
+            Map<String, String> selectedCustomer = resDao.checkSelectedCustomer(accountId, reservationIdx);
+            for (Map.Entry<String, String> entry : selectedCustomer.entrySet()) {
+                System.out.println(entry.getKey() + " : " + entry.getValue());
+            }
             
-            
-
-            System.out.println("매출액 입력");
-            System.out.print(">> ");
+            System.out.println("매출액 입력 >> ");
             sale = br.readLine();
+            int newSale = Integer.parseInt(sale);
             
-            int newSale = Integer.parseInt(br.readLine());
-            resDao.createCustomerSale(accountId, reservationIdx, newSale);
-                // 변경
-//                resDao.updateRestaurantSales(accountId, reservationIdx, newSales);
+            resDao.updateCustomerSale(accountId, reservationIdx, newSale);
             
         } catch (NumberFormatException  e) {
             System.out.println("숫자 형식이 올바르지 않습니다.");
@@ -48,7 +48,7 @@ public class TestInputCustomerSales {
             e.printStackTrace();
         }
         
-//        System.out.println("식당 정보가 성공적으로 변경되었습니다.");
+        System.out.println("매출액이 성공적으로 입력되었습니다.");
     }
 
 }
