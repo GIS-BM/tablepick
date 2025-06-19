@@ -1,12 +1,16 @@
 package com.tablepick.Restaurant.UnitTest;
 
 import java.util.List;
+
 import java.util.Map;
 
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
+import com.tablepick.session.SessionManager;
+
 import com.tablepick.service.CommonService;
+
 
 public class TestSelectReservationListByOwner {
 	
@@ -23,14 +27,20 @@ public class TestSelectReservationListByOwner {
 					RestaurantDao restaurantDao = new RestaurantDao();
 					AccountVO loginData = null;
 					
-					try {
-						loginData = CommonService.getInstance().getLoginData();
-					} catch (ClassNotFoundException e) {
-						System.out.println(e.getMessage());
-					}
+
+//					try {
+//						loginData = TablePickSerivceCommon.getInstance().getLoginData();
+//					} catch (ClassNotFoundException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					
+//					
+//					String accountId = loginData.getId();
+					//세션으로 id 가져오기
+					String accountId = SessionManager.getLoginDataSession().getId();
+
 					
-					
-					String accountId = loginData.getId();
 					
 					
 					List<Map<String, String>> reservationList = restaurantDao.findMyRestaurantReservationList(accountId);

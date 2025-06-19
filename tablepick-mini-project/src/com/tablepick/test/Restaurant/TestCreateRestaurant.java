@@ -89,7 +89,7 @@ public class TestCreateRestaurant {
 		try {
 
 			System.out.println("식당이 등록되었습니다.");
-			System.out.println("내 식당 등록 번호 : " + dao.makeRestaurant(vo1));
+			System.out.println("내 식당 등록 번호 : " + dao.createRestaurant(vo1));
 		} catch (SQLException e) {
 
 			e.printStackTrace();

@@ -5,7 +5,13 @@ import java.util.Scanner;
 
 import com.tablepick.Restaurant.UnitTest.TestCreateRestaurant;
 import com.tablepick.Restaurant.UnitTest.TestDeleteRestaurant;
+
+import com.tablepick.model.AccountVO;
+
+import com.tablepick.session.SessionManager;
+
 import com.tablepick.service.CommonService;
+
 
 //식당 주인의 메인 화면 입니다.
 //식당 등록 화면, 식당 상세 정보 화면으로 이동할 수 있습니다. 
@@ -29,19 +35,10 @@ public class OwnerMain {
 		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		
-		// 테스트용 아이디 (추후 삭제)
+		//세션으로 id와 패스워드 가져오기
+		SessionManager.getLoginDataSession().getId();
 		
-		try {
-			
-			CommonService.getInstance().login("owner01", "pw1234");
-			
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		//이 로그인 데이터로 하위 페이지에서 로그인 아이디를 사용할 수 있습니다.
 	
 		

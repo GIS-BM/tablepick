@@ -11,6 +11,9 @@ import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
+
+import com.tablepick.session.SessionManager;
+
 import com.tablepick.service.CommonService;
 
 //메뉴를 조회 및 생성하는 클래스 입니다.
@@ -30,19 +33,11 @@ public class OwnerMenuDetail {
 		String console;
 		String name;
 		int price;
-		// 메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
-		// 1. 따라서 로그인 정보의 accountId를 받아온 후
-		// 2. 이 정보를 가지고 restaurantId 를 조회합니다.
-		AccountVO loginData = null;
 
-		try {
-			loginData = CommonService.getInstance().getLoginData();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		String accountId = loginData.getId();
+		
+		//세션으로 id 가져오기
+		String accountId = SessionManager.getLoginDataSession().getId();
+		
 
 		boolean create = true;
 
@@ -86,11 +81,11 @@ public class OwnerMenuDetail {
 					break;
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				}
 
 			case "2":
@@ -111,11 +106,11 @@ public class OwnerMenuDetail {
 						dao.createMenu(accountId, name, price);
 						System.out.println("메뉴가 성공적으로 등록되었습니다.");
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
+						//e.printStackTrace();
 					} catch (NotFoundRestaurantException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
+						//e.printStackTrace();
 					}
 
 				} else {
@@ -145,11 +140,11 @@ public class OwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				}
 
 				System.out.println("수정하려는 메뉴를 입력해 주세요.");
@@ -162,18 +157,18 @@ public class OwnerMenuDetail {
 					dao.updateMenu(accountId, name, price);
 					System.out.println("메뉴가 성공적으로 수정되었습니다.");
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				} catch (NotFoundMenuException e) {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
 				} catch (AccountNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				}
 
 				break;
@@ -199,11 +194,11 @@ public class OwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				}
 				
 				System.out.println("삭제하려는 메뉴를 입력해 주세요.");
@@ -213,18 +208,18 @@ public class OwnerMenuDetail {
 					System.out.println("메뉴가 삭제되었습니다.");
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				} catch (NotFoundMenuException e) {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
 				} catch (AccountNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+					//e.printStackTrace();
 				}
 				break;
 			case "5":
