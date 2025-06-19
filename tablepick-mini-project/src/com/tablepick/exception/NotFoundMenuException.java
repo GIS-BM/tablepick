@@ -8,5 +8,3 @@ public class NotFoundMenuException extends Exception {
 		super(message);
 	}
 }
-
-
