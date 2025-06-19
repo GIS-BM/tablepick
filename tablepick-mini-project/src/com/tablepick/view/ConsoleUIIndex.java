@@ -9,7 +9,7 @@ import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.TablePickSerivceCommon;
 import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
-import com.tablepick.test.CustomerView.CustomerViewUnitTest;
+import com.tablepick.test.CustomerView.UICustomerMain;
 
 public class ConsoleUIIndex {
     private final AccountDao accountDao;
@@ -67,13 +67,7 @@ public class ConsoleUIIndex {
                 // 사용자 타입에 따라 분기
                 switch (loginData.getType().toLowerCase()) {
                     case "customer":
-                    	try {
-                    		CustomerViewUnitTest cust = new CustomerViewUnitTest();
-                            cust.run(reader);
-                        } catch (Exception e) {
-                            System.out.println("customer 실행 중 오류가 발생했습니다.");
-                            e.printStackTrace();
-                        }
+                    	UICustomerMain.getInstance().run(reader);
                     	break;
                     case "owner":
                     	System.out.println("ownerView 구현해야 한다");

@@ -6,14 +6,19 @@ import java.io.InputStreamReader;
 import com.tablepick.test.ReserveCRUDView.ReserveCRUDUnitTest;
 import com.tablepick.test.SearchRestaurant.SearchRestaurantUnitTest;
 
-public class CustomerViewUnitTest {
-	public CustomerViewUnitTest() throws ClassNotFoundException {
+public class UICustomerMain {
+	private static UICustomerMain instance = new UICustomerMain();
+	private UICustomerMain() {
+		
+	}
+	public static UICustomerMain getInstance() {
+		return instance;
 	}
 
 	public static void main(String[] args) {
 	    try {
 	        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-	        new CustomerViewUnitTest().run(reader);
+	        new UICustomerMain().run(reader);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
@@ -25,7 +30,7 @@ public class CustomerViewUnitTest {
 	            String main = reader.readLine().trim();
 	            switch (main) {
 	                case "1":
-	                	UICustomerSearch.getInstance().run(reader);
+	                	
 	                    break;
 	                case "2":
 	                	UICustomerReserve.getInstance().run(reader);

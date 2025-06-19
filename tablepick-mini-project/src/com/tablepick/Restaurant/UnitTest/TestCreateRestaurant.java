@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.tablepick.exception.RestaurantNotFoundException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.RestaurantDao;
 import com.tablepick.model.RestaurantVO;
