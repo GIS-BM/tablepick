@@ -43,6 +43,10 @@ public class UIIndex {
 				case "3":
 					System.out.println("******* 음식점 예약 시스템을 종료합니다. *******");
 					return;
+				case "0":
+					System.out.println("프로그램을 종료합니다.");
+					System.exit(0); // 시스템 종료
+					break;
 				default:
 					System.out.println("올바른 메뉴를 선택해 주세요.");
 				}
@@ -51,7 +55,10 @@ public class UIIndex {
 			}
 		}
 	}
-
+	/**
+	 * 로그인 부분 뷰
+	 * @throws ClassNotFoundException 
+	 */
 	private void loginView() {
 		try {
 			System.out.println("[로그인]");
@@ -60,8 +67,9 @@ public class UIIndex {
 			System.out.print("Password: ");
 			String password = reader.readLine();
 
-			if (commonService.login(id, password) != null) {
+			if (commonService.loginSession(id, password) != null) {
 				AccountVO loginData = commonService.getLoginDataSession();
+				// CommonService.getInstance();
 				System.out.println("[" + loginData.getType() + "] " + loginData.getName() + "님 환영합니다.");
 
 				// 사용자 타입에 따라 분기
