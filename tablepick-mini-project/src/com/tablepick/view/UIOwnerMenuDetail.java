@@ -1,4 +1,4 @@
-package com.tablepick.test.owner;
+package com.tablepick.view;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,14 +12,14 @@ import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
 
 //메뉴를 조회 및 생성하는 클래스 입니다.
-public class OwnerMenuDetail {
+public class UIOwnerMenuDetail {
 
-	private static OwnerMenuDetail instance = new OwnerMenuDetail();
+	private static UIOwnerMenuDetail instance = new UIOwnerMenuDetail();
 
-	private OwnerMenuDetail() {
+	private UIOwnerMenuDetail() {
 	}
 
-	public static OwnerMenuDetail getInstance() {
+	public static UIOwnerMenuDetail getInstance() {
 		return instance;
 	}
 
@@ -223,7 +223,7 @@ public class OwnerMenuDetail {
 				break;
 			case "5":
 				System.out.println("이전 화면으로 돌아갑니다.");
-				OwnerMainDetail.getInstance().run();
+				UIOwnerMainDetail.getInstance().run();
 				break;
 			case "6":
 				create = false;
@@ -240,7 +240,7 @@ public class OwnerMenuDetail {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
-		new OwnerMenuDetail().run();
+		new UIOwnerMenuDetail().run();
 
 	}
 }

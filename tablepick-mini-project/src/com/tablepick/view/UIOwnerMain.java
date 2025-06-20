@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
-import com.tablepick.test.owner.OwnerMainDetail;
 import com.tablepick.test.owner.TestCreateRestaurant;
 import com.tablepick.test.owner.TestDeleteRestaurant;
 
@@ -96,7 +95,7 @@ public class UIOwnerMain {
 			TestCreateRestaurant.getInstance().run();
 			break;
 		case "2":
-			OwnerMainDetail.getInstance().run();
+			UIOwnerMainDetail.getInstance().run();
 			break;
 		case "3":
 			TestDeleteRestaurant.getInstance().run();
