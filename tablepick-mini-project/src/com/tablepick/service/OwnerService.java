@@ -1,6 +1,7 @@
 package com.tablepick.service;
 
 import java.sql.SQLException;
+
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +85,7 @@ public class OwnerService {
 	
 	public void findMenuDetail(String accountId, String name) throws NotFoundMenuException, SQLException, 
   
-  , NotFoundRestaurantException {
+   NotFoundRestaurantException, NotFoundAccountException {
 		ownerDao.findMenuDetail(accountId, name);
 	}
 	
