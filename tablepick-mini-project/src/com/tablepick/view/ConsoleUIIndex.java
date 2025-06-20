@@ -1,22 +1,24 @@
-package com.tablepick.test.extra;
+package com.tablepick.view;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 
+import javax.security.auth.login.AccountNotFoundException;
+
+import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
-import com.tablepick.view.UIAdminMain;
-import com.tablepick.view.UICustomerMain;
 
-public class ConsoleUIMainUnit {
+public class ConsoleUIIndex {
     private final AccountDao accountDao;
     private final CommonService tablePickServiceCommon;
     private final BufferedReader reader;
 
-    public ConsoleUIMainUnit() {
+    public ConsoleUIIndex() {
         try {
             this.accountDao = new AccountDao();
             this.tablePickServiceCommon = CommonService.getInstance();
@@ -35,7 +37,7 @@ public class ConsoleUIMainUnit {
                 String input = reader.readLine().trim();
                 switch (input) {
                     case "1":
-                        loginView();
+                    		loginView();
                         break;
                     case "2":
                         registerView();
@@ -61,28 +63,29 @@ public class ConsoleUIMainUnit {
             String password = reader.readLine();
 
             if (tablePickServiceCommon.login(id, password) != null) {
-                AccountVO loginData = tablePickServiceCommon.getLoginDataSession();
+                AccountVO loginData = CommonService.getInstance().getLoginDataSession();
+
                 System.out.println("[" + loginData.getType() + "] " + loginData.getName() + "님 환영합니다.");
 
                 // 사용자 타입에 따라 분기
                 switch (loginData.getType().toLowerCase()) {
                     case "customer":
-                    	UICustomerMain.getInstance().run();
-                        break;
+                    	//UICustomerMain.getInstance().run(reader);
+                    	break;
                     case "owner":
-                    	System.out.println("ownerView 구현해야 한다");
-                        // new OwnerView().run(reader);
+                    	//System.out.println("ownerView 구현해야 한다");
+                    	UIOwnerMain.getInstance().run();
                         break;
                     case "admin":
                     	//UIAdminMain.getInstance().run(reader);
-                        break;
+                    	break;
                     default:
                         System.out.println("알 수 없는 사용자 유형입니다.");
                 }
             } else {
                 System.out.println("로그인 실패: 아이디 또는 비밀번호를 확인하세요.");
             }
-        } catch (IOException | SQLException e) {
+        } catch (IOException | SQLException | ClassNotFoundException | NotFoundAccountException | AccountNotFoundException | NotFoundRestaurantException e) {
             System.err.println("로그인 오류: " + e.getMessage());
         }
     }
