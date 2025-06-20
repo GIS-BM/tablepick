@@ -139,43 +139,53 @@ public class CommonService {
 // 세션 로그인 메서드 (id, password 체크)
 //로그인 성공이면 타입에 따라서 판별하여 고객 혹은 멤버 페이지로 이동
 	public AccountVO loginSession(String id, String password) throws SQLException {
-		AccountVO loginDataSession = null;
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
+    AccountVO loginDataSession = null;
+    Connection con = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
 
-		try {
-			con = accountDao.getConnection();
-			String sql = "SELECT id, type, name, password, tel FROM account WHERE id = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, id);
-			rs = pstmt.executeQuery();
+    try {
+        con = accountDao.getConnection();
+        String sql = "SELECT id, type, name, password, tel FROM account WHERE id = ?";
+        pstmt = con.prepareStatement(sql);
+        pstmt.setString(1, id);
+        rs = pstmt.executeQuery();
 
-			if (rs.next()) {
-				String dbPassword = rs.getString("password");
+        if (!rs.next()) {
+            System.out.println("로그인 실패: 해당 ID는 존재하지 않습니다.");
+            return null;
+        }
 
-				// 평문 비교 (보안 미적용)
-				if (dbPassword.equals(password)) {
-					loginDataSession = new AccountVO();
-					loginDataSession.setId(rs.getString("id"));
-					loginDataSession.setPassword(dbPassword);
-					loginDataSession.setType(rs.getString("type"));
-					loginDataSession.setName(rs.getString("name"));
-					loginDataSession.setTel(rs.getString("tel"));
+        String dbPassword = rs.getString("password");
+        if (!dbPassword.equals(password)) {
+            System.out.println("로그인 실패: 비밀번호가 일치하지 않습니다.");
+            return null;
+        }
 
-					// 세션에 저장
-					SessionManager.login(loginDataSession);
+        // 로그인 성공
+        loginDataSession = new AccountVO();
+        loginDataSession.setId(rs.getString("id"));
+        loginDataSession.setPassword(dbPassword);
+        loginDataSession.setType(rs.getString("type"));
+        loginDataSession.setName(rs.getString("name"));
+        loginDataSession.setTel(rs.getString("tel"));
 
-					// 내부 필드에도 저장 (logoutSession에서 필요함)
-					this.logindatasession = loginDataSession;
-					System.out.println("로그인 데이터 값 확인 : " + loginDataSession); // 디버깅용
-				}
-			}
-		} finally {
-			accountDao.closeAll(rs, pstmt, con);
-		}
-		return loginDataSession;
-	}
+        // 세션 저장
+        SessionManager.login(loginDataSession);
+        this.logindatasession = loginDataSession;
+
+        // System.out.println(rs.getString("name")+"님 안녕하세요");
+        // System.out.println("로그인 성공! 로그인 정보: " + loginDataSession); // 테스트용 코드
+
+    } catch (SQLException e) {
+        System.out.println("DB 오류로 로그인에 실패했습니다.");
+        throw e;
+    } finally {
+        accountDao.closeAll(rs, pstmt, con);
+    }
+
+    return loginDataSession;
+}
 
 	// 세션 로그인 데이터 가져오기
 	public AccountVO getLoginDataSession() {
