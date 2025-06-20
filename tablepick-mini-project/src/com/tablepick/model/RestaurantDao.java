@@ -1,7 +1,6 @@
 package com.tablepick.model;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.tablepick.common.DatabaseUtil;
-import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NoReservationException;
+import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.exception.NotMatchedPasswordException;

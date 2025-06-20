@@ -165,13 +165,14 @@ public class UIOwnerMenuDetail {
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
 
+
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (AccountNotFoundException e) {
+				} catch (NotFoundAccountException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				} 
 
 				break;
 
@@ -220,7 +221,7 @@ public class UIOwnerMenuDetail {
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (AccountNotFoundException e) {
+				} catch (NotFoundAccountException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

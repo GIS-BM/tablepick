@@ -3,6 +3,8 @@ package com.tablepick.test.customer;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import com.tablepick.service.CommonService;
+
 public class UICustomerMain {
 	private static UICustomerMain instance = new UICustomerMain();
 
@@ -29,18 +31,24 @@ public class UICustomerMain {
 				printCustomerMenu();
 				String main = reader.readLine().trim();
 				switch (main) {
+				// 식당 조회 view 로 이동
 				case "1":
-					UICustomerSearch.getInstance().run(reader);
+					UICustomerFindRestaurant.getInstance().run(reader);
 					break;
+				// 식당 예약 view 로 이동 
 				case "2":
 					UICustomerReserve.getInstance().run(reader);
 					break;
+				// 식당 리뷰 view 로 이동
 				case "3":
 					UICustomerReview.getInstance().run(reader);
 					break;
+				// main UI 로 이동
 				case "4":
 					System.out.println("로그아웃합니다.");
+					CommonService.getInstance().logoutSession();
 					return;
+				// 서비스 종료
 				case "5":
 					System.out.println("종료합니다.");
 					System.exit(0);
