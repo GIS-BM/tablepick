@@ -61,7 +61,7 @@ public class ConsoleUIMainUnit {
             String password = reader.readLine();
 
             if (tablePickServiceCommon.login(id, password) != null) {
-                AccountVO loginData = tablePickServiceCommon.getLoginData();
+                AccountVO loginData = tablePickServiceCommon.getLoginDataSession();
                 System.out.println("[" + loginData.getType() + "] " + loginData.getName() + "님 환영합니다.");
 
                 // 사용자 타입에 따라 분기

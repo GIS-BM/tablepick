@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.tablepick.exception.AccountNotFoundException;
+import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.AdminDao;
 import com.tablepick.model.ReserveVO;
@@ -80,7 +80,7 @@ public class AdminUnit {
 			} else {
 				System.out.println("해당 ID의 계정이 존재하지 않습니다.");
 			}
-		} catch (AccountNotFoundException e) {
+		} catch (NotFoundAccountException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
