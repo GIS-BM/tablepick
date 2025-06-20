@@ -1,12 +1,15 @@
 package com.tablepick.test.admin;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.AdminDao;
 import com.tablepick.model.ReserveVO;
@@ -30,8 +33,8 @@ public class AdminUnit {
 
 	public void searchAllAccount() {
 		try {
-			System.out.println("[전체 계정 조회]");
-			ArrayList<AccountVO> list = admindao.getAllAccounts();
+			System.out.println("\n[전체 계정 조회]");
+			ArrayList<AccountVO> list = admindao.findAllAccounts();
 			if (list.isEmpty()) {
 				System.out.println("등록된 계정이 없습니다.");
 			} else {
@@ -40,6 +43,8 @@ public class AdminUnit {
 							+ " 비밀번호: " + vo.getPassword() + " 전화번호: " + vo.getTel());
 				}
 			}
+		} catch (NotFoundAccountException e) {
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -47,41 +52,50 @@ public class AdminUnit {
 
 	public void searchAccount(BufferedReader reader) {
 		try {
-			System.out.println("[회원 정보 관리 시스템]");
-			System.out.print("조회할 ID 입력: ");
-			String id = reader.readLine();
-			AccountVO vo = admindao.findAccountById(id);
-			if (vo != null) {
-				System.out.println("조회 결과: 아이디: " + vo.getId() + " 유형: " + vo.getType() + " 이름: " + vo.getName()
-						+ " 비밀번호: " + vo.getPassword() + " 전화번호: " + vo.getTel());
-
-				while (true) {
-					System.out.println("\n해당 아이디를 어떻게 처리하겠습니까?");
-					System.out.println("1. 변경 2. 삭제 3. 뒤로가기 4. 관리자 페이지");
-					String choice = reader.readLine().trim();
-					switch (choice) {
-					case "1":
-						updateAccount(vo, reader);
-						return;
-					case "2":
-						deleteAccount(vo, reader);
-						return;
-					case "3":
-						System.out.println("회원 정보 관리 시스템으로 돌아갑니다.\n");
-						searchAccount(reader);
-						break;
-					case "4":
-						System.out.println("관리자 페이지로 돌아갑니다.");
-						return;
-					default:
-						System.out.println("잘못된 입력입니다.");
+			System.out.println("\n[회원 정보 관리 시스템]");
+			System.out.println("1. 회원 조회 2. 뒤로가기");
+			String num = reader.readLine().trim();
+			if (num.equals("1")) {
+				System.out.print("조회할 ID 입력: ");
+				String id = reader.readLine();
+				AccountVO vo = admindao.findAccount(id);
+				if (vo != null) {
+					System.out.println("조회 결과: 아이디: " + vo.getId() + " 유형: " + vo.getType() + " 이름: " + vo.getName()
+							+ " 비밀번호: " + vo.getPassword() + " 전화번호: " + vo.getTel());
+					while (true) {
+						System.out.println("\n해당 아이디를 어떻게 처리하겠습니까?");
+						System.out.println("1. 변경 2. 삭제 3. 뒤로가기 4. 관리자 페이지");
+						String choice = reader.readLine().trim();
+						switch (choice) {
+						case "1":
+							updateAccount(vo, reader);
+							return;
+						case "2":
+							deleteAccount(vo, reader);
+							return;
+						case "3":
+							System.out.println("회원 정보 관리 시스템으로 돌아갑니다.\n");
+							searchAccount(reader);
+							break;
+						case "4":
+							System.out.println("관리자 페이지로 돌아갑니다.");
+							return;
+						default:
+							System.out.println("잘못된 입력입니다.");
+						}
 					}
+
 				}
-			} else {
-				System.out.println("해당 ID의 계정이 존재하지 않습니다.");
+			}else if(num.equals("2")) {
+				System.out.println("관리자 페이지로 돌아갑니다.");
+				return;
+			}else {
+				System.out.println("잘못된 입력입니다.");
+				searchAccount(reader);
 			}
 		} catch (NotFoundAccountException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			searchAccount(reader);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -113,7 +127,11 @@ public class AdminUnit {
 			} else {
 				System.out.println("수정 실패");
 			}
-		} catch (Exception e) {
+		} catch (InfoNotEnoughException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -147,14 +165,18 @@ public class AdminUnit {
 				}
 			}
 
-		} catch (Exception e) {
+		} catch (InfoNotEnoughException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void searchAllReserve() {
 		try {
-			System.out.println("[전체 예약 조회]");
+			System.out.println("\n[전체 예약 조회]");
 			ArrayList<ReserveVO> list = admindao.getAllReserves();
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (list.isEmpty()) {
@@ -169,12 +191,14 @@ public class AdminUnit {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (NotFoundRestaurantException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
 	public void searchMostReserve() {
 		try {
-			System.out.println("[최대 예약자 조회]");
+			System.out.println("\n[최대 예약자 조회]");
 			Map<String, Integer> map = admindao.getMostReservesAccount();
 			if (map.isEmpty()) {
 				System.out.println("예약한 사람이 없습니다.");
