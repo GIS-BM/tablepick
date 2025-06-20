@@ -24,7 +24,7 @@ public class ReviewCRUDUnitTest {
 	public void registerReviewTest() {
 		try {
 			System.out.println("registerReviewTest 테스트");
-			ReviewVO reviewresult = customerDao.createReview(5, 3, "리뷰테스트");
+			boolean reviewresult = customerDao.createReview(5, 3, "리뷰테스트");
 			System.out.println(reviewresult);
 		} catch (SQLException e) {
 			e.printStackTrace();

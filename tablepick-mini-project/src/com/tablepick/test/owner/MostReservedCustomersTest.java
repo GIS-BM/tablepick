@@ -39,9 +39,16 @@ public class MostReservedCustomersTest {
 
 			System.out.println("                  *** 내 식당의 최다 예약자를 확인합니다. ***");
 			System.out.println("                  ");
-			for (int i = 0; i < mostReservationList.size(); i++) {
-				System.out.println(mostReservationList.get(i));
+			
+			if (mostReservationList.isEmpty()) {
+				System.out.println("예약자가 존재하지 않습니다.");
+			} else {
+				for (int i = 0; i < mostReservationList.size(); i++) {
+					System.out.println(mostReservationList.get(i));
+				}
+				
 			}
+			
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
