@@ -24,26 +24,18 @@ public class TestSelectReservationListByOwner {
 	}
 
 	public void run() {
-		// 식당 주인이 조회하는 예약 리스트
+		/*
+		 * 식당 주인이 본인의 예약자 명단 리스트를 조회하는 클래스
+		 */
 		try {
 			OwnerService service = new OwnerService();
-			AccountVO loginData = null;
-
-//					try {
-//						loginData = TablePickSerivceCommon.getInstance().getLoginData();
-//					} catch (ClassNotFoundException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					
-//					
-//					String accountId = loginData.getId();
-			// 세션으로 id 가져오기
+	
 			String accountId = SessionManager.getLoginDataSession().getId();
 
 			List<Map<String, String>> reservationList = service.findMyRestaurantReservationList(accountId);
 
 			System.out.println("                        *** 내 식당 예약자 명단 *** ");
+			
 			if (reservationList.isEmpty()) {
 				System.out.println("                        예약자가 없습니다. ");
 			} else {
