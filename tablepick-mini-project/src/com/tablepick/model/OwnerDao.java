@@ -368,6 +368,7 @@ public class OwnerDao {
 			 con.setAutoCommit(false); // 트랜젝션 처리를 위한 자동 커밋 모드 해제
 
 			String updateRestaurantInfoSql = "UPDATE restaurant SET name = ?, type = ?, address = ?, tel = ? WHERE account_id = ?";
+			String updateSalesSql = "UPDATE sales SET sales = 0 WHERE reserve_idx = ?";
 
 			pstmt = con.prepareStatement(updateRestaurantInfoSql);
 			pstmt.setString(1, newName);
@@ -375,6 +376,12 @@ public class OwnerDao {
 			pstmt.setString(3, newAddress);
 			pstmt.setString(4, newTel);
 			pstmt.setString(5, accountId);
+			pstmt .executeUpdate();
+			
+			pstmt.close();
+			
+			pstmt = con.prepareStatement(updateSalesSql);
+			pstmt.setInt(1, reservationIdx);
 
 			pstmt.executeUpdate();
 			 con.commit(); // 정보 업데이트 내의 모든 세부 작업 정상 처리
