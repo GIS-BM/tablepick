@@ -167,7 +167,7 @@ public class UIOwnerMenuDetail {
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (AccountNotFoundException e) {
+				} catch (NotFoundAccountException e) {
 					e.printStackTrace();
 				}
 
