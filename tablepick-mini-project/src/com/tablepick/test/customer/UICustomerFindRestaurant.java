@@ -3,23 +3,20 @@ package com.tablepick.test.customer;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.tablepick.test.SearchRestaurant.SearchRestaurantUnitTest;
-import com.tablepick.test.customer.CustomerUnit;
+public class UICustomerFindRestaurant {
+	private static UICustomerFindRestaurant instance = new UICustomerFindRestaurant();
 
-public class UICustomerSearch {
-	private static UICustomerSearch instance = new UICustomerSearch();
-
-	private UICustomerSearch() {
+	private UICustomerFindRestaurant() {
 	}
 
-	public static UICustomerSearch getInstance() {
+	public static UICustomerFindRestaurant getInstance() {
 		return instance;
 	}
 
 	public static void main(String[] args) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			new UICustomerSearch().run(reader);
+			new UICustomerFindRestaurant().run(reader);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -31,21 +28,27 @@ public class UICustomerSearch {
 				printSearchRestaurantMenu();
 				String main = reader.readLine().trim();
 				switch (main) {
+				// 식당 전체 조회
 				case "1":
 					CustomerUnit.getInstance().searchAllRestaurant();
 					break;
+				// 식당 타입별 조회
 				case "2":
 					CustomerUnit.getInstance().searchRestaurantByType(reader);
 					break;
+				// 해당 식당 리뷰 조회
 				case "3":
 					CustomerUnit.getInstance().searchRestaurantReview(reader);
 					break;
+				// 평균 별점 높은순 식당 조회
 				case "4":
 					CustomerUnit.getInstance().searchRestaurantByStar(reader);
 					break;
+				// customer main UI 로 이동
 				case "5":
 					System.out.println("Customer 메인 페이지로 돌아갑니다.");
 					return;
+				// 서비스 종료
 				case "exit":
 					System.out.println("종료합니다.");
 					System.exit(0);

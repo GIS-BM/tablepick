@@ -1,7 +1,6 @@
 package com.tablepick.model;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,9 +11,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.common.DatabaseUtil;
-import com.tablepick.exception.AccountNotFoundException;
 import com.tablepick.exception.NoReservationException;
+import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.exception.NotMatchedPasswordException;
@@ -35,7 +36,7 @@ public class RestaurantDao {
 	 * @throws SQLException
 	 */
 	public boolean findAccount(String accountId, String password)
-			throws NotMatchedPasswordException, AccountNotFoundException, SQLException {
+			throws NotMatchedPasswordException, NotFoundAccountException, SQLException {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -52,7 +53,7 @@ public class RestaurantDao {
 			if (rs.next() == false) {
 				// 아이디가 존재하지 않을 때
 				loginSuccess = false;
-				throw new AccountNotFoundException("아이디가 존재하지 않습니다. 다시 입력하세요.");
+				throw new NotFoundAccountException("아이디가 존재하지 않습니다. 다시 입력하세요.");
 
 			} else {// 아이디가 존재하면 비밀번호 동일 여부 확인
 
@@ -173,7 +174,7 @@ public class RestaurantDao {
 	 * @throws NotMatchedPasswordException
 	 */
 	public void deleteMyRestaurant(String accountId, String password)
-			throws SQLException, NotMatchedPasswordException, AccountNotFoundException {
+			throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 

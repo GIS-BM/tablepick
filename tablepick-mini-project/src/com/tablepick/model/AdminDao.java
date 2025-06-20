@@ -13,8 +13,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.tablepick.common.DatabaseUtil;
 import com.tablepick.common.DbConfig;
-import com.tablepick.exception.AccountNotFoundException;
+import com.tablepick.exception.InfoNotEnoughException;
+import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
+import com.tablepick.exception.NotMatchedPasswordException;
 
 public class AdminDao {
 	public AdminDao() throws ClassNotFoundException {
@@ -37,16 +41,39 @@ public class AdminDao {
 			rs.close();
 		closeAll(pstmt, con);
 	}
+	
+	// 계정 조회
+	public void findAccounts()
+			throws NotFoundAccountException, SQLException {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "SELECT * FROM account;";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			if (rs.next() == false) {
+				throw new NotFoundAccountException("조회된 계정이 없습니다.");
+			}
+		}finally {
+			DatabaseUtil.closeAll(rs, pstmt, con);
+		}
+	}
 
 	// 전체 계정 출력
-	public ArrayList<AccountVO> getAllAccounts() throws SQLException {
+	public ArrayList<AccountVO> findAllAccounts() throws SQLException, NotFoundAccountException {
 		ArrayList<AccountVO> list = new ArrayList<AccountVO>();
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		findAccounts();
 		try {
 			con = getConnection();
-			String sql = "SELECT * FROM account";
+			String sql = "SELECT * FROM account;";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
@@ -62,7 +89,7 @@ public class AdminDao {
 	}
 
 	// 하나의 계정 출력
-	public AccountVO findAccountById(String accountId) throws SQLException, AccountNotFoundException {
+	public AccountVO findAccount(String accountId) throws SQLException, NotFoundAccountException {
 		AccountVO accountVO = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -74,7 +101,7 @@ public class AdminDao {
 			pstmt.setString(1, accountId);
 			rs = pstmt.executeQuery();
 			if (!rs.next())
-				throw new AccountNotFoundException(accountId + " 해당 ID의 계정이 존재하지 않습니다.");
+				throw new NotFoundAccountException(accountId + " 해당 ID의 계정이 존재하지 않습니다.");
 			else {
 				accountVO = new AccountVO(rs.getString("id"), rs.getString("type"), rs.getString("name"),
 						rs.getString("password"), rs.getString("tel"));
@@ -86,7 +113,7 @@ public class AdminDao {
 	}
 
 	// 계정 수정
-	public boolean updateAccount(AccountVO accountVO) throws SQLException {
+	public boolean updateAccount(AccountVO accountVO) throws SQLException, InfoNotEnoughException {
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -101,9 +128,11 @@ public class AdminDao {
 			pstmt.setString(4, accountVO.getTel());
 			pstmt.setString(5, accountVO.getId());
 			int rows = pstmt.executeUpdate();
-			result = rows > 0;
-			con.commit();
-		} catch(Exception e){
+			if(result = rows > 0)
+				con.commit();
+			else
+				throw new InfoNotEnoughException("정보가 충분하지 않습니다.");
+		} catch(InfoNotEnoughException e){
 			con.rollback();
 			throw e;
 		}finally {
@@ -113,7 +142,7 @@ public class AdminDao {
 	}
 
 	// 계정 삭제
-	public boolean deleteAccount(String id) throws SQLException {
+	public boolean deleteAccount(String id) throws SQLException, InfoNotEnoughException {
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -124,9 +153,11 @@ public class AdminDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			int rows = pstmt.executeUpdate();
-			result = rows > 0;
-			con.commit();
-		} catch(Exception e){
+			if(result = rows > 0)
+				con.commit();
+			else
+				throw new InfoNotEnoughException("정보가 충분하지 않습니다.");
+		} catch(InfoNotEnoughException e){
 			con.rollback();
 			throw e;
 		}finally {
@@ -136,7 +167,7 @@ public class AdminDao {
 	}
 
 	// 레스토랑 name 찾는 메서드
-	public String findRestaurantNameById(int num) throws SQLException {
+	public String findRestaurantNameById(int num) throws SQLException, NotFoundRestaurantException {
 		String name = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -147,7 +178,9 @@ public class AdminDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, num);
 			rs = pstmt.executeQuery();
-			if (rs.next())
+			if (!rs.next())
+				throw new NotFoundRestaurantException("조회된 식당이 없습니다.");
+			else
 				name = rs.getString("name");
 		} finally {
 			closeAll(rs, pstmt, con);
