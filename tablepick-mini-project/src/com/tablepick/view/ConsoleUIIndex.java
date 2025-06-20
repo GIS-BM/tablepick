@@ -70,14 +70,14 @@ public class ConsoleUIIndex {
                 // 사용자 타입에 따라 분기
                 switch (loginData.getType().toLowerCase()) {
                     case "customer":
-                    	UICustomerMain.getInstance().run(reader);
+                    	//UICustomerMain.getInstance().run(reader);
                     	break;
                     case "owner":
                     	//System.out.println("ownerView 구현해야 한다");
                     	UIOwnerMain.getInstance().run();
                         break;
                     case "admin":
-                    	UIAdminMain.getInstance().run(reader);
+                    	//UIAdminMain.getInstance().run(reader);
                     	break;
                     default:
                         System.out.println("알 수 없는 사용자 유형입니다.");

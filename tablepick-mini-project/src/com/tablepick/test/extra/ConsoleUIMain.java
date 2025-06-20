@@ -1,6 +1,8 @@
-package com.tablepick.view;
+package com.tablepick.test.extra;
 
-public class UIMain {
+import com.tablepick.view.UIIndex;
+
+public class ConsoleUIMain {
 	public static void main(String[] args) {
 		UIIndex UIIndex = new UIIndex();
 		UIIndex.run();

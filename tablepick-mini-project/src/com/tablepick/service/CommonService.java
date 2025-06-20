@@ -6,10 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.common.DbConfig;
+import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.session.SessionManager;
+import com.tablepick.view.AdminIndex;
+import com.tablepick.view.UIAdminMain;
+import com.tablepick.view.UICustomerMain;
+import com.tablepick.view.UIOwnerMain;
 
 // 싱글톤 처리
 public class CommonService {
@@ -41,8 +49,35 @@ public class CommonService {
 
 // 회원가입 기능
 // 이미 존재하는 insertAccount로 구현
-	public boolean registerAccount(AccountVO accountVO) throws SQLException {
-		return accountDao.insertAccount(accountVO);
+	public boolean createAccount(AccountVO accountVO) throws SQLException {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		// 1. 타입 유효성 검사
+		String type = accountVO.getType();
+		if (!"customer".equalsIgnoreCase(type) && !"owner".equalsIgnoreCase(type)) {
+			System.out.println("회원가입 실패: 허용되지 않은 계정 타입입니다. (입력된 타입: " + type + ")");
+			return false;
+		}
+
+		try {
+			con = accountDao.getConnection();
+			String sql = "INSERT INTO account (id, type, name, password, tel) VALUES (?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, accountVO.getId());
+			pstmt.setString(2, type); // 검증된 타입
+			pstmt.setString(3, accountVO.getName());
+			pstmt.setString(4, accountVO.getPassword());
+			pstmt.setString(5, accountVO.getTel());
+			int rows = pstmt.executeUpdate();
+			result = rows > 0;
+		} finally {
+			accountDao.closeAll(rs, pstmt, con);
+		}
+
+		return result;
 	}
 
 // 로그인 메서드 (id, password 체크)
@@ -74,7 +109,7 @@ public class CommonService {
 					logindatasession.setName(rs.getString("name"));
 					logindatasession.setPassword(rs.getString("password"));
 					logindatasession.setTel(rs.getString("tel"));
-					System.out.println("로그인 데이터 값 확인 : " + logindatasession); // 테스트용 코드
+					// System.out.println("로그인 데이터 값 확인 : " + logindatasession); // 테스트용 코드
 				}
 			}
 		} finally {
@@ -82,6 +117,7 @@ public class CommonService {
 		}
 		return logindatasession;
 	}
+
 	// 로그아웃 처리
 	public boolean logout() {
 		if (this.logindata != null) {
@@ -93,53 +129,54 @@ public class CommonService {
 			return false;
 		}
 	}
-	
+
 	// 로그인 사용자 정보 반환
 	public AccountVO getLoginDataSessionService() {
 		logindatasession = SessionManager.getLoginDataSession();
 		return logindatasession;
 	}
-	
+
 // 세션 로그인 메서드 (id, password 체크)
 //로그인 성공이면 타입에 따라서 판별하여 고객 혹은 멤버 페이지로 이동
 	public AccountVO loginSession(String id, String password) throws SQLException {
-    AccountVO loginDataSession = null;
-    Connection con = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+		AccountVO loginDataSession = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-    try {
-        con = accountDao.getConnection();
-        String sql = "SELECT id, type, name, password, tel FROM account WHERE id = ?";
-        pstmt = con.prepareStatement(sql);
-        pstmt.setString(1, id);
-        rs = pstmt.executeQuery();
+		try {
+			con = accountDao.getConnection();
+			String sql = "SELECT id, type, name, password, tel FROM account WHERE id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
 
-        if (rs.next()) {
-            String dbPassword = rs.getString("password");
+			if (rs.next()) {
+				String dbPassword = rs.getString("password");
 
-            // 평문 비교 (보안 미적용)
-            if (dbPassword.equals(password)) {
-                loginDataSession = new AccountVO();
-                loginDataSession.setId(rs.getString("id"));
-                loginDataSession.setPassword(dbPassword);
-                loginDataSession.setType(rs.getString("type"));
-                loginDataSession.setName(rs.getString("name"));
-                loginDataSession.setTel(rs.getString("tel"));
+				// 평문 비교 (보안 미적용)
+				if (dbPassword.equals(password)) {
+					loginDataSession = new AccountVO();
+					loginDataSession.setId(rs.getString("id"));
+					loginDataSession.setPassword(dbPassword);
+					loginDataSession.setType(rs.getString("type"));
+					loginDataSession.setName(rs.getString("name"));
+					loginDataSession.setTel(rs.getString("tel"));
 
-                // 세션에 저장
-                SessionManager.login(loginDataSession);
+					// 세션에 저장
+					SessionManager.login(loginDataSession);
 
-                // 내부 필드에도 저장 (logoutSession에서 필요함)
-                this.logindatasession = loginDataSession;
-                System.out.println("로그인 데이터 값 확인 : " + loginDataSession); // 디버깅용
-            }
-        }
-    } finally {
-        accountDao.closeAll(rs, pstmt, con);
-    }
-    return loginDataSession;
-}
+					// 내부 필드에도 저장 (logoutSession에서 필요함)
+					this.logindatasession = loginDataSession;
+					System.out.println("로그인 데이터 값 확인 : " + loginDataSession); // 디버깅용
+				}
+			}
+		} finally {
+			accountDao.closeAll(rs, pstmt, con);
+		}
+		return loginDataSession;
+	}
+
 	// 세션 로그인 데이터 가져오기
 	public AccountVO getLoginDataSession() {
 		AccountVO loginData = SessionManager.getLoginDataSession();
@@ -158,24 +195,30 @@ public class CommonService {
 			return false;
 		}
 	}
-	
-	/** 로그인한 계정의 타입을 판별해서 그에 맞는 View로 보내는 메서드
-	**/
-	public void checkAccountTypeAndMovePage(AccountVO logindata) {
+
+	/**
+	 * 로그인한 계정의 타입을 판별해서 그에 맞는 View로 보내는 메서드
+	 * 
+	 * @throws NotFoundRestaurantException
+	 * @throws NotFoundAccountException
+	 * @throws AccountNotFoundException
+	 **/
+	public void checkAccountTypeAndMovePage(AccountVO logindata)
+			throws AccountNotFoundException, NotFoundAccountException, NotFoundRestaurantException {
 		String accountType = logindata.getType();
 		switch (accountType) {
-			case "customer" :
-				System.out.println("고객 메인 페이지 출력");
-				// customerView().run();
-				break;
-			case "owner" :
-				System.out.println("음식점 주인 메인 페이지 출력");
-				// ownerView().run();
-				break;
-			case "admin" :
-				System.out.println("관리자 메인 페이지 출력");
-				// adminView().run();
-				break;
+		case "customer":
+			System.out.println("고객 메인 페이지 출력");
+			UICustomerMain.getInstance().run();
+			break;
+		case "owner":
+			System.out.println("음식점 주인 메인 페이지 출력");
+			UIOwnerMain.getInstance().run();
+			break;
+		case "admin":
+			System.out.println("관리자 메인 페이지 출력");
+			UIAdminMain.getInstance().run();
+			break;
 		}
 	}
 

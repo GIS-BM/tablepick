@@ -1,4 +1,4 @@
-package com.tablepick.view;
+package com.tablepick.test.extra;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,12 +8,12 @@ import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
 
-public class UIIndex {
+public class ConsoleUIIndex {
 	private final AccountDao accountDao;
 	private final CommonService commonService;
 	private final BufferedReader reader;
 
-	public UIIndex() {
+	public ConsoleUIIndex() {
         try {
             this.accountDao = new AccountDao();
             this.commonService = CommonService.getInstance();
