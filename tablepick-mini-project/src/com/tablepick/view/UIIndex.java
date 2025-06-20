@@ -4,15 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-
-import javax.security.auth.login.AccountNotFoundException;
-
-import com.tablepick.exception.NotFoundAccountException;
-import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
-import com.tablepick.test.admin.UIAdminMain;
 
 public class UIIndex {
 	private final AccountDao accountDao;
