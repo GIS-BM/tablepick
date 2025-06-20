@@ -35,9 +35,9 @@ public class UIOwnerMain {
 		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		
-//		//테스트 로그인. 페이지 연결이 전부 완료되면 삭제해야 합니다.
+		//테스트 로그인. 페이지 연결이 전부 완료되면 삭제해야 합니다.
 //		try {
-//			CommonService.getInstance().loginSessionManager("owner01","pw1234");
+//			CommonService.getInstance().loginSession("owner01","pw1234");
 //		} catch (ClassNotFoundException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
