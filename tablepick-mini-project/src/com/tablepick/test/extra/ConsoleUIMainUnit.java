@@ -67,7 +67,7 @@ public class ConsoleUIMainUnit {
                 // 사용자 타입에 따라 분기
                 switch (loginData.getType().toLowerCase()) {
                     case "customer":
-                    	UICustomerMain.getInstance().run(reader);
+                    	UICustomerMain.getInstance().run();
                         break;
                     case "owner":
                     	System.out.println("ownerView 구현해야 한다");
