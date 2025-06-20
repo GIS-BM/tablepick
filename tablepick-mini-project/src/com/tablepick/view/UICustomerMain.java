@@ -40,7 +40,7 @@ public class UICustomerMain {
 			UICustomerReserve.getInstance().run(reader);
 			break;
 		case "3":
-			UICustomerReview.getInstance().run();
+			UICustomerReview.getInstance().run(reader);
 			break;
 		case "4":
 			System.out.println("로그아웃합니다.");

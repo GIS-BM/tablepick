@@ -438,20 +438,12 @@ public class CustomerService {
 			System.out.print("코멘트: ");
 			String comment = reader.readLine();
 			int reserveId = customerDao.findReserveIdxByRestaurantName(name, accountId.getId());
-<<<<<<< HEAD
-			ReviewVO reviewResult = customerDao.createReview(reserveId, star, comment);
-			if (reviewResult != null)
-				System.out.println(accountId.getId() + ": " + " 식당: " + customerDao.findRestaurantNameByReserveIdx(reserveId)
-						+ " 별점: " + star + "점 코멘트: " + comment);
-
-=======
 			boolean reviewResult = customerDao.createReview(reserveId, star, comment);
 			if (reviewResult) {
 				System.out.println(customerDao.findRestaurantNameByReserveIdx(reserveId) + " 리뷰 등록하였습니다.");
 			} else {
 				System.out.println("리뷰 등록에 실패하였습니다.");
 			}
->>>>>>> main
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (NotFoundRestaurantException e) {
@@ -469,18 +461,14 @@ public class CustomerService {
 			System.out.println("\n[내 리뷰 검색]");
 			System.out.println("서비스 클래스 findMyReviewById 메서드 실행 성공");
 			System.out.println(accountId.getId());
-			// ArrayList<ReviewVO> list = customerDao.findMyReviewById(accountId.getId());
+			ArrayList<ReviewVO> list = customerDao.findMyReviewById(accountId.getId());
 			
 			if (list.isEmpty()) {
 				System.out.println("작성한 리뷰가 없습니다.");
 				return;
 			}
 			for (ReviewVO vo : list) {
-<<<<<<< HEAD
-				System.out.println("식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx()) + " 별점: "
-=======
 				System.out.println(customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx()) + " 별점: "
->>>>>>> main
 						+ vo.getStar() + "점 코멘트: " + vo.getComment());
 			}
 		} catch (SQLException e) {
@@ -503,13 +491,6 @@ public class CustomerService {
 				System.out.println("작성한 리뷰가 없습니다.");
 				return;
 			}
-<<<<<<< HEAD
-			System.out.println("\n작성한 리뷰 목록");
-			for (int i = 0; i < list.size(); i++) {
-				ReviewVO vo = list.get(i);
-				System.out.println((i + 1) + ". 식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx()) + " 별점: "
-						+ vo.getStar() + "점 코멘트: " + vo.getComment());
-=======
 			ReviewVO old;
 			ReviewVO updatedReview;
 			while (true) {
@@ -530,7 +511,6 @@ public class CustomerService {
 				// 유효한 선택이면 반복 종료
 				old = list.get(choice - 1);
 				break;
->>>>>>> main
 			}
 			while (true) {
 				System.out.print("새 별점(1~10)을 입력하세요: (기존: " + old.getStar() + "): ");
@@ -543,24 +523,9 @@ public class CustomerService {
 				String comment = reader.readLine();
 				ReviewVO updated = new ReviewVO(old.getIdx(), old.getReserveIdx(), star == 0 ? old.getStar() : star,
 						comment.isEmpty() ? old.getComment() : comment);
-				updatedReview = customerDao.updateMyReviewById(accountId.getId(), updated.getIdx(), star, comment);
+				updatedReview = customerDao.updateMyReviewById(accountId, updated.getIdx(), star, comment);
 				break;
 			}
-<<<<<<< HEAD
-			ReviewVO old = list.get(choice - 1);
-			System.out.print("새 별점(1~10)을 입력하세요: (기존: " + old.getStar() + "): ");
-			int star = Integer.parseInt(reader.readLine());
-			if (star < 1 || star > 10) {
-				System.out.println("fail : 별점은 1~10 사이의 숫자여야 합니다.");
-				return;
-			}
-			System.out.print("새 코멘트를 입력하세요: (기존: " + old.getComment() + "): ");
-			String comment = reader.readLine();
-			ReviewVO updated = new ReviewVO(old.getIdx(), old.getReserveIdx(), star == 0 ? old.getStar() : star,
-					comment.isEmpty() ? old.getComment() : comment);
-			ReviewVO updatedReview = customerDao.updateMyReviewById(accountId, updated.getIdx(), star, comment);
-=======
->>>>>>> main
 			if (updatedReview != null) {
 				System.out.println("리뷰가 성공적으로 수정되었습니다.");
 			} else {
@@ -595,13 +560,8 @@ public class CustomerService {
 			System.out.println("\n작성한 리뷰 목록");
 			for (int i = 0; i < reviews.size(); i++) {
 				ReviewVO vo = reviews.get(i);
-<<<<<<< HEAD
-				System.out.println((i + 1) + ". 식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx()) + " 별점: "
-						+ vo.getStar() + "점 코멘트: " + vo.getComment());
-=======
 				System.out.println((i + 1) + ". 식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
 						+ " 별점: " + vo.getStar() + "점 코멘트: " + vo.getComment());
->>>>>>> main
 			}
 			System.out.print("\n수정할 리뷰 번호를 입력하세요: ");
 			int choice = Integer.parseInt(reader.readLine());
