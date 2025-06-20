@@ -90,7 +90,6 @@ public class CustomerDao {
 					+ " JOIN reserve rs "
 					+ " ON r.reserve_idx = rs.idx "
 					+ " WHERE rs.account_id = ?";
-			System.out.println("실행할 SQL: " + sql);
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, accountId);
 			// ? 에 accountId 값 바인딩
@@ -206,11 +205,11 @@ public class CustomerDao {
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT r.idx"
-					+ "FROM reserve r"
-					+ "JOIN restaurant res ON r.restaurant_idx = res.idx"
-					+ "LEFT JOIN review rv ON r.idx = rv.reserve_idx"
-					+ "WHERE res.name = ? AND r.account_id = ?;";
+			String sql = "SELECT r.idx "
+					+ " FROM reserve r "
+					+ " JOIN restaurant res ON r.restaurant_idx = res.idx "
+					+ " LEFT JOIN review rv ON r.idx = rv.reserve_idx "
+					+ " WHERE res.name = ? AND r.account_id = ?; ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, name);
 			pstmt.setString(2, accountId);
@@ -233,17 +232,17 @@ public class CustomerDao {
 			try {
 				con = getConnection();
 				String sql = "SELECT res.name "
-				           + "FROM reserve r "
-				           + "JOIN restaurant res ON r.restaurant_idx = res.idx "
-				           + "LEFT JOIN review rv ON r.idx = rv.reserve_idx "
-				           + "WHERE rv.idx = ?";
+				           + " FROM reserve r "
+				           + " JOIN restaurant res ON r.restaurant_idx = res.idx "
+				           + " LEFT JOIN review rv ON r.idx = rv.reserve_idx "
+				           + " WHERE rv.idx = ? ";
 				pstmt = con.prepareStatement(sql);
 				pstmt.setInt(1, idx);
 				rs = pstmt.executeQuery();
 				if (rs.next())
 					restaurantName = rs.getString("name");
 				if (restaurantName == null)
-					throw new NotFoundRestaurantException(" 식당이 존재하지 않습니다.");
+					throw new NotFoundRestaurantException("식당이 존재하지 않습니다.");
 			} finally {
 				closeAll(rs, pstmt, con);
 			}
