@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotFoundRestaurantException;
@@ -162,17 +164,10 @@ public class UIOwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
-<<<<<<< HEAD:tablepick-mini-project/src/com/tablepick/RestaurantOwner/View/OwnerMenuDetail.java
-				} catch (NotFoundAccountException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
-=======
-				} catch (AccountNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
->>>>>>> main:tablepick-mini-project/src/com/tablepick/test/owner/OwnerMenuDetail.java
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NotFoundAccountException e) {
 					e.printStackTrace();
 				}
 
@@ -219,15 +214,9 @@ public class UIOwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
-<<<<<<< HEAD:tablepick-mini-project/src/com/tablepick/RestaurantOwner/View/OwnerMenuDetail.java
 				} catch (NotFoundAccountException e) {
 					System.out.println(e.getMessage());
 					//e.printStackTrace();
-=======
-				} catch (AccountNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
->>>>>>> main:tablepick-mini-project/src/com/tablepick/test/owner/OwnerMenuDetail.java
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
