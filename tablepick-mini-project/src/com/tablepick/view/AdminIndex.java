@@ -1,4 +1,4 @@
-package com.tablepick.service;
+package com.tablepick.view;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,12 +14,12 @@ import com.tablepick.model.AccountVO;
 import com.tablepick.model.AdminDao;
 import com.tablepick.model.ReserveVO;
 
-public class AdminService {
+public class AdminIndex {
 	private AdminDao admindao;
 
-	private static AdminService instance = new AdminService();
+	private static AdminIndex instance = new AdminIndex();
 
-	public AdminService() {
+	public AdminIndex() {
 		try {
 			admindao = new AdminDao();
 		} catch (ClassNotFoundException e) {
@@ -27,7 +27,7 @@ public class AdminService {
 		}
 	}
 
-	public static AdminService getInstance() {
+	public static AdminIndex getInstance() {
 		return instance;
 	}
 
