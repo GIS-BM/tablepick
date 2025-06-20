@@ -1,9 +1,8 @@
-package com.tablepick.test.CustomerView;
+package com.tablepick.test.customer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.tablepick.test.ReviewCRUD.ReviewCRUDUnitTest;
 
 public class UICustomerReview {
 	private static UICustomerReview instance = new UICustomerReview();

@@ -7,11 +7,12 @@ import java.util.Scanner;
 import com.tablepick.exception.AccountNotFoundException;
 import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.model.RestaurantDao;
+import com.tablepick.model.OwnerDao;
 
 import com.tablepick.session.SessionManager;
 
 import com.tablepick.service.CommonService;
+import com.tablepick.service.OwnerService;
 
 
 public class TestDeleteRestaurant {
@@ -24,7 +25,7 @@ public class TestDeleteRestaurant {
 	}
 
 	public void run() {
-		RestaurantDao dao = new RestaurantDao();
+		OwnerService service = new OwnerService();
 		Scanner sc = new Scanner(System.in);
 		AccountVO loginData = null;
 
@@ -59,7 +60,7 @@ public class TestDeleteRestaurant {
 				}
 				System.out.println("비밀번호 : ");
 				password = sc.nextLine();
-				dao.deleteMyRestaurant(accountId, password);
+				service.deleteMyRestaurant(accountId, password);
 
 				System.out.println("등록된 식당을 삭제했습니다.");
 				restaurantDelete=true;

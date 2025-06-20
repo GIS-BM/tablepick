@@ -8,12 +8,13 @@ import java.util.Map;
 
 import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.model.RestaurantDao;
+import com.tablepick.model.OwnerDao;
 import com.tablepick.model.RestaurantVO;
 
 import com.tablepick.session.SessionManager;
 
 import com.tablepick.service.CommonService;
+import com.tablepick.service.OwnerService;
 
 
 public class TestUpdateRestaurantAndSales {
@@ -29,7 +30,7 @@ public class TestUpdateRestaurantAndSales {
 	public void run() {
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			RestaurantDao resDao = new RestaurantDao();
+			OwnerService service = new OwnerService();
 			
 			//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
 			//1. 따라서 로그인 정보의 accountId를 받아온 후
@@ -51,11 +52,11 @@ public class TestUpdateRestaurantAndSales {
 
 			
 			
-			int reservationIdx = resDao.findMyRestaurant(accountId).getRestaurantId();
+			int reservationIdx = service.findMyRestaurant(accountId).getRestaurantId();
 			
 			//System.out.println(reservationIdx);
 			
-			List<Map<String, String>> existList = resDao.findMyRestaurantAndSales(accountId, reservationIdx);
+			List<Map<String, String>> existList = service.findMyRestaurantAndSales(accountId, reservationIdx);
 			String newName = null;
 			String newType = null;
 			String newAddress = null;
@@ -91,7 +92,7 @@ public class TestUpdateRestaurantAndSales {
 				}
 			
 				// 변경
-				resDao.updateMyRestaurantInfoAndSales(accountId, reservationIdx, newName, newType, newAddress, newTel);
+				service.updateMyRestaurantInfoAndSales(accountId, reservationIdx, newName, newType, newAddress, newTel);
 				System.out.println("식당 정보가 성공적으로 변경되었습니다.");
 			}
 			

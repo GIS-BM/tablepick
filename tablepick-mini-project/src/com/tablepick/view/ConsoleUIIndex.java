@@ -8,13 +8,8 @@ import java.sql.SQLException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
-import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
-<<<<<<< HEAD
-import com.tablepick.test.CustomerView.UIAdminMain;
-import com.tablepick.test.CustomerView.UICustomerMain;
-=======
-import com.tablepick.test.customer.CustomerViewUnitTest;
->>>>>>> main
+import com.tablepick.test.customer.UIAdminMain;
+import com.tablepick.test.customer.UICustomerMain;
 
 public class ConsoleUIIndex {
     private final AccountDao accountDao;
