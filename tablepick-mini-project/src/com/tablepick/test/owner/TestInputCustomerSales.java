@@ -1,17 +1,15 @@
 package com.tablepick.test.owner;
 
 import java.io.BufferedReader;
-
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.model.OwnerDao;
+import com.tablepick.service.CommonService;
 import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
-
 public class TestInputCustomerSales {
 
 	private static TestInputCustomerSales instance = new TestInputCustomerSales();
@@ -34,7 +32,11 @@ public class TestInputCustomerSales {
 				OwnerService service = new OwnerService();
 
 				AccountVO loginData = null;
-
+				try {
+					loginData = CommonService.getInstance().getLoginData();
+				} catch (ClassNotFoundException e) {
+					System.out.println(e.getMessage());
+				}
 
 //				try {
 //					loginData = TablePickSerivceCommon.getInstance().getLoginData();

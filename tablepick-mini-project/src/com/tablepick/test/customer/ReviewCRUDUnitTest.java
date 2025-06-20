@@ -12,14 +12,13 @@ import com.tablepick.model.ReviewVO;
 public class ReviewCRUDUnitTest {
 	CustomerDao customerDao = new CustomerDao();
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-	public static void main(String[] args) {
-		ReviewCRUDUnitTest test = new ReviewCRUDUnitTest();
-		test.registerReviewTest();
-		test.findMyReviewByIdTest();
-		// test.updateReviewByIdTest();
-		test.deleteMyReviewByIdTest();
+	private static ReviewCRUDUnitTest instance = new ReviewCRUDUnitTest();
+	private ReviewCRUDUnitTest() {
 	}
+	public static ReviewCRUDUnitTest getInstance() {
+		return instance;
+	}
+
 
 	// 리뷰 등록하는 테스트 메서드
 	public void registerReviewTest() {

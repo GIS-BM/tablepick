@@ -1,21 +1,18 @@
 package com.tablepick.test.owner;
 
 import java.sql.SQLException;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.model.OwnerDao;
 import com.tablepick.model.RestaurantVO;
+import com.tablepick.service.CommonService;
 import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
 
 //식당 등록을 테스트하는 클래스 입니다.
-
 public class TestCreateRestaurant {
 
 	private static TestCreateRestaurant instance = new TestCreateRestaurant();
@@ -29,6 +26,12 @@ public class TestCreateRestaurant {
 
 	public void run() {
 
+		AccountVO loginData = null;
+		try {
+			loginData = CommonService.getInstance().getLoginData();
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
 
 //		AccountVO loginData = null;
 //		try {

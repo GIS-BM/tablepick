@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
+import com.tablepick.test.customer.UIAdminMain;
+import com.tablepick.test.customer.UICustomerMain;
 
 public class ConsoleUIMainUnit {
     private final AccountDao accountDao;
@@ -65,16 +67,14 @@ public class ConsoleUIMainUnit {
                 // 사용자 타입에 따라 분기
                 switch (loginData.getType().toLowerCase()) {
                     case "customer":
-                    	System.out.println("CustomerView 구현해야 한다");
-                        // new CustomerView().run(reader);
+                    	UICustomerMain.getInstance().run(reader);
                         break;
                     case "owner":
                     	System.out.println("ownerView 구현해야 한다");
                         // new OwnerView().run(reader);
                         break;
                     case "admin":
-                    	System.out.println("adminView 구현해야 한다");
-                        // new AdminView().run(reader);
+                    	UIAdminMain.getInstance().run(reader);
                         break;
                     default:
                         System.out.println("알 수 없는 사용자 유형입니다.");
