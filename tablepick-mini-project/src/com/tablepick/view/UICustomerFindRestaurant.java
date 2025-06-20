@@ -1,9 +1,10 @@
 package com.tablepick.view;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.tablepick.test.customer.CustomerUnit;
+import com.tablepick.service.CustomerService;
 
 public class UICustomerFindRestaurant {
 	private static UICustomerFindRestaurant instance = new UICustomerFindRestaurant();
@@ -32,19 +33,19 @@ public class UICustomerFindRestaurant {
 				switch (main) {
 				// 식당 전체 조회
 				case "1":
-					CustomerUnit.getInstance().searchAllRestaurant();
+					CustomerService.getInstance().searchAllRestaurant();
 					break;
 				// 식당 타입별 조회
 				case "2":
-					CustomerUnit.getInstance().searchRestaurantByType(reader);
+					CustomerService.getInstance().searchRestaurantByType(reader);
 					break;
 				// 해당 식당 리뷰 조회
 				case "3":
-					CustomerUnit.getInstance().searchRestaurantReview(reader);
+					CustomerService.getInstance().searchRestaurantReview(reader);
 					break;
 				// 평균 별점 높은순 식당 조회
 				case "4":
-					CustomerUnit.getInstance().searchRestaurantByStar(reader);
+					CustomerService.getInstance().searchRestaurantByStar(reader);
 					break;
 				// customer main UI 로 이동
 				case "5":

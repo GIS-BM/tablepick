@@ -1,9 +1,10 @@
 package com.tablepick.view;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.tablepick.test.customer.ReviewCRUDUnitTest;
+import com.tablepick.service.CustomerService;
 
 
 public class UICustomerReview {
@@ -33,19 +34,19 @@ public class UICustomerReview {
 				switch (main) {
 				// 리뷰 등록
 				case "1":
-					ReviewCRUDUnitTest.getInstance().registerReviewTest();
+					CustomerService.getInstance().createReview(reader);
 					break;
 				// 리뷰 검색
 				case "2":
-					ReviewCRUDUnitTest.getInstance().findMyReviewByIdTest();
+					CustomerService.getInstance().findMyReviewById(reader);
 					break;
 				// 리뷰 수정
 				case "3":
-					ReviewCRUDUnitTest.getInstance().updateReviewByIdTest();
+					CustomerService.getInstance().updateReviewById(reader);
 					break;
 				// 리뷰 삭제
 				case "4":
-					ReviewCRUDUnitTest.getInstance().deleteMyReviewByIdTest();
+					CustomerService.getInstance().deleteMyReviewById(reader);;
 					break;
 				// customer main UI 로 이동 
 				case "5":

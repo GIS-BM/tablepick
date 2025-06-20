@@ -20,7 +20,7 @@ import com.tablepick.model.ReviewVO;
 public class CustomerService {
 	private static CustomerService instance;
 	private CustomerDao customerDao;
-	private AccountVO accountId;
+	private AccountVO accountId = null;
 
 	private CustomerService() {
 		try {
@@ -228,7 +228,7 @@ public class CustomerService {
 			if (customerDao.updateReserve(updated)) {
 				System.out.println("예약이 성공적으로 수정되었습니다.");
 			} else {
-				System.out.println("수정 실패");
+				System.out.println("수정이 실패하였습니다.");
 			}
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
@@ -394,7 +394,7 @@ public class CustomerService {
 	}
 
 	// 리뷰 등록하는 테스트 메서드
-	public void registerReviewTest(BufferedReader reader) throws IOException {
+	public void createReview(BufferedReader reader) throws IOException {
 		try {
 			System.out.println("registerReviewTest 테스트");
 			ReviewVO reviewresult = customerDao.createReview(5, 3, "리뷰테스트");
@@ -402,60 +402,90 @@ public class CustomerService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	// 리뷰찾는 테스트 메서드
-	public void findMyReviewByIdTest(BufferedReader reader) {
 		try {
-			System.out.println("findMyReviewByIdTest 테스트");
-			System.out.println(customerDao.findMyReviewById("cust01"));
+			System.out.println("\n[식당 리뷰 등록]");
+			System.out.print("식당명: ");
+			String name = reader.readLine();
+			System.out.print("별점: ");
+			int star = Integer.parseInt(reader.readLine());
+			System.out.print("코멘트: ");
+			String comment = reader.readLine();
+			int reserveId = customerDao.findReserveIdxByRestaurantName(name, accountId.getId());
+			ReviewVO reviewResult = customerDao.createReview(reserveId, star, comment);
+			if(reviewResult!=null)
+				System.out.println(accountId.getId()+": "+" 식당: "+customerDao.findRestaurantNameByReserveIdx(reserveId)
+				+" 별점: "+star+"점 코멘트: "+comment);
+
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (NotFoundRestaurantException e) {
+			System.out.println(e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	// 본인 아이디에 해당되는 리뷰를 수정하는 기능 테스트 메서드
-	public void updateReviewByIdTest(BufferedReader reader) {
-		System.out.print("아이디를 입력하세요: ");
-
+	// 리뷰찾는 테스트 메서드
+	public void findMyReviewById(BufferedReader reader) {
 		try {
-			String accountId = reader.readLine();
-
-			List<ReviewVO> reviews = customerDao.findMyReviewById(accountId);
-
-			if (reviews.isEmpty()) {
+			System.out.println("\n[내 리뷰 검색]");
+			ArrayList<ReviewVO> list = customerDao.findMyReviewById(accountId.getId());
+			if (list.isEmpty()) {
 				System.out.println("작성한 리뷰가 없습니다.");
 				return;
 			}
-
-			System.out.println("\n[작성한 리뷰 목록]");
-			for (ReviewVO r : reviews) {
-				System.out.printf("[리뷰번호: %d] 별점: %d점, 내용: %s%n", r.getIdx(), r.getStar(), r.getComment());
+			for(ReviewVO vo: list) {
+				System.out.println("식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
+				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (NotFoundRestaurantException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 
+	// 본인 아이디에 해당되는 리뷰를 수정하는 기능 테스트 메서드
+	public void updateReviewById(BufferedReader reader) {
+
+		try {
+			System.out.println("\n[내 리뷰 수정]");
+			List<ReviewVO> list = customerDao.findMyReviewById(accountId.getId());
+			if (list.isEmpty()) {
+				System.out.println("작성한 리뷰가 없습니다.");
+				return;
+			}
+			System.out.println("\n작성한 리뷰 목록");
+			for(int i =0; i<list.size(); i++) {
+				ReviewVO vo = list.get(i);
+				System.out.println((i+1)+ ". 식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
+				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
+			}
 			System.out.print("\n수정할 리뷰 번호를 입력하세요: ");
-			int reviewIdx = Integer.parseInt(reader.readLine());
-
-			System.out.print("새 별점(1~10)을 입력하세요: ");
-			int newStar = Integer.parseInt(reader.readLine());
-
-			if (newStar < 1 || newStar > 10) {
+			int choice = Integer.parseInt(reader.readLine());
+			if (choice < 1 || choice > list.size()) {
+				System.out.println("잘못된 선택입니다.");
+				return;
+			}
+			ReviewVO old = list.get(choice - 1);
+			System.out.print("새 별점(1~10)을 입력하세요: (기존: " + old.getStar() + "): ");
+			int star = Integer.parseInt(reader.readLine());
+			if (star < 1 || star > 10) {
 				System.out.println("fail : 별점은 1~10 사이의 숫자여야 합니다.");
 				return;
 			}
-
-			System.out.print("새 코멘트를 입력하세요: ");
-			String newComment = reader.readLine();
-
-			// 리뷰 수정 시도
-			ReviewVO updatedReview = customerDao.updateMyReviewById(accountId, reviewIdx, newStar, newComment);
-
-			if (updatedReview != null) {
-				System.out.println("\n 리뷰가 성공적으로 수정되었습니다.");
-				System.out.printf(" 수정된 리뷰 → [리뷰번호: %d] 별점: %d점, 내용: %s%n", updatedReview.getIdx(),
-						updatedReview.getStar(), updatedReview.getComment());
+			System.out.print("새 코멘트를 입력하세요: (기존: " + old.getComment() + "): ");
+			String comment = reader.readLine();
+			ReviewVO updated = new ReviewVO(old.getIdx(), old.getReserveIdx(),
+					star == 0 ? old.getStar() : star,
+					comment.isEmpty() ? old.getComment() : comment);
+			ReviewVO updatedReview = customerDao.updateMyReviewById(accountId.getId(), updated.getIdx(), star, comment);
+			if (updatedReview!=null) {
+				System.out.println("리뷰가 성공적으로 수정되었습니다.");
 			} else {
-				System.out.println("fail : 리뷰 수정에 실패했습니다. 리뷰 번호나 아이디를 확인하세요.");
+				System.out.println("수정이 실패하였습니다.");
 			}
 
 		} catch (IOException e) {
@@ -466,17 +496,16 @@ public class CustomerService {
 		} catch (SQLException e) {
 			System.out.println("fail : 데이터베이스 오류가 발생했습니다.");
 			e.printStackTrace();
+		} catch (NotFoundRestaurantException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
 	// 본인 아이디에 해당되는 리뷰 출력 후 하나 선택해서 삭제하는 뷰 테스트 메서드
-	public void deleteMyReviewByIdTest(BufferedReader reader) {
-		System.out.println("아이디를 입력하세요: ");
-
+	public void deleteMyReviewById(BufferedReader reader) {
 		try {
-			String accountId = reader.readLine();
-
-			List<ReviewVO> reviews = customerDao.findMyReviewById(accountId);
+			System.out.println("[내 리뷰 삭제]");
+			List<ReviewVO> reviews = customerDao.findMyReviewById(accountId.getId());
 
 			if (reviews.isEmpty()) {
 				System.out.println("작성한 리뷰가 없습니다.");
@@ -484,24 +513,28 @@ public class CustomerService {
 				return;
 			}
 
-			// [] 해당 유저가 작성한 리뷰 목록이 출력
-			System.out.println("\n[작성한 리뷰 목록]");
-			for (ReviewVO r : reviews) {
-				System.out.printf("[리뷰번호: %d] 별점: %d점, 내용: %s%n", r.getIdx(), r.getStar(), r.getComment());
+			System.out.println("\n작성한 리뷰 목록");
+			for(int i =0; i< reviews.size(); i++) {
+				ReviewVO vo = reviews.get(i);
+				System.out.println((i+1)+ ". 식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
+				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
 			}
-
-			System.out.print("\n삭제할 리뷰 번호를 입력해 주세요: ");
-			int reviewIdx = Integer.parseInt(reader.readLine());
-
-			// reviewIdx가 존재하지 않을 경우 메시지 추가
-
-			if (customerDao.deleteReviewById(reviewIdx))
+			System.out.print("\n수정할 리뷰 번호를 입력하세요: ");
+			int choice = Integer.parseInt(reader.readLine());
+			if (choice < 1 || choice > reviews.size()) {
+				System.out.println("잘못된 선택입니다.");
+				return;
+			}
+			ReviewVO old = reviews.get(choice - 1);
+			if (customerDao.deleteReviewById(old.getIdx()))
 				System.out.println("리뷰 삭제가 성공했습니다.");
 			else {
 				System.out.println("리뷰 삭제가 실패했습니다.");
 			}
 		} catch (SQLException | NumberFormatException | IOException e) {
 			e.printStackTrace();
+		} catch (NotFoundRestaurantException e) {
+			System.out.println(e.getMessage());;
 		}
 
 	}
