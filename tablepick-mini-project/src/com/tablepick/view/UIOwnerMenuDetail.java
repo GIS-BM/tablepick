@@ -53,7 +53,7 @@ public class UIOwnerMenuDetail {
 			System.out.println("                          3. 메뉴 수정하기");
 			System.out.println("                          4. 메뉴 삭제하기");
 			System.out.println("                          5. 이전 화면으로 돌아가기");
-			System.out.println("                          6. 프로그램 종료하기");
+			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -160,6 +160,8 @@ public class UIOwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
+
+
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
 					System.out.println(e.getMessage());
@@ -208,15 +210,17 @@ public class UIOwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
+
 				} catch (NotFoundRestaurantException e) {
 					System.out.println(e.getMessage());
+
 				}
 				break;
 			case "5":
 				System.out.println("이전 화면으로 돌아갑니다.");
 				UIOwnerMainDetail.getInstance().run();
 				break;
-			case "6":
+			case "0":
 				create = false;
 				System.out.println("프로그램을 종료합니다.");
 				System.exit(0); // 시스템 종료

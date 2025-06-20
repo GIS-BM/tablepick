@@ -47,7 +47,7 @@ public class UIOwnerReviewDetail {
 			System.out.println("                  ");
 			System.out.println("                          1. 리뷰 조회하기");
 			System.out.println("                          2. 뒤로 가기");
-			System.out.println("                          3. 프로그램 종료하기");
+			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -79,7 +79,7 @@ public class UIOwnerReviewDetail {
 				exit = true;
 				UIOwnerMainDetail.getInstance().run();
 				break;
-			case "3":
+			case "0":
 				System.out.println("프로그램을 종료합니다.");
 				exit = true;
 				System.exit(0); // 시스템 종료
