@@ -25,7 +25,7 @@ public class CustomerViewUnitTest {
 	            String main = reader.readLine().trim();
 	            switch (main) {
 	                case "1":
-	                	UICustomerSearch.getInstance().run(reader);
+	                	UICustomerFindRestaurant.getInstance().run(reader);
 	                    break;
 	                case "2":
 	                	UICustomerReserve.getInstance().run(reader);

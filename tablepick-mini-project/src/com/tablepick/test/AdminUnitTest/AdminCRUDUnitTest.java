@@ -1,11 +1,15 @@
 package com.tablepick.test.AdminUnitTest;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.tablepick.exception.InfoNotEnoughException;
+import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.AdminDao;
@@ -31,7 +35,7 @@ public class AdminCRUDUnitTest {
 	public void searchAllAccount() {
 		try {
 			System.out.println("[전체 계정 조회]");
-			ArrayList<AccountVO> list = admindao.getAllAccounts();
+			ArrayList<AccountVO> list = admindao.findAllAccounts();
 			if (list.isEmpty()) {
 				System.out.println("등록된 계정이 없습니다.");
 			} else {
@@ -40,6 +44,8 @@ public class AdminCRUDUnitTest {
 							+ " 비밀번호: " + vo.getPassword() + " 전화번호: " + vo.getTel());
 				}
 			}
+		} catch (NotFoundAccountException e) {
+			System.out.println(e.getMessage());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -50,7 +56,7 @@ public class AdminCRUDUnitTest {
 			System.out.println("[회원 정보 관리 시스템]");
 			System.out.print("조회할 ID 입력: ");
 			String id = reader.readLine();
-			AccountVO vo = admindao.findAccountById(id);
+			AccountVO vo = admindao.findAccount(id);
 			if (vo != null) {
 				System.out.println("조회 결과: 아이디: " + vo.getId() + " 유형: " + vo.getType() + " 이름: " + vo.getName()
 						+ " 비밀번호: " + vo.getPassword() + " 전화번호: " + vo.getTel());
@@ -81,6 +87,7 @@ public class AdminCRUDUnitTest {
 				System.out.println("해당 ID의 계정이 존재하지 않습니다.");
 			}
 		} catch (NotFoundAccountException e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,7 +120,11 @@ public class AdminCRUDUnitTest {
 			} else {
 				System.out.println("수정 실패");
 			}
-		} catch (Exception e) {
+		}catch(InfoNotEnoughException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -147,7 +158,11 @@ public class AdminCRUDUnitTest {
 				}
 			}
 
-		} catch (Exception e) {
+		} catch (InfoNotEnoughException e) {
+			System.out.println(e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -169,6 +184,8 @@ public class AdminCRUDUnitTest {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (NotFoundRestaurantException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 

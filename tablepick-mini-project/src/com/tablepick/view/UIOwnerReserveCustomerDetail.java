@@ -2,7 +2,10 @@ package com.tablepick.view;
 
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.test.owner.MostReservedCustomersTest;
 import com.tablepick.test.owner.TestInputCustomerSales;
 import com.tablepick.test.owner.TestSelectReservationListByOwner;
@@ -21,7 +24,7 @@ public class UIOwnerReserveCustomerDetail {
 		return instance;
 	}
 
-	public void run() throws NotFoundAccountException {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		boolean exit = false;
 
 		while (!exit) {
@@ -72,7 +75,7 @@ public class UIOwnerReserveCustomerDetail {
 		}
 	}
 
-	public static void main(String[] args) throws NotFoundAccountException {
+	public static void main(String[] args) throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerReserveCustomerDetail().run();
 	}
 }

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.service.OwnerService;
@@ -22,7 +24,7 @@ public class UIOwnerReviewDetail {
 		return instance;
 	}
 	
-	public void run() throws NotFoundAccountException {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		Scanner sc = new Scanner(System.in);
 		OwnerService service = new OwnerService();
 		List list = new ArrayList<>();
@@ -90,7 +92,7 @@ public class UIOwnerReviewDetail {
 		}
 	}
 
-	public static void main(String[] args) throws NotFoundAccountException {
+	public static void main(String[] args) throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerReviewDetail().run();
 	}
 }

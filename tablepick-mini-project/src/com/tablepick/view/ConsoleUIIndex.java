@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
-import com.tablepick.session.SessionManager;
-import com.tablepick.test.customer.UIAdminMain;
+import com.tablepick.test.admin.UIAdminMain;
 import com.tablepick.test.customer.UICustomerMain;
 
 public class ConsoleUIIndex {
@@ -85,7 +87,7 @@ public class ConsoleUIIndex {
             } else {
                 System.out.println("로그인 실패: 아이디 또는 비밀번호를 확인하세요.");
             }
-        } catch (IOException | SQLException | ClassNotFoundException | NotFoundAccountException e) {
+        } catch (IOException | SQLException | ClassNotFoundException | NotFoundAccountException | AccountNotFoundException | NotFoundRestaurantException e) {
             System.err.println("로그인 오류: " + e.getMessage());
         }
     }

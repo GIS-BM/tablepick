@@ -3,7 +3,10 @@ package com.tablepick.view;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
 import com.tablepick.test.owner.TestCreateRestaurant;
@@ -28,7 +31,7 @@ public class UIOwnerMain {
 				return instance;
 			}
 
-	public void run() throws NotFoundAccountException {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		
@@ -132,7 +135,7 @@ public class UIOwnerMain {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerMain().run();
 	}
 

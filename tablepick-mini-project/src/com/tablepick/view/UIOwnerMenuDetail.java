@@ -25,7 +25,7 @@ public class UIOwnerMenuDetail {
 		return instance;
 	}
 
-	public void run() throws NotFoundAccountException {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 
 		String console;
 		String name;
@@ -164,12 +164,9 @@ public class UIOwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
-				} catch (AccountNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 
 				break;
@@ -215,8 +212,6 @@ public class UIOwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
-				} catch (AccountNotFoundException e) {
-					System.out.println(e.getMessage());
 				} catch (NotFoundRestaurantException e) {
 					System.out.println(e.getMessage());
 				}
@@ -238,7 +233,7 @@ public class UIOwnerMenuDetail {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 
 		new UIOwnerMenuDetail().run();
 
