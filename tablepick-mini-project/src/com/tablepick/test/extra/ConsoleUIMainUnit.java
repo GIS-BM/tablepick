@@ -9,7 +9,7 @@ import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
 import com.tablepick.test.admin.UIAdminMain;
-import com.tablepick.test.customer.UICustomerMain;
+import com.tablepick.view.UICustomerMain;
 
 public class ConsoleUIMainUnit {
     private final AccountDao accountDao;

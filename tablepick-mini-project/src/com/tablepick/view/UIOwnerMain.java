@@ -7,8 +7,8 @@ import javax.security.auth.login.AccountNotFoundException;
 
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundRestaurantException;
+import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
-import com.tablepick.session.SessionManager;
 import com.tablepick.test.owner.TestCreateRestaurant;
 import com.tablepick.test.owner.TestDeleteRestaurant;
 

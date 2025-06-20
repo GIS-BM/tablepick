@@ -1,22 +1,24 @@
-package com.tablepick.test.customer;
+package com.tablepick.view;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class UICustomerReserve {
-	private static UICustomerReserve instance = new UICustomerReserve();
+import com.tablepick.test.customer.CustomerUnit;
 
-	private UICustomerReserve() {
+public class UICustomerFindRestaurant {
+	private static UICustomerFindRestaurant instance = new UICustomerFindRestaurant();
+
+	private UICustomerFindRestaurant() {
 	}
 
-	public static UICustomerReserve getInstance() {
+	public static UICustomerFindRestaurant getInstance() {
 		return instance;
 	}
 
 	public static void main(String[] args) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			UICustomerReserve.getInstance().run(reader);
+			new UICustomerFindRestaurant().run(reader);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -25,34 +27,33 @@ public class UICustomerReserve {
 	public void run(BufferedReader reader) {
 		try {
 			while (true) {
-				printReserveMenu();
+				printSearchRestaurantMenu();
 				String main = reader.readLine().trim();
 				switch (main) {
-				// 식당 예약
+				// 식당 전체 조회
 				case "1":
-					CustomerUnit.getInstance().reserveRestaurant(reader);
+					CustomerUnit.getInstance().searchAllRestaurant();
 					break;
-				// 예약 조회
+				// 식당 타입별 조회
 				case "2":
-					CustomerUnit.getInstance().readReserve(reader);
+					CustomerUnit.getInstance().searchRestaurantByType(reader);
 					break;
-				// 예약 수정
+				// 해당 식당 리뷰 조회
 				case "3":
-					CustomerUnit.getInstance().reserveUpdate(reader);
+					CustomerUnit.getInstance().searchRestaurantReview(reader);
 					break;
-				// 예약 삭제
+				// 평균 별점 높은순 식당 조회
 				case "4":
-					CustomerUnit.getInstance().reserveDelete(reader);
+					CustomerUnit.getInstance().searchRestaurantByStar(reader);
 					break;
 				// customer main UI 로 이동
 				case "5":
 					System.out.println("Customer 메인 페이지로 돌아갑니다.");
 					return;
 				// 서비스 종료
-				case "6":
+				case "exit":
 					System.out.println("종료합니다.");
 					System.exit(0);
-					break;
 				default:
 					System.out.println("잘못된 입력입니다.");
 				}
@@ -62,16 +63,16 @@ public class UICustomerReserve {
 		}
 	}
 
-	private void printReserveMenu() {
+	private void printSearchRestaurantMenu() {
 		System.out.println(
 				"\n============================================================================================");
-		System.out.println("                               *** Customer 예약 서비스 ***");
+		System.out.println("                               *** Customer 조회 서비스 ***");
 		System.out.println(
 				"============================================================================================");
-		System.out.println("                                    1. 식당 예약");
-		System.out.println("                                    2. 예약 확인");
-		System.out.println("                                    3. 예약 변경");
-		System.out.println("                                    4: 예약 삭제");
+		System.out.println("                                    1. 식당 전체 조회");
+		System.out.println("                                    2. 식당 타입별 조회");
+		System.out.println("                                    3. 해당 식당 리뷰 조회");
+		System.out.println("                                    4: 평균 별점 높은순 식당 조회");
 		System.out.println("                                    5. 뒤로가기");
 		System.out.println("                                    6. 서비스 종료하기");
 		System.out.println(
