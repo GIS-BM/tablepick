@@ -20,6 +20,7 @@ public class CommonService {
 	// 인스턴스 변수 AccountDao 데이터형의 accountDao 선언
 	private AccountVO logindata = null;
 	// 인스턴스 변수 AccountVO 데이터형의 logindata 선언
+	private AccountVO logindatasession = null;
 
 	// [] 생성자 선언 : 싱글톤 패턴이므로 private로 선언, 외부에서 객체 생성 불가능 하게 막는다.
 	private CommonService() throws ClassNotFoundException {
@@ -36,11 +37,6 @@ public class CommonService {
 			instance = new CommonService();
 		}
 		return instance;
-	}
-
-	// 로그인 사용자 정보 반환
-	public AccountVO getLoginData() {
-		return logindata;
 	}
 
 // 회원가입 기능
@@ -71,20 +67,20 @@ public class CommonService {
 					isLogin = true;
 
 					// [] 로그인 정보를 담고 있는 AccountVO 데이터형 객체 logindata 생성하고 값 저장
-					logindata = new AccountVO();
-					logindata.setId(id);
-					logindata.setPassword(dbPassword);
-					logindata.setType(rs.getString("type"));
-					logindata.setName(rs.getString("name"));
-					logindata.setPassword(rs.getString("password"));
-					logindata.setTel(rs.getString("tel"));
-					System.out.println("로그인 데이터 값 확인 : " + logindata);
+					logindatasession = new AccountVO();
+					logindatasession.setId(id);
+					logindatasession.setPassword(dbPassword);
+					logindatasession.setType(rs.getString("type"));
+					logindatasession.setName(rs.getString("name"));
+					logindatasession.setPassword(rs.getString("password"));
+					logindatasession.setTel(rs.getString("tel"));
+					System.out.println("로그인 데이터 값 확인 : " + logindatasession); // 테스트용 코드
 				}
 			}
 		} finally {
 			accountDao.closeAll(rs, pstmt, con);
 		}
-		return logindata;
+		return logindatasession;
 	}
 	// 로그아웃 처리
 	public boolean logout() {
@@ -98,9 +94,15 @@ public class CommonService {
 		}
 	}
 	
-//로그인 메서드 (id, password 체크)
+	// 로그인 사용자 정보 반환
+	public AccountVO getLoginDataSessionService() {
+		logindatasession = SessionManager.getLoginDataSession();
+		return logindatasession;
+	}
+	
+// 세션 로그인 메서드 (id, password 체크)
 //로그인 성공이면 타입에 따라서 판별하여 고객 혹은 멤버 페이지로 이동
-	public AccountVO loginSessionManager(String id, String password) throws SQLException {
+	public AccountVO loginSession(String id, String password) throws SQLException {
 		boolean isLogin = false;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -135,13 +137,18 @@ public class CommonService {
 		}
 		return logindata;
 	}
+	
+	// 세션 로그인 데이터 가져오기
+	public AccountVO getLoginDataSession() {
+		return logindata;
+	}
 
-	// 로그아웃 처리
+	// 세션 로그아웃 처리
 	public boolean logoutSession() {
-		logout();
-		if (this.logindata != null) {
-			System.out.println(this.logindata.getName() + "님, 로그아웃 되었습니다.");
-			this.logindata = null;
+		if (this.logindatasession != null) {
+			SessionManager.logout();
+			System.out.println(this.logindatasession.getName() + "님, 로그아웃 되었습니다.");
+			this.logindatasession = null;
 			return true;
 		} else {
 			System.out.println("현재 로그인된 사용자가 없습니다.");

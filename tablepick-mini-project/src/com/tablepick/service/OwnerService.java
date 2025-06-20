@@ -2,7 +2,7 @@ package com.tablepick.service;
 
 import java.sql.SQLException;
 
-import com.tablepick.exception.AccountNotFoundException;
+import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotFoundRestaurantException;
@@ -30,7 +30,7 @@ public class OwnerService {
 
 	
 	
-	public void findAccount() throws NotMatchedPasswordException, AccountNotFoundException, SQLException {
+	public void findAccount() throws NotMatchedPasswordException, NotFoundAccountException, SQLException {
 		restaurantDao.findAccount(accountId, password);
 	}
 	
@@ -42,7 +42,7 @@ public class OwnerService {
 		restaurantDao.findMyRestaurant(accountId);
 		
 	}
-	public void deleteMyRestaurant() throws SQLException, NotMatchedPasswordException, AccountNotFoundException {
+	public void deleteMyRestaurant() throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
 		restaurantDao.deleteMyRestaurant(accountId,password);
 		
 	}
@@ -85,15 +85,15 @@ public class OwnerService {
 		restaurantDao.findMenu(accountId);
 	}
 	
-	public void findMenuDetail() throws NotFoundMenuException, SQLException, AccountNotFoundException, NotFoundRestaurantException {
+	public void findMenuDetail() throws NotFoundMenuException, SQLException, NotFoundAccountException, NotFoundRestaurantException {
 		restaurantDao.findMenuDetail(accountId, name);
 	}
 	
-	public void updateMenu() throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
+	public void updateMenu() throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException {
 		restaurantDao.updateMenu(accountId, name, price);
 	}
 	
-	public void deleteMenu() throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
+	public void deleteMenu() throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException {
 		restaurantDao.deleteMenu(accountId, name);
 	}
 	

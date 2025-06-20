@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.tablepick.exception.AccountNotFoundException;
+import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
@@ -163,7 +163,7 @@ public class OwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
-				} catch (AccountNotFoundException e) {
+				} catch (NotFoundAccountException e) {
 					System.out.println(e.getMessage());
 					//e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
@@ -214,7 +214,7 @@ public class OwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
-				} catch (AccountNotFoundException e) {
+				} catch (NotFoundAccountException e) {
 					System.out.println(e.getMessage());
 					//e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
