@@ -28,30 +28,15 @@ public class TestUpdateRestaurant {
 	
 	
 	public void run() {
+		/*
+		 * 식당의 정보를 변경하는 클래스
+		 */
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 			OwnerService service = new OwnerService();
-			
-			//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
-			//1. 따라서 로그인 정보의 accountId를 받아온 후
-			//2. 이 정보를 가지고 restaurantId 를 조회합니다.
-//			AccountVO loginData = null;
-		
 
-//			try {
-//				loginData = TablePickSerivceCommon.getInstance().getLoginData();
-//			} catch (ClassNotFoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			
-//			
-//			String accountId = loginData.getId();
-			//세션으로 id 가져오기
 			String accountId = SessionManager.getLoginDataSession().getId();
 
-			
-			
 			int reservationIdx = service.findMyRestaurant(accountId).getRestaurantId();
 			
 			List<Map<String, String>> existList = service.findMyRestaurantAndSales(accountId, reservationIdx);
@@ -88,17 +73,13 @@ public class TestUpdateRestaurant {
 				}
 			
 				// 변경
-				service.updateMyRestaurantInfoAndSales(accountId, reservationIdx, newName, newType, newAddress, newTel);
+				service.updateMyRestaurantInfo(accountId, reservationIdx, newName, newType, newAddress, newTel);
 				System.out.println("식당 정보가 성공적으로 변경되었습니다.");
 			}
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
-		
-		
-		
 	}
 	public static void main(String[] args) {
 		new TestUpdateRestaurant().run();

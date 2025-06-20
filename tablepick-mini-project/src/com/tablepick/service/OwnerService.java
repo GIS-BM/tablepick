@@ -74,12 +74,20 @@ public class OwnerService {
 		return ownerDao.findMyRestaurantAndSales(accountId, restaurantIdx);
 
 	}
+<<<<<<< HEAD
 
 	//식당 정보를 업데이트하는 메소드
 	public void updateMyRestaurantInfoAndSales(String accountId, int reservationIdx, String newName, String newType,
 			String newAddress, String newTel) throws SQLException, NotFoundRestaurantException {
 		ownerDao.updateMyRestaurantInfoAndSales(accountId, reservationIdx, newName, newType, newAddress, newTel);
 
+=======
+	
+	public void updateMyRestaurantInfo(String accountId, int reservationIdx, String newName, String newType, String newAddress, String newTel) throws SQLException, NotFoundRestaurantException {
+		ownerDao.updateMyRestaurantInfo(accountId,  reservationIdx, newName, newType,
+				newAddress,  newTel);
+		
+>>>>>>> main
 	}
 
 	//메뉴를 생성하는 메소드

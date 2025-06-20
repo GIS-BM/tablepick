@@ -1,4 +1,4 @@
-package com.tablepick.test.AdminUnitTest;
+package com.tablepick.test.admin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
