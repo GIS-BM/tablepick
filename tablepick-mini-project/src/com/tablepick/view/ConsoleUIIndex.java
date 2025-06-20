@@ -61,13 +61,9 @@ public class ConsoleUIIndex {
             System.out.print("Password: ");
             String password = reader.readLine();
 
-<<<<<<< HEAD
             if (tablePickServiceCommon.login(id, password) != null) {
                 AccountVO loginData = CommonService.getInstance().getLoginDataSession();
-=======
-            if (tablePickServiceCommon.loginSessionManager(id, password) != null) {
-                AccountVO loginData = SessionManager.getLoginDataSession();
->>>>>>> main
+
                 System.out.println("[" + loginData.getType() + "] " + loginData.getName() + "님 환영합니다.");
 
                 // 사용자 타입에 따라 분기
