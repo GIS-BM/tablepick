@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
+import com.tablepick.session.SessionManager;
 import com.tablepick.test.customer.UIAdminMain;
 import com.tablepick.test.customer.UICustomerMain;
 
@@ -60,8 +61,8 @@ public class ConsoleUIIndex {
             System.out.print("Password: ");
             String password = reader.readLine();
 
-            if (tablePickServiceCommon.login(id, password) != null) {
-                AccountVO loginData = tablePickServiceCommon.getLoginData();
+            if (tablePickServiceCommon.loginSessionManager(id, password) != null) {
+                AccountVO loginData = SessionManager.getLoginDataSession();
                 System.out.println("[" + loginData.getType() + "] " + loginData.getName() + "님 환영합니다.");
 
                 // 사용자 타입에 따라 분기
@@ -70,8 +71,8 @@ public class ConsoleUIIndex {
                     	UICustomerMain.getInstance().run(reader);
                     	break;
                     case "owner":
-                    	System.out.println("ownerView 구현해야 한다");
-                        // new OwnerView().run(reader);
+                    	//System.out.println("ownerView 구현해야 한다");
+                    	UIOwnerMain.getInstance().run();
                         break;
                     case "admin":
                     	UIAdminMain.getInstance().run(reader);

@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
-import com.tablepick.test.owner.OwnerMainDetail;
 import com.tablepick.test.owner.TestCreateRestaurant;
 import com.tablepick.test.owner.TestDeleteRestaurant;
 
@@ -32,19 +31,20 @@ public class UIOwnerMain {
 		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		
-		//테스트 로그인 . 페이지 연결이 전부 완료되면 삭제해야 합니다.
-		try {
-			CommonService.getInstance().loginSessionManager("owner01","pw1234");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// 테스트 로그인
+//		//테스트 로그인. 페이지 연결이 전부 완료되면 삭제해야 합니다.
+//		try {
+//			CommonService.getInstance().loginSessionManager("owner01","pw1234");
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		// 테스트 로그인
 		
 		String accountId = SessionManager.getLoginDataSession().getId();
+		
 		//세션으로 id와 패스워드 가져오기
 
 		//이 로그인 데이터로 하위 페이지에서 로그인 아이디를 사용할 수 있습니다.
@@ -95,7 +95,7 @@ public class UIOwnerMain {
 			TestCreateRestaurant.getInstance().run();
 			break;
 		case "2":
-			OwnerMainDetail.getInstance().run();
+			UIOwnerMainDetail.getInstance().run();
 			break;
 		case "3":
 			TestDeleteRestaurant.getInstance().run();
@@ -107,12 +107,15 @@ public class UIOwnerMain {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다. (로직 추가 필요)");
+			SessionManager.logout();
+			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다.");
 			System.out.println("                          ");
+			new ConsoleUIIndex().execute();
 			break;
 		case "5":
-			System.out.println("이전 화면으로 돌아갑니다. (로직 추가 필요)");
+			System.out.println("이전 화면으로 돌아갑니다.");
 			System.out.println("                          ");
+			new ConsoleUIIndex().execute();
 			break;
 		case "6":
 			System.out.println("프로그램을 종료합니다.");
