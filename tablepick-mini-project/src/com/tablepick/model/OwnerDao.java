@@ -60,9 +60,7 @@ public class OwnerDao {
 				if (password.equals(rs.getString("password")) == false) {
 					loginSuccess = false;
 					throw new NotMatchedPasswordException("비밀번호가 일치하지 않습니다. 다시 입력하세요.");
-
 				}
-
 			}
 		}
 
@@ -75,17 +73,14 @@ public class OwnerDao {
 
 	/**
 	 * 식당을 등록하는 메소드 입니다.<br>
-	 * 트랜잭션 처리 완료
+	 * 트랜잭션 처리 완료 <br>
+	 * 
 	 * @param restaurantVO
 	 * @return
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
 	public int createRestaurant(RestaurantVO restaurantVO) throws SQLException {
-
-//		if (exitRestaurant(restaurantVO.getAccountId()) == true) {
-//			throw new RestaurantNotFoundException("이미 식당이 존재합니다.");
-//		}
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -98,8 +93,6 @@ public class OwnerDao {
 			con.setAutoCommit(false);
 			String sql = "INSERT INTO restaurant(account_id, name, type, address, tel) VALUES(?,?,?,?,?);";
 
-			// String sql2 = "INSERT INTO sales (reserve_idx, sales) VALUES(?,?);";
-
 			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, restaurantVO.getAccountId());
 			pstmt.setString(2, restaurantVO.getName());
@@ -111,7 +104,7 @@ public class OwnerDao {
 			if (rs.next())
 				restaurantId = rs.getInt(1);
 			con.commit();
-			//System.out.println("트랜잭션 처리 완료");
+
 		} catch (Exception e) {
 			con.rollback();
 			throw e;
@@ -122,11 +115,12 @@ public class OwnerDao {
 		}
 
 		return restaurantId;
-	}// makeRes
+	}// createRestaurant
 
 	/**
-	 * 내 아이디로 내 식당의 restaurantId를 찾는 메소드 입니다. 레스토랑 객체를 반환합니다. id가 필요하면 가져다 쓰면 됩니다.
-	 * 만약 식당이 없다면 예외 처리가 됩니다.
+	 * Owner의 아이디로 내 식당의 restaurantId를 찾는 메서드 입니다. <br>
+	 * RestaurantVO의 객체를 반환합니다. <br>
+	 * 내 식당이 존재하지 않을 시 예외 처리가 됩니다. <br>
 	 * 
 	 * @param accountId
 	 * @return
@@ -139,7 +133,7 @@ public class OwnerDao {
 			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
 
-		RestaurantVO res = null;
+		RestaurantVO retaurantVO = null;
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT idx, account_id, name, type, address, tel, opentime");
 		sql.append(" FROM restaurant");
@@ -151,20 +145,20 @@ public class OwnerDao {
 			try (ResultSet rs = pstmt.executeQuery()) {
 				if (rs.next()) {
 
-					res = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
+					retaurantVO = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
 							rs.getString("type"), rs.getString("address"), rs.getString("tel"),
 							rs.getTime("opentime").toLocalTime());
 				}
 			}
 		}
 
-		return res;
+		return retaurantVO;
 
 	}
 
 	/**
-	 * //등록된 식당을 삭제하는 메소드 입니다. <br>
-	 * 비밀번호가 다르면 NotMatchedPasswordException 발생시키고 전파 <br>
+	 * 등록된 식당을 삭제하는 메소드 입니다. <br>
+	 * 비밀번호가 다르면 NotMatchedPasswordException 발생시키며 예외 처리 됩니다. <br>
 	 * 
 	 * @param accountId
 	 * @param password
@@ -174,29 +168,29 @@ public class OwnerDao {
 	 * @throws NotFoundAccountException 
 	 */
 	public void deleteMyRestaurant(String accountId, String password)
-			throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
-		Connection con = null;
-		PreparedStatement pstmt = null;
-
-		findAccount(accountId, password);
-
-		try {
-			con = DatabaseUtil.getConnection();
-			String sql = "DELETE FROM restaurant WHERE account_id =?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, accountId);
-			pstmt.executeUpdate();
-
-		}
-
-		finally {
-			DatabaseUtil.closeAll(pstmt, con);
-		}
-
+		
+		throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+	
+			findAccount(accountId, password);
+	
+			try {
+				con = DatabaseUtil.getConnection();
+				String sql = "DELETE FROM restaurant WHERE account_id =?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, accountId);
+				pstmt.executeUpdate();
+			}
+	
+			finally {
+				DatabaseUtil.closeAll(pstmt, con);
+			}
 	}
 
 	/**
-	 * 해당 아이디로 식당이 존재하는지 확인하는 메서드
+	 * Owner의 아이디로 식당이 존재하는지 확인하는 메서드 입니다. <br>
+	 * 다른 메서드에서 식당의 유무를 조회할 때 사용합니다. <br>
 	 * 
 	 * @param accountId
 	 * @return
@@ -207,6 +201,7 @@ public class OwnerDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		
 		try {
 			con = DatabaseUtil.getConnection();
 			String sql = "SELECT 1 FROM restaurant WHERE account_id = ?";
@@ -217,11 +212,13 @@ public class OwnerDao {
 		} finally {
 			DatabaseUtil.closeAll(rs, pstmt, con);
 		}
+		
 		return existRestaurant;
 	}
 
 	/**
-	 * 예약자 명단 유무 조회하는 메서드
+	 * Owner가 내 식당의 예약이 존재하는지 확인할 때 사용하는 메서드 입니다. <br>
+	 * 다른 메서드에서 예약의 유무를 조회할 때 사용합니다. <br>
 	 * 
 	 * @param reservationIdx
 	 * @return
@@ -232,6 +229,7 @@ public class OwnerDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		
 		try {
 			con = DatabaseUtil.getConnection();
 			String sql = "SELECT 1 FROM reserve WHERE idx = ?";
@@ -246,10 +244,11 @@ public class OwnerDao {
 	}
 
 	/**
-	 * 내 식당의 예약 리스트를 조회하는 메서드 내 식당이 존재하는지 먼저 확인 후 쿼리문 실행
+	 * Owner가 내 식당의 예약 리스트를 조회하는 메서드입니다. <br>
+	 * 내 식당이 존재하는지 먼저 existRestaurant() 메서드 실행 후 메서드를 실행합니다. <br>
 	 * 
 	 * @param accountId
-	 * @return
+	 * @return reservationList
 	 * @throws RestaurantNotFoundException
 	 * @throws SQLException
 	 */
@@ -261,8 +260,7 @@ public class OwnerDao {
 
 		List<Map<String, String>> reservationList = new ArrayList<Map<String, String>>();
 		StringBuilder sql = new StringBuilder();
-		sql.append(
-				"SELECT rs.idx AS reserve_idx, rs.account_id AS customer_id, a.name AS customer_name, rs.reservepeople, rs.reservedate, ");
+		sql.append("SELECT rs.idx AS reserve_idx, rs.account_id AS customer_id, a.name AS customer_name, rs.reservepeople, rs.reservedate, ");
 		sql.append("rs.reservetime, rs.registerdate, rt.idx AS restaurant_idx, IFNULL(s.sales, 0) AS sales_amount ");
 		sql.append("FROM reserve rs ");
 		sql.append("LEFT JOIN restaurant rt ON rs.restaurant_idx = rt.idx ");
@@ -270,7 +268,7 @@ public class OwnerDao {
 		sql.append("LEFT JOIN account o ON rt.account_id = o.id ");
 		sql.append("LEFT JOIN sales s ON rs.idx = s.reserve_idx ");
 		sql.append("WHERE rt.account_id = ? ");
-		sql.append("ORDER BY rs.reservedate, rs.reservetime;"); // 조인이 많이 되어야하는지 의문 : 고려사항
+		sql.append("ORDER BY rs.reservedate, rs.reservetime;"); 
 
 		try (Connection con = DatabaseUtil.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
@@ -293,52 +291,10 @@ public class OwnerDao {
 		return reservationList;
 	}
 
-//	/**
-//	 * 최다 예약자를 조회하는 메소드 입니다.
-//	 * @param accountId
-//	 * @return
-//	 * @throws SQLException
-//	 */
-//	public List<Map<String, String>> findMostReservedCustomers(String accountId) throws SQLException {
-//		List<Map<String, String>> mostReservedCustomersList = new ArrayList<Map<String,String>>();
-//		
-//		StringBuilder sql = new StringBuilder();
-//		sql.append("SELECT r.account_id AS customer_id, a.name AS customer_name, COUNT(*) AS reservation_count, rt.name AS restaurant_name ");
-//		sql.append("FROM reserve r ");
-//		sql.append("JOIN  restaurant rt ON r.restaurant_idx = rt.idx ");
-//		sql.append("JOIN  account a ON r.account_id = a.id ");
-//		sql.append("WHERE rt.account_id = ? ");
-//		sql.append("GROUP BY r.account_id, a.name, rt.name ");
-//		sql.append("HAVING reservation_count = ( ");
-//		sql.append("SELECT MAX(sub.cnt) ");
-//		sql.append("FROM ( SELECT COUNT(*) AS cnt FROM reserve r2 ");
-//		sql.append("JOIN restaurant rt2 ON r2.restaurant_idx = rt2.idx ");
-//		sql.append("WHERE rt2.account_id = ? ");
-//		sql.append("GROUP BY r2.account_id ) AS sub );");
-//
-//		try(Connection con = DatabaseUtil.getConnection();
-//				PreparedStatement pstmt = con.prepareStatement(sql.toString());
-//				) {
-//			pstmt.setString(1, accountId);
-//			pstmt.setString(2, accountId);
-//			try(ResultSet rs = pstmt.executeQuery()) {
-//				while (rs.next()) {
-//					Map<String, String> map = new HashMap<String, String>();
-//					map.put("고객 아이디", rs.getString("customer_id"));
-//					map.put("예약자 명", rs.getString("customer_name"));
-//					map.put("누적 예약 수", Integer.toString(rs.getInt("reservation_count")));
-//					map.put("식당 이름", rs.getString("restaurant_name"));
-//					
-//					mostReservedCustomersList.add(map);
-//				}
-//			}
-//		}
-//		return mostReservedCustomersList;
-//	}
 
 	/**
-	 * 식당 정보 조회 및 식당 별 매출액 조회하는 메서드 내 식당이 존재하는지 먼저 확인 후 쿼리문을 실행한다. 내 식당 조회 시 정보, 매출액
-	 * 출력
+	 * Owner가 내 식당의 정보와 매출액을 조회하는 메서드 입니다. <br>
+	 * 내 식당이 존재하는지 existRestaurant() 메서드 먼저 실행 후 메서드를 실행합니다. <br>
 	 * 
 	 * @param accountId
 	 * @param reservationIdx
@@ -346,8 +302,7 @@ public class OwnerDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
-	public List<Map<String, String>> findMyRestaurantAndSales(String accountId, int restaurantIdx)
-			throws SQLException, NotFoundRestaurantException {
+	public List<Map<String, String>> findMyRestaurantAndSales(String accountId, int restaurantIdx) throws SQLException, NotFoundRestaurantException {
 		if (existRestaurant(accountId) == false) {
 			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
@@ -363,8 +318,8 @@ public class OwnerDao {
 		sql.append("GROUP BY r.idx, r.name, r.type, r.address, r.tel;");
 
 		try (Connection con = DatabaseUtil.getConnection();
-
 				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
+			
 			con.setAutoCommit(false);
 			pstmt.setString(1, accountId);
 			pstmt.setInt(2, restaurantIdx);
@@ -386,7 +341,8 @@ public class OwnerDao {
 	}
 
 	/**
-	 * 식당 정보 업데이트
+	 * 나의 식당 정보를 변경하는 메서드입니다. <br>
+	 * existRestaurant() 메서드를 실행한 후 식당이 존재할 경우에 해당 메서드가 실행이 됩니다. <br>
 	 * 
 	 * @param accountId
 	 * @param reservationIdx
@@ -398,16 +354,8 @@ public class OwnerDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
-	public void updateMyRestaurantInfoAndSales(String accountId, int reservationIdx, String newName, String newType,
+	public void updateMyRestaurantInfo(String accountId, int reservationIdx, String newName, String newType,
 			String newAddress, String newTel) throws SQLException, NotFoundRestaurantException {
-
-//		System.out.println(accountId);
-//		System.out.println(reservationIdx);
-//		System.out.println(newName);
-//		System.out.println(newType);
-//		System.out.println(newAddress);
-//		System.out.println(newTel);
-		// System.out.println(newSales);
 
 		if (existRestaurant(accountId) == false) {
 			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
@@ -420,7 +368,6 @@ public class OwnerDao {
 			 con.setAutoCommit(false); // 트랜젝션 처리를 위한 자동 커밋 모드 해제
 
 			String updateRestaurantInfoSql = "UPDATE restaurant SET name = ?, type = ?, address = ?, tel = ? WHERE account_id = ?";
-			// String updateSalesSql = "UPDATE sales SET sales = ? WHERE reserve_idx = ?";
 
 			pstmt = con.prepareStatement(updateRestaurantInfoSql);
 			pstmt.setString(1, newName);
@@ -429,60 +376,20 @@ public class OwnerDao {
 			pstmt.setString(4, newTel);
 			pstmt.setString(5, accountId);
 
-			int newInfoResult = pstmt.executeUpdate();
-//			if (newInfoResult > 0) {
-//				System.out.println("레스토랑 업데이트 완료. 코드 : " + newInfoResult);
-//			}
-			// pstmt.close();
-//			
-//			pstmt = con.prepareStatement(updateSalesSql);
-//			pstmt.setInt(1, newSales);
-//			pstmt.setInt(2, reservationIdx);
-//			
-//			int newSalesResult = pstmt.executeUpdate();
-//			if (newSalesResult > 0) {
-//				System.out.println("매출액 업데이트 완료. 코드 : " + newSalesResult);
-//			}
-
+			pstmt.executeUpdate();
 			 con.commit(); // 정보 업데이트 내의 모든 세부 작업 정상 처리
-			//System.out.println("내 식당 정보가 업데이트되었습니다.");
+			 
 		} catch (Exception e) {
 			con.rollback();
 			throw e;
 		} finally {
 			DatabaseUtil.closeAll(pstmt, con);
 		}
-
 	}
 
 	/**
-	 * 식당의 매출액을 입력시 업데이트 해주는 메서드 (디폴트 값 0이기때문에 update 쿼리를 이용)
-	 * 
-	 * @param accountId
-	 * @param totalSales
-	 * @param newSales
-	 * @throws SQLException
-	 */
-//	public void updateRestaurantSales(String accountId, int reservationIdx, int newSales) throws SQLException {
-//		StringBuilder sql = new StringBuilder();
-//		sql.append("UPDATE sales s  ");
-//		sql.append("JOIN reserve rv ON s.reserve_idx = rv.idx ");
-//		sql.append("JOIN restaurant r ON rv.restaurant_idx = r.idx ");
-//		sql.append("SET s.sales = ? ");
-//		sql.append("WHERE s.idx > 0 AND r.account_id = ?");
-//
-//		try (Connection con = DatabaseUtil.getConnection();
-//				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
-//			pstmt.setInt(1, newSales);
-//			pstmt.setString(2, accountId);
-//
-//			pstmt.executeUpdate();
-//		}
-//
-//	}
-
-	/**
-	 * 메뉴를 생성하는 메소드 입니다. 메뉴 데이터 뿐만 아니라 레스토랑 ID도 필요합니다.
+	 * Owner가 식당 메뉴를 생성하는 메소드 입니다. <br> 
+	 * 메뉴 데이터 뿐만 아니라 레스토랑 ID도 필요합니다. <br>
 	 * 
 	 * @param menuVO
 	 * @throws SQLException
@@ -515,8 +422,9 @@ public class OwnerDao {
 	}
 
 	/**
-	 * 전체 메뉴를 조회하는 메소드 입니다. accountId를 통해 해당 계정의 restaurantId 정보를 알아냅니다. "내 식당을 조회하는
-	 * 메소드" 를 사용하여 식당 정보 객체를 받아온 후, id만 뺍니다.
+	 * 내 식당의 전체 메뉴를 조회하는 메서드 입니다. <br>
+	 * Owner의 accountId를 통해 해당 계정의 restaurantId 정보를 알아냅니다. <br>
+	 * "내 식당을 조회하는 메서드" 를 사용하여 식당 정보 객체를 받아온 후, id만 뺍니다. <br>
 	 * 
 	 * @param restaurantId
 	 * @throws SQLException
@@ -547,7 +455,6 @@ public class OwnerDao {
 				map.put("가격", rs.getString("price"));
 				list.add(map);
 			}
-
 		}
 
 		finally {
@@ -558,7 +465,8 @@ public class OwnerDao {
 	}
 
 	/**
-	 * 메뉴를 찾는 메소드 입니다. 가격 수정 및 삭제 시 이 메소드가 먼저 호출됩니다.
+	 * Owner가 내 식당의 메뉴를 찾는 메소드 입니다. <br>
+	 * 가격 수정 및 삭제 시 이 메소드가 먼저 호출됩니다. <br>
 	 * 
 	 * @throws SQLException
 	 * @throws AccountNotFoundException
@@ -597,7 +505,7 @@ public class OwnerDao {
 	}
 
 	/**
-	 * 메뉴의 가격을 수정하는 메소드 입니다. <br>
+	 * Owner가 내 식당의 메뉴 가격을 수정하는 메소드 입니다. <br>
 	 * 
 	 * @param menuVO
 	 * @throws SQLException
@@ -629,11 +537,10 @@ public class OwnerDao {
 		finally {
 			DatabaseUtil.closeAll(pstmt, con);
 		}
-
 	}
 
 	/**
-	 * 메뉴를 삭제하는 메소드 입니다.
+	 * Owner가 내 식당의 메뉴를 삭제하는 메소드 입니다. <br>
 	 * 
 	 * @param restaurantId
 	 * @param name
@@ -667,7 +574,8 @@ public class OwnerDao {
 	}
 
 	/**
-	 * 내 식당의 리뷰를 조회하는 메소드 입니다. 리뷰 메소드는 예약 id를 가지고 있으므로 이를 가지고 리뷰를 조회해야 합니다.
+	 * Owner가 내 식당의 리뷰를 조회하는 메소드 입니다. <br>
+	 * 리뷰 메소드는 예약 id를 가지고 있으므로 이를 가지고 리뷰를 조회해야 합니다. <br>
 	 * 
 	 * @param restaurantId
 	 * @throws SQLException
@@ -709,29 +617,10 @@ public class OwnerDao {
 
 	}
 
-// 예약 시 sales 컬럼이 같이 생성되므로 필요 없어짐	
-//	public void createCustomerSale(String accountId, int reservationIdx, int newSale)
-//			throws RestaurantNotFoundException, SQLException {
-//		if (existRestaurantReservation(reservationIdx) == false) {
-//			throw new RestaurantNotFoundException(accountId + "님의 식당이 존재하지 않습니다.");
-//		}
-//		StringBuilder sql = new StringBuilder();
-//		sql.append("INSERT INTO sales (reserve_idx, sales) VALUES ( ? ,  ? );");
-//		try (Connection con = DatabaseUtil.getConnection();
-//				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
-//			pstmt.setInt(1, reservationIdx);
-//			pstmt.setInt(2, newSale);
-//
-//			int row = pstmt.executeUpdate();
-//			if (row == 0) {
-//				throw new SQLException("매출 정보 삽입에 실패했습니다.");
-//			}
-//		}
-//
-//	}
-
 	/**
-	 * 선택한 예약자의 매출액을 업데이트 시켜주는 메서드
+	 * Owner가 예약자 리스트를 확인 한 후 선택한 예약자의 매출액을 업데이트 시켜주는 메서드 입니다. <br>
+	 * existRestaurantReservation() 메서드를 먼저 실행한 후 예약이 존재할 경우 해당 메서드를 실행합니다. <br>
+	 * 예약이 존재하지 않을 경우 NoReservationException로 예외 처리를 합니다. <br>
 	 * 
 	 * @param accountId
 	 * @param reservationIdx
@@ -741,9 +630,7 @@ public class OwnerDao {
 	 */
 	public void updateCustomerSale(String accountId, int reservationIdx, int newSale)
 			throws NoReservationException, SQLException {
-//		System.out.println("넘어온 값: " + accountId);
-//		System.out.println("넘어온 값: " + reservationIdx);
-//		System.out.println("넘어온 값: " + newSale);
+
 		if (existRestaurantReservation(reservationIdx) == false) {
 			throw new NoReservationException(reservationIdx + " 번의 예약은 존재하지 않습니다.");
 		}
@@ -755,16 +642,15 @@ public class OwnerDao {
 			pstmt.setInt(2, reservationIdx);
 
 			int row = pstmt.executeUpdate();
-			// System.out.println("update result: " + row);
 			if (row == 0) {
 				throw new SQLException("매출 정보 삽입에 실패했습니다.");
 			}
 		}
-
 	}
 
 	/**
-	 * 선택한 예약자 명단을 조회하여 매출액을 입력하기 위한 단순 예약자 조회 메서드
+	 * Owner가 예약자 명단에 매출액을 입력하는 메소드를 실행할 때 선택된 예약자 명단을 조회하기 위해 실행하는 메서드 입니다. <br>
+	 * 매출액을 업데이트 하기 위해서 이 메소드를 먼저 실행합니다. <br>
 	 * 
 	 * @param accountId
 	 * 
@@ -816,7 +702,8 @@ public class OwnerDao {
 	}
 
 	/**
-	 * 최다 예약자를 조회할 수 있는 메소드 입니다.
+	 * Owner가 내 식당의 최다 예약자를 조회할 수 있는 메소드 입니다. <br>
+	 * 내 식당이 존재하는지 existRestaurant() 메서드를 실행 후 존재할 경우 이 메서드를 실행합니다. <br>
 	 * 
 	 * @param accountId
 	 * @return

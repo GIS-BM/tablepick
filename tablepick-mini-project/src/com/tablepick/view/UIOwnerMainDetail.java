@@ -15,8 +15,10 @@ import com.tablepick.test.owner.TestUpdateRestaurant;
 public class UIOwnerMainDetail {
 
 	private static UIOwnerMainDetail instance = new UIOwnerMainDetail();
+
 	private UIOwnerMainDetail() {
 	}
+
 	public static UIOwnerMainDetail getInstance() {
 		return instance;
 	}
@@ -46,12 +48,12 @@ public class UIOwnerMainDetail {
 			System.out.println("                          2. 식당 메뉴 관리");
 			System.out.println("                          3. 내 식당 예약자 조회하기");
 			System.out.println("                          4. 내 식당 리뷰 조회하기");
-			System.out.println("                          5. 뒤로가기");
+			System.out.println("                          5. 이전 화면으로 돌아가기");
 			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
-			
+			System.out.print("메뉴를 선택하세요: ");
 			console = sc.nextLine();
 
 			switch (console) {
@@ -68,6 +70,8 @@ public class UIOwnerMainDetail {
 				UIOwnerReviewDetail.getInstance().run();
 				break;
 			case "5":
+				System.out.println("이전 화면으로 돌아갑니다.");
+				System.out.println("                          ");
 				UIOwnerMain.getInstance().run();
 				break;
 			case "0":
@@ -77,13 +81,14 @@ public class UIOwnerMainDetail {
 				break;
 			default:
 				System.out.println("없는 선택지 입니다. 다시 선택해 주세요.");
-				
+
 				break;
 			}
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException,
+			AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerMainDetail().run();
 	}
 }
