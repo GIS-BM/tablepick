@@ -76,11 +76,7 @@ public class UICustomerReview {
 		System.out.println("                                    3. 내 리뷰 수정");
 		System.out.println("                                    4: 내 리뷰 삭제");
 		System.out.println("                                    5. 뒤로가기");
-<<<<<<< HEAD
-		System.out.println("                                    0. 프로그램 종료하기");
-=======
 		System.out.println("                                    0. 서비스 종료하기");
->>>>>>> main
 		System.out.println(
 				"============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");

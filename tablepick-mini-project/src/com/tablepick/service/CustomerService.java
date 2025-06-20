@@ -396,13 +396,6 @@ public class CustomerService {
 	// 리뷰 등록하는 테스트 메서드
 	public void createReview(BufferedReader reader) throws IOException {
 		try {
-			System.out.println("registerReviewTest 테스트");
-			ReviewVO reviewresult = customerDao.createReview(5, 3, "리뷰테스트");
-			System.out.println(reviewresult);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			System.out.println("\n[식당 리뷰 등록]");
 			System.out.print("식당명: ");
 			String name = reader.readLine();
