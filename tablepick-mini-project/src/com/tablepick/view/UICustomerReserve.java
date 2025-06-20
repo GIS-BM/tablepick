@@ -33,19 +33,19 @@ public class UICustomerReserve {
 				switch (main) {
 				// 식당 예약
 				case "1":
-					CustomerService.getInstance().reserveRestaurant(reader);
+					CustomerService.getInstance().reserveRestaurant();
 					break;
 				// 예약 조회
 				case "2":
-					CustomerService.getInstance().readReserve(reader);
+					CustomerService.getInstance().readReserve();
 					break;
 				// 예약 수정
 				case "3":
-					CustomerService.getInstance().reserveUpdate(reader);
+					CustomerService.getInstance().reserveUpdate();
 					break;
 				// 예약 삭제
 				case "4":
-					CustomerService.getInstance().reserveDelete(reader);
+					CustomerService.getInstance().reserveDelete();
 					break;
 				// customer main UI 로 이동
 				case "5":
