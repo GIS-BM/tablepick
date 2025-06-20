@@ -558,8 +558,8 @@ public class OwnerDao {
 			con = DatabaseUtil.getConnection();
 			String sql = "UPDATE menu SET price = ? WHERE name = ?;";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, restaurantVo.getRestaurantId());
-			pstmt.setString(2, restaurantVo.getName());
+			pstmt.setInt(1, price);
+			pstmt.setString(2, name);
 
 			result = pstmt.executeUpdate();
 
