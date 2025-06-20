@@ -58,7 +58,8 @@ public class TestUpdateRestaurant {
 
 					System.out.print("식당 명 (현재 : " + name + ") : ");
 					newName = br.readLine();
-					System.out.print("타입 명 (현재 : " + type + ") : ");
+					System.out.print("타입 명 (현재 : " + type + ", 가능한 식당 타입 : 한식, 중식, 일식, 양식, 카페/베이커리, 해산물, 주점, 기타 : ");
+					
 					newType = br.readLine();
 					System.out.print("주소 명 (현재 : " + address + ") : ");
 					newAddress = br.readLine();

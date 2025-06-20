@@ -9,6 +9,7 @@ import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
+import com.tablepick.service.OwnerService;
 import com.tablepick.test.owner.TestCreateRestaurant;
 import com.tablepick.test.owner.TestDeleteRestaurant;
 
@@ -33,6 +34,7 @@ public class UIOwnerMain {
 		UIIndex ui = new UIIndex();
 		// 세션으로 id와 패스워드 가져오기
 		AccountVO loginData = null;
+		OwnerService service = new OwnerService();
 		try {
 			loginData = CommonService.getInstance().getLoginDataSession();
 		} catch (ClassNotFoundException e) {
@@ -82,8 +84,19 @@ public class UIOwnerMain {
 				TestCreateRestaurant.getInstance().run();
 				break;
 			case "2":
-				UIOwnerMainDetail.getInstance().run();
-				break;
+				
+				try {
+					service.findMyRestaurant(accountId);
+					UIOwnerMainDetail.getInstance().run();
+					break;
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NotFoundRestaurantException e) {
+					System.out.println("식당이 없으므로 접근할 수 없는 화면 입니다. 식당 등록을 진행해 주세요.");
+					new UIOwnerMain().run();
+				}
+				
 			case "3":
 				TestDeleteRestaurant.getInstance().run();
 				break;
