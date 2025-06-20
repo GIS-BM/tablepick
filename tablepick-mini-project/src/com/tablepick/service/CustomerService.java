@@ -7,8 +7,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
@@ -39,7 +41,7 @@ public class CustomerService {
 	}
 
 	// 리뷰 작성
-	public ReviewVO writeReview(int reserveIdx, int star, String comment) throws SQLException {
+	public boolean writeReview(int reserveIdx, int star, String comment) throws SQLException {
 		return customerDao.createReview(reserveIdx, star, comment);
 	}
 
@@ -397,18 +399,46 @@ public class CustomerService {
 	public void createReview(BufferedReader reader) throws IOException {
 		try {
 			System.out.println("\n[식당 리뷰 등록]");
-			System.out.print("식당명: ");
+			System.out.println("예약한 식당:");
+			ArrayList<ReserveVO> reserveList = customerDao.getAccountReserves(accountId.getId());
+			if (reserveList.isEmpty()) {
+				System.out.println("등록된 예약이 없습니다.");
+				return;
+			} else {
+				Set<String> printedNames = new HashSet<>();
+				for (ReserveVO vo : reserveList) {
+					String restaurantName = customerDao.findRestaurantNameById(vo.getRestaurantId());
+					if (!printedNames.contains(restaurantName)) {
+						System.out.println(restaurantName);
+						printedNames.add(restaurantName);
+					}
+				}
+			}
+			System.out.print("\n식당명: ");
 			String name = reader.readLine();
-			System.out.print("별점: ");
-			int star = Integer.parseInt(reader.readLine());
+			int star = 0;
+			while (true) {
+				System.out.print("별점 (1~10): ");
+				try {
+					star = Integer.parseInt(reader.readLine());
+					if (star >= 1 && star <= 10) {
+						break;
+					} else {
+						System.out.println("별점은 1에서 10 사이의 숫자여야 합니다.");
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("숫자를 입력해주세요.");
+				}
+			}
 			System.out.print("코멘트: ");
 			String comment = reader.readLine();
 			int reserveId = customerDao.findReserveIdxByRestaurantName(name, accountId.getId());
-			ReviewVO reviewResult = customerDao.createReview(reserveId, star, comment);
-			if(reviewResult!=null)
-				System.out.println(accountId.getId()+": "+" 식당: "+customerDao.findRestaurantNameByReserveIdx(reserveId)
-				+" 별점: "+star+"점 코멘트: "+comment);
-
+			boolean reviewResult = customerDao.createReview(reserveId, star, comment);
+			if (reviewResult) {
+				System.out.println(customerDao.findRestaurantNameByReserveIdx(reserveId) + " 리뷰 등록하였습니다.");
+			} else {
+				System.out.println("리뷰 등록에 실패하였습니다.");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (NotFoundRestaurantException e) {
@@ -429,9 +459,9 @@ public class CustomerService {
 				System.out.println("작성한 리뷰가 없습니다.");
 				return;
 			}
-			for(ReviewVO vo: list) {
-				System.out.println("식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
-				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
+			for (ReviewVO vo : list) {
+				System.out.println(customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx()) + " 별점: "
+						+ vo.getStar() + "점 코멘트: " + vo.getComment());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -450,32 +480,42 @@ public class CustomerService {
 				System.out.println("작성한 리뷰가 없습니다.");
 				return;
 			}
-			System.out.println("\n작성한 리뷰 목록");
-			for(int i =0; i<list.size(); i++) {
-				ReviewVO vo = list.get(i);
-				System.out.println((i+1)+ ". 식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
-				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
+			ReviewVO old;
+			ReviewVO updatedReview;
+			while (true) {
+				System.out.println("\n작성한 리뷰 목록");
+				for (int i = 0; i < list.size(); i++) {
+					ReviewVO vo = list.get(i);
+					System.out
+							.println((i + 1) + ". 식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
+									+ " 별점: " + vo.getStar() + "점 코멘트: " + vo.getComment());
+				}
+				System.out.print("\n수정할 리뷰 번호를 입력하세요: ");
+				int choice = Integer.parseInt(reader.readLine());
+				if (choice < 1 || choice > list.size()) {
+					System.out.println("잘못된 선택입니다. 다시 입력하세요.");
+					continue; // 목록을 다시 출력하고 입력 받기
+				}
+
+				// 유효한 선택이면 반복 종료
+				old = list.get(choice - 1);
+				break;
 			}
-			System.out.print("\n수정할 리뷰 번호를 입력하세요: ");
-			int choice = Integer.parseInt(reader.readLine());
-			if (choice < 1 || choice > list.size()) {
-				System.out.println("잘못된 선택입니다.");
-				return;
+			while (true) {
+				System.out.print("새 별점(1~10)을 입력하세요: (기존: " + old.getStar() + "): ");
+				int star = Integer.parseInt(reader.readLine());
+				if (star < 1 || star > 10) {
+					System.out.println("별점은 1~10 사이의 숫자여야 합니다.");
+					continue;
+				}
+				System.out.print("새 코멘트를 입력하세요: (기존: " + old.getComment() + "): ");
+				String comment = reader.readLine();
+				ReviewVO updated = new ReviewVO(old.getIdx(), old.getReserveIdx(), star == 0 ? old.getStar() : star,
+						comment.isEmpty() ? old.getComment() : comment);
+				updatedReview = customerDao.updateMyReviewById(accountId.getId(), updated.getIdx(), star, comment);
+				break;
 			}
-			ReviewVO old = list.get(choice - 1);
-			System.out.print("새 별점(1~10)을 입력하세요: (기존: " + old.getStar() + "): ");
-			int star = Integer.parseInt(reader.readLine());
-			if (star < 1 || star > 10) {
-				System.out.println("fail : 별점은 1~10 사이의 숫자여야 합니다.");
-				return;
-			}
-			System.out.print("새 코멘트를 입력하세요: (기존: " + old.getComment() + "): ");
-			String comment = reader.readLine();
-			ReviewVO updated = new ReviewVO(old.getIdx(), old.getReserveIdx(),
-					star == 0 ? old.getStar() : star,
-					comment.isEmpty() ? old.getComment() : comment);
-			ReviewVO updatedReview = customerDao.updateMyReviewById(accountId.getId(), updated.getIdx(), star, comment);
-			if (updatedReview!=null) {
+			if (updatedReview != null) {
 				System.out.println("리뷰가 성공적으로 수정되었습니다.");
 			} else {
 				System.out.println("수정이 실패하였습니다.");
@@ -507,10 +547,10 @@ public class CustomerService {
 			}
 
 			System.out.println("\n작성한 리뷰 목록");
-			for(int i =0; i< reviews.size(); i++) {
+			for (int i = 0; i < reviews.size(); i++) {
 				ReviewVO vo = reviews.get(i);
-				System.out.println((i+1)+ ". 식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
-				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
+				System.out.println((i + 1) + ". 식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
+						+ " 별점: " + vo.getStar() + "점 코멘트: " + vo.getComment());
 			}
 			System.out.print("\n수정할 리뷰 번호를 입력하세요: ");
 			int choice = Integer.parseInt(reader.readLine());
@@ -527,7 +567,8 @@ public class CustomerService {
 		} catch (SQLException | NumberFormatException | IOException e) {
 			e.printStackTrace();
 		} catch (NotFoundRestaurantException e) {
-			System.out.println(e.getMessage());;
+			System.out.println(e.getMessage());
+			;
 		}
 
 	}
