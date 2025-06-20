@@ -3,6 +3,7 @@ package com.tablepick.test.owner;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,7 +13,6 @@ import com.tablepick.service.CommonService;
 import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
 
-//식당 등록을 테스트하는 클래스 입니다.
 public class TestCreateRestaurant {
 
 	private static TestCreateRestaurant instance = new TestCreateRestaurant();
@@ -25,29 +25,14 @@ public class TestCreateRestaurant {
 	}
 
 	public void run() {
+		/*
+		 * 새로운 식당의 정보를 등록을 테스트하는 클래스
+		 */
 
-		AccountVO loginData = null;
-		try {
-			loginData = CommonService.getInstance().getLoginDataSession();
-		} catch (ClassNotFoundException e) {
-			System.out.println(e.getMessage());
-		}
-
-//		AccountVO loginData = null;
-//		try {
-//			loginData = TablePickSerivceCommon.getInstance().getLoginData();
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		String accountId = loginData.getId();
 		//세션으로 id 가져오기
 		String accountId = SessionManager.getLoginDataSession().getId();
-				
 
 		OwnerService service = new OwnerService();
-		
 		
 		ArrayList<String> restaurantType = new ArrayList<String>();
 		restaurantType.add("한식");
@@ -98,32 +83,35 @@ public class TestCreateRestaurant {
 				address = sc.nextLine();
 				System.out.println("4. 식당 전화번호를 입력하세요: ");
 				tel = sc.nextLine();
-				System.out.println("5. 식당 오픈 시간을 입력하세요. 예시: 09:00");
-				time = sc.nextLine();
-
-				LocalTime opentime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+				
+				LocalTime opentime = null;
+				   while (true) {
+			            try {
+			                System.out.println("5. 식당 오픈 시간을 입력하세요. 예시: 09:00");
+			                time = sc.nextLine();
+			               opentime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+			                break;
+			            } catch (DateTimeParseException e) {
+			                System.out.println("잘못된 시간 형식입니다. 예시처럼 HH:mm 형식으로 입력해주세요.");
+			            }
+			        }
 
 				RestaurantVO vo1 = new RestaurantVO(accountId, name, type, address, tel, opentime);
 
 				try {
-
 					System.out.println("식당이 등록되었습니다.");
 					System.out.println("내 식당 등록 번호 : " + service.createRestaurant(vo1));
 				} catch (SQLException e) {
 
 					System.out.println(e.getMessage());
 				} 
-				
-
 			}
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-
 	}
 
 	public static void main(String[] args) {
-
 		new TestCreateRestaurant().run();
 	}
 

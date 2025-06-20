@@ -65,8 +65,8 @@ public class OwnerService {
 		
 	}
 	
-	public void updateMyRestaurantInfoAndSales(String accountId, int reservationIdx, String newName, String newType, String newAddress, String newTel) throws SQLException, NotFoundRestaurantException {
-		ownerDao.updateMyRestaurantInfoAndSales(accountId,  reservationIdx, newName, newType,
+	public void updateMyRestaurantInfo(String accountId, int reservationIdx, String newName, String newType, String newAddress, String newTel) throws SQLException, NotFoundRestaurantException {
+		ownerDao.updateMyRestaurantInfo(accountId,  reservationIdx, newName, newType,
 				newAddress,  newTel);
 		
 	}
