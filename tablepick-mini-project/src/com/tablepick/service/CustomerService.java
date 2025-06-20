@@ -2,6 +2,7 @@ package com.tablepick.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,17 +17,22 @@ import com.tablepick.model.CustomerDao;
 import com.tablepick.model.ReserveVO;
 import com.tablepick.model.RestaurantVO;
 import com.tablepick.model.ReviewVO;
+import com.tablepick.session.SessionManager;
 
 public class CustomerService {
 	private static CustomerService instance;
 	private CustomerDao customerDao;
 	private AccountVO accountId = null;
+	private BufferedReader reader = null;
+	CustomerService customerService = null;
 
 	private CustomerService() {
 		try {
-			customerDao = new CustomerDao();
-			accountId = CommonService.getInstance().getLoginDataSession();
+			this.customerDao = new CustomerDao();
+			this.accountId = CommonService.getInstance().getLoginDataSession();
+			this.reader = new BufferedReader(new InputStreamReader(System.in));
 		} catch (ClassNotFoundException e) {
+			System.err.println("CommonService 초기화 중 오류 발생: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -49,8 +55,7 @@ public class CustomerService {
 	}
 
 	// 내 리뷰 수정(아이디랑 리뷰 번호로 변경 데이터 찾기)
-	public ReviewVO updateMyReview(String accountId, int reviewIdx, int newStar, String newComment)
-			throws SQLException {
+	public ReviewVO updateMyReview(String accountId, int reviewIdx, int newStar, String newComment) throws SQLException {
 		return customerDao.updateMyReviewById(accountId, reviewIdx, newStar, newComment);
 	}
 
@@ -120,7 +125,7 @@ public class CustomerService {
 	}
 
 	// 식당 예약
-	public void reserveRestaurant(BufferedReader reader) {
+	public void reserveRestaurant() {
 		try {
 			System.out.println("\n[식당 예약]");
 			System.out.print("식당명: ");
@@ -159,7 +164,7 @@ public class CustomerService {
 	}
 
 	// 식당 예약 조회
-	public void readReserve(BufferedReader reader) throws IOException {
+	public void readReserve() throws IOException {
 		try {
 			System.out.println("\n[식당 예약 조회]");
 			System.out.println("조회할 식당 이름을 입력하세요.");
@@ -174,8 +179,8 @@ public class CustomerService {
 				for (ReserveVO vo : list) {
 					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
 					System.out.println("식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId()) + " 인원 수: "
-							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
-							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
+							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: " + vo.getReserveTime()
+							+ "시 예약한 날짜: " + formattedRegisterDate);
 				}
 			}
 		} catch (SQLException e) {
@@ -186,7 +191,7 @@ public class CustomerService {
 	}
 
 	// 예약 update
-	public void reserveUpdate(BufferedReader reader) {
+	public void reserveUpdate() {
 		try {
 			System.out.println("\n등록된 예약 목록");
 			ArrayList<ReserveVO> list = customerDao.getAccountReserves(accountId.getId());
@@ -197,9 +202,9 @@ public class CustomerService {
 				for (int i = 0; i < list.size(); i++) {
 					ReserveVO vo = list.get(i);
 					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
-					System.out.println((i + 1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId())
-							+ " 인원 수: " + vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
-							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
+					System.out.println((i + 1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId()) + " 인원 수: "
+							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: " + vo.getReserveTime()
+							+ "시 예약한 날짜: " + formattedRegisterDate);
 				}
 			}
 			System.out.print("수정할 예약: ");
@@ -242,7 +247,7 @@ public class CustomerService {
 	}
 
 	// 예약 delete
-	public void reserveDelete(BufferedReader reader) {
+	public void reserveDelete() {
 		try {
 			System.out.print("\n등록된 예약 목록");
 			ArrayList<ReserveVO> list = customerDao.getAccountReserves(accountId.getId());
@@ -253,9 +258,9 @@ public class CustomerService {
 				for (int i = 0; i < list.size(); i++) {
 					ReserveVO vo = list.get(i);
 					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
-					System.out.println((i + 1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId())
-							+ " 인원 수: " + vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
-							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
+					System.out.println((i + 1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId()) + " 인원 수: "
+							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: " + vo.getReserveTime()
+							+ "시 예약한 날짜: " + formattedRegisterDate);
 				}
 			}
 			System.out.print("삭제할 예약: ");
@@ -290,8 +295,8 @@ public class CustomerService {
 				System.out.println("등록된 식당이 없습니다.");
 			} else {
 				for (RestaurantVO vo : list) {
-					System.out.println(vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: "
-							+ vo.getOpenTime());
+					System.out.println(
+							vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: " + vo.getOpenTime());
 				}
 			}
 		} catch (Exception e) {
@@ -300,7 +305,7 @@ public class CustomerService {
 	}
 
 	// 타입별 식당 조회
-	public void searchRestaurantByType(BufferedReader reader) {
+	public void searchRestaurantByType() {
 		try {
 			System.out.println("\n조회할 식당 타입을 선택하세요");
 			System.out.println(" 1. 한식 2. 중식 3. 일식 4. 양식");
@@ -328,8 +333,8 @@ public class CustomerService {
 				System.out.println("선택한 타입의 식당이 없습니다.");
 			} else {
 				for (RestaurantVO vo : list) {
-					System.out.println(vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: "
-							+ vo.getOpenTime());
+					System.out.println(
+							vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: " + vo.getOpenTime());
 				}
 			}
 		} catch (Exception e) {
@@ -338,7 +343,7 @@ public class CustomerService {
 	}
 
 	// 식당 리뷰 조회
-	public void searchRestaurantReview(BufferedReader reader) throws IOException {
+	public void searchRestaurantReview() throws IOException {
 		try {
 			System.out.println("\n리뷰를 조회할 식당을 선택하세요 ");
 			ArrayList<RestaurantVO> list = customerDao.searchAllRestaurants();
@@ -373,7 +378,7 @@ public class CustomerService {
 	}
 
 	// 별점 높은순 식당 조회
-	public void searchRestaurantByStar(BufferedReader reader) {
+	public void searchRestaurantByStar() {
 		try {
 			System.out.println("\n[별점 높은순 조회]");
 			Map<RestaurantVO, double[]> map = customerDao.searchRestaurantByStar();
@@ -394,7 +399,7 @@ public class CustomerService {
 	}
 
 	// 리뷰 등록하는 테스트 메서드
-	public void createReview(BufferedReader reader) throws IOException {
+	public void createReview() throws IOException {
 		try {
 			System.out.println("\n[식당 리뷰 등록]");
 			System.out.print("식당명: ");
@@ -405,9 +410,9 @@ public class CustomerService {
 			String comment = reader.readLine();
 			int reserveId = customerDao.findReserveIdxByRestaurantName(name, accountId.getId());
 			ReviewVO reviewResult = customerDao.createReview(reserveId, star, comment);
-			if(reviewResult!=null)
-				System.out.println(accountId.getId()+": "+" 식당: "+customerDao.findRestaurantNameByReserveIdx(reserveId)
-				+" 별점: "+star+"점 코멘트: "+comment);
+			if (reviewResult != null)
+				System.out.println(accountId.getId() + ": " + " 식당: " + customerDao.findRestaurantNameByReserveIdx(reserveId)
+						+ " 별점: " + star + "점 코멘트: " + comment);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -421,17 +426,20 @@ public class CustomerService {
 	}
 
 	// 리뷰찾는 테스트 메서드
-	public void findMyReviewById(BufferedReader reader) {
+	public void findMyReviewById() {
 		try {
 			System.out.println("\n[내 리뷰 검색]");
-			ArrayList<ReviewVO> list = customerDao.findMyReviewById(accountId.getId());
+			System.out.println("서비스 클래스 findMyReviewById 메서드 실행 성공");
+			System.out.println(accountId.getId());
+			// ArrayList<ReviewVO> list = customerDao.findMyReviewById(accountId.getId());
+			
 			if (list.isEmpty()) {
 				System.out.println("작성한 리뷰가 없습니다.");
 				return;
 			}
-			for(ReviewVO vo: list) {
-				System.out.println("식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
-				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
+			for (ReviewVO vo : list) {
+				System.out.println("식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx()) + " 별점: "
+						+ vo.getStar() + "점 코멘트: " + vo.getComment());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -441,20 +449,23 @@ public class CustomerService {
 	}
 
 	// 본인 아이디에 해당되는 리뷰를 수정하는 기능 테스트 메서드
-	public void updateReviewById(BufferedReader reader) {
+	public void updateReviewById() {
 
 		try {
 			System.out.println("\n[내 리뷰 수정]");
-			List<ReviewVO> list = customerDao.findMyReviewById(accountId.getId());
+			String accountId = SessionManager.getLoginDataSession().getId();
+			// 로그인한 계정에서 id 가져와서 저장
+			ArrayList<ReviewVO> list = customerDao.findMyReviewById(accountId);
+			// 리뷰 목록 받아와서 저장
 			if (list.isEmpty()) {
 				System.out.println("작성한 리뷰가 없습니다.");
 				return;
 			}
 			System.out.println("\n작성한 리뷰 목록");
-			for(int i =0; i<list.size(); i++) {
+			for (int i = 0; i < list.size(); i++) {
 				ReviewVO vo = list.get(i);
-				System.out.println((i+1)+ ". 식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
-				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
+				System.out.println((i + 1) + ". 식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx()) + " 별점: "
+						+ vo.getStar() + "점 코멘트: " + vo.getComment());
 			}
 			System.out.print("\n수정할 리뷰 번호를 입력하세요: ");
 			int choice = Integer.parseInt(reader.readLine());
@@ -471,11 +482,10 @@ public class CustomerService {
 			}
 			System.out.print("새 코멘트를 입력하세요: (기존: " + old.getComment() + "): ");
 			String comment = reader.readLine();
-			ReviewVO updated = new ReviewVO(old.getIdx(), old.getReserveIdx(),
-					star == 0 ? old.getStar() : star,
+			ReviewVO updated = new ReviewVO(old.getIdx(), old.getReserveIdx(), star == 0 ? old.getStar() : star,
 					comment.isEmpty() ? old.getComment() : comment);
-			ReviewVO updatedReview = customerDao.updateMyReviewById(accountId.getId(), updated.getIdx(), star, comment);
-			if (updatedReview!=null) {
+			ReviewVO updatedReview = customerDao.updateMyReviewById(accountId, updated.getIdx(), star, comment);
+			if (updatedReview != null) {
 				System.out.println("리뷰가 성공적으로 수정되었습니다.");
 			} else {
 				System.out.println("수정이 실패하였습니다.");
@@ -495,7 +505,7 @@ public class CustomerService {
 	}
 
 	// 본인 아이디에 해당되는 리뷰 출력 후 하나 선택해서 삭제하는 뷰 테스트 메서드
-	public void deleteMyReviewById(BufferedReader reader) {
+	public void deleteMyReviewById() {
 		try {
 			System.out.println("[내 리뷰 삭제]");
 			List<ReviewVO> reviews = customerDao.findMyReviewById(accountId.getId());
@@ -507,10 +517,10 @@ public class CustomerService {
 			}
 
 			System.out.println("\n작성한 리뷰 목록");
-			for(int i =0; i< reviews.size(); i++) {
+			for (int i = 0; i < reviews.size(); i++) {
 				ReviewVO vo = reviews.get(i);
-				System.out.println((i+1)+ ". 식당: "+customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx())
-				+" 별점: "+vo.getStar()+"점 코멘트: "+vo.getComment());
+				System.out.println((i + 1) + ". 식당: " + customerDao.findRestaurantNameByReserveIdx(vo.getReserveIdx()) + " 별점: "
+						+ vo.getStar() + "점 코멘트: " + vo.getComment());
 			}
 			System.out.print("\n수정할 리뷰 번호를 입력하세요: ");
 			int choice = Integer.parseInt(reader.readLine());
@@ -527,7 +537,8 @@ public class CustomerService {
 		} catch (SQLException | NumberFormatException | IOException e) {
 			e.printStackTrace();
 		} catch (NotFoundRestaurantException e) {
-			System.out.println(e.getMessage());;
+			System.out.println(e.getMessage());
+			;
 		}
 
 	}
