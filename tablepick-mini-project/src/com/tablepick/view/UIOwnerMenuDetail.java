@@ -197,6 +197,7 @@ public class UIOwnerMenuDetail {
 				break;
 			case "5":
 				System.out.println("이전 화면으로 돌아갑니다.");
+				System.out.println("                          ");
 				UIOwnerMainDetail.getInstance().run();
 				break;
 			case "0":

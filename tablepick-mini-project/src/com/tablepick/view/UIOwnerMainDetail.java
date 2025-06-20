@@ -48,7 +48,7 @@ public class UIOwnerMainDetail {
 			System.out.println("                          2. 식당 메뉴 관리");
 			System.out.println("                          3. 내 식당 예약자 조회하기");
 			System.out.println("                          4. 내 식당 리뷰 조회하기");
-			System.out.println("                          5. 뒤로가기");
+			System.out.println("                          5. 이전 화면으로 돌아가기");
 			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
@@ -70,6 +70,8 @@ public class UIOwnerMainDetail {
 				UIOwnerReviewDetail.getInstance().run();
 				break;
 			case "5":
+				System.out.println("이전 화면으로 돌아갑니다.");
+				System.out.println("                          ");
 				UIOwnerMain.getInstance().run();
 				break;
 			case "0":

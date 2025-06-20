@@ -69,7 +69,7 @@ public class UIOwnerMain {
 			System.out.println("                          2. 내 식당 상세 정보 확인하기 ");
 			System.out.println("                          3. 내 식당 삭제하기 ");
 			System.out.println("                          4. 로그아웃 ");
-			System.out.println("                          5. 뒤로가기 ");
+			System.out.println("                          5. 이전 화면으로 돌아가기");
 			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
