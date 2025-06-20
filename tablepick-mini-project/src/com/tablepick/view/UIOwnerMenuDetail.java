@@ -25,7 +25,7 @@ public class UIOwnerMenuDetail {
 		return instance;
 	}
 
-	public void run() {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 
 		String console;
 		String name;
@@ -107,11 +107,9 @@ public class UIOwnerMenuDetail {
 						service.createMenu(accountId, name, price);
 						System.out.println("메뉴가 성공적으로 등록되었습니다.");
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					} catch (NotFoundRestaurantException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					}
 
 				} else {
@@ -141,11 +139,9 @@ public class UIOwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 
 				System.out.println("수정하려는 메뉴를 입력해 주세요.");
@@ -168,11 +164,8 @@ public class UIOwnerMenuDetail {
 
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NotFoundAccountException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
+					System.out.println(e.getMessage());
+				}
 
 				break;
 
@@ -219,11 +212,8 @@ public class UIOwnerMenuDetail {
 					//e.printStackTrace();
 
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NotFoundAccountException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+
 				}
 				break;
 			case "5":
@@ -243,7 +233,7 @@ public class UIOwnerMenuDetail {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 
 		new UIOwnerMenuDetail().run();
 

@@ -83,9 +83,7 @@ public class OwnerService {
 		return ownerDao.findMenu(accountId);
 	}
 	
-	public void findMenuDetail(String accountId, String name) throws NotFoundMenuException, SQLException, 
-  
-   NotFoundRestaurantException, NotFoundAccountException {
+	public void findMenuDetail(String accountId, String name) throws NotFoundMenuException, SQLException, NotFoundRestaurantException, NotFoundAccountException {
 		ownerDao.findMenuDetail(accountId, name);
 	}
 	

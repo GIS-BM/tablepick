@@ -3,6 +3,8 @@ package com.tablepick.test.owner;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.AccountVO;
@@ -19,7 +21,7 @@ public class TestDeleteRestaurant {
 		return instance;
 	}
 
-	public void run() {
+	public void run() throws AccountNotFoundException {
 		OwnerService service = new OwnerService();
 		Scanner sc = new Scanner(System.in);
 		AccountVO loginData = null;
@@ -70,7 +72,11 @@ public class TestDeleteRestaurant {
 	}
 
 	public static void main(String[] args) {
-		new TestDeleteRestaurant().run();
+		try {
+			new TestDeleteRestaurant().run();
+		} catch (AccountNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

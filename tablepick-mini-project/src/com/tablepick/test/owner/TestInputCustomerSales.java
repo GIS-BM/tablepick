@@ -57,8 +57,12 @@ public class TestInputCustomerSales {
 				System.out.println("                  ");
 				System.out.println("                          *** 식당 예약 자 명단 *** ");
 				System.out.println("                  ");
-				for (int i = 0; i < reservationList.size(); i++) {
-					System.out.println(reservationList.get(i));
+				if (reservationList.isEmpty()) {
+					System.out.println("                        예약자가 없습니다. ");
+				} else {
+					for (int i = 0; i < reservationList.size(); i++) {
+						System.out.println(reservationList.get(i));
+					}
 				}
 
 				System.out.println("매출액을 입력할 예약 번호를 입력해 주세요.");

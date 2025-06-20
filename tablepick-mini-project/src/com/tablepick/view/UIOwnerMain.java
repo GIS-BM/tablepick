@@ -3,7 +3,10 @@ package com.tablepick.view;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.tablepick.model.AccountVO;
+import javax.security.auth.login.AccountNotFoundException;
+
+import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
 import com.tablepick.test.owner.TestCreateRestaurant;
@@ -28,13 +31,13 @@ public class UIOwnerMain {
 				return instance;
 			}
 
-	public void run() {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		
-//		//테스트 로그인. 페이지 연결이 전부 완료되면 삭제해야 합니다.
+		//테스트 로그인. 페이지 연결이 전부 완료되면 삭제해야 합니다.
 //		try {
-//			CommonService.getInstance().loginSessionManager("owner01","pw1234");
+//			CommonService.getInstance().loginSession("owner01","pw1234");
 //		} catch (ClassNotFoundException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -147,7 +150,7 @@ public class UIOwnerMain {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerMain().run();
 	}
 
