@@ -10,7 +10,6 @@ import java.util.Map;
 import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundRestaurantException;
-import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.AdminDao;
 import com.tablepick.model.ReserveVO;
@@ -88,7 +87,6 @@ public class AdminCRUDUnitTest {
 			}
 		} catch (NotFoundAccountException e) {
 			System.out.println(e.getMessage());
-			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

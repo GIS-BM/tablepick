@@ -1,4 +1,4 @@
-package com.tablepick.test.customer;
+package com.tablepick.view;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
