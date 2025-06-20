@@ -35,7 +35,7 @@ public class CustomerViewUnitTest {
 	                case "4":
 	                	System.out.println("로그아웃합니다.");
 	                    return;
-	                case "5":
+	                case "0":
 	                    System.out.println("종료합니다.");
 	                    System.exit(0);
 	                    break;
