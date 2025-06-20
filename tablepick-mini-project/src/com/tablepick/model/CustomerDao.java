@@ -36,6 +36,8 @@ public class CustomerDao {
 			rs.close();
 		closeAll(pstmt, con);
 	}
+	
+	
 
 	// 리뷰 등록 메서드
 	// 해당 예약에 대한 리뷰를 등록해야한다.
