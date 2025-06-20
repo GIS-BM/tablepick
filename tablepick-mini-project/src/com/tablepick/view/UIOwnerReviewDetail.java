@@ -12,18 +12,19 @@ import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
 
-
 //식당 주인이 자신의 식당의 리뷰를 조회할 수 있습니다.
 
 public class UIOwnerReviewDetail {
-	
+
 	private static UIOwnerReviewDetail instance = new UIOwnerReviewDetail();
+
 	private UIOwnerReviewDetail() {
 	}
+
 	public static UIOwnerReviewDetail getInstance() {
 		return instance;
 	}
-	
+
 	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		Scanner sc = new Scanner(System.in);
 		OwnerService service = new OwnerService();
@@ -32,12 +33,9 @@ public class UIOwnerReviewDetail {
 
 		String console;
 
+		// 세션으로 id 가져오기
+		String accountId = SessionManager.getLoginDataSession().getId();
 
-
-		//세션으로 id 가져오기
-				String accountId = SessionManager.getLoginDataSession().getId();
-				
-		
 		while (!exit) {
 			System.out.println("                          ");
 			System.out.println(
@@ -46,12 +44,12 @@ public class UIOwnerReviewDetail {
 			System.out.println("                  *** 내 식당의 리뷰를 조회할 수 있는 화면입니다. ***");
 			System.out.println("                  ");
 			System.out.println("                          1. 리뷰 조회하기");
-			System.out.println("                          2. 뒤로 가기");
+			System.out.println("                          2. 이전 화면으로 돌아가기");
 			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
-		
+			System.out.print("메뉴를 선택하세요: ");
 			console = sc.nextLine();
 			switch (console) {
 			case "1":
@@ -61,17 +59,16 @@ public class UIOwnerReviewDetail {
 					list = service.findMyRestaurantReview(accountId);
 					if (list.isEmpty()) {
 						System.out.println("등록된 리뷰가 없습니다.");
-					}else {
+					} else {
 						for (int i = 0; i < list.size(); i++) {
-						System.out.println(list.get(i));
+							System.out.println(list.get(i));
+						}
 					}
-					}
-					
+
 				} catch (SQLException e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 				break;
 			case "2":
@@ -92,7 +89,8 @@ public class UIOwnerReviewDetail {
 		}
 	}
 
-	public static void main(String[] args) throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
+	public static void main(String[] args)
+			throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerReviewDetail().run();
 	}
 }

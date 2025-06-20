@@ -41,12 +41,12 @@ public class UIOwnerReserveCustomerDetail {
 			System.out.println("                          1. 예약자 전체 조회하기");
 			System.out.println("                          2. 가장 많이 예약한 사람 조회하기");
 			System.out.println("                          3. 예약 당 매출액 입력 및 수정하기");
-			System.out.println("                          4. 뒤로 가기");
+			System.out.println("                          4. 이전 화면으로 돌아가기");
 			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
-
+			System.out.print("메뉴를 선택하세요: ");
 			console = sc.nextLine();
 
 			switch (console) {
@@ -60,6 +60,8 @@ public class UIOwnerReserveCustomerDetail {
 				TestInputCustomerSales.getInstance().run();
 				break;
 			case "4":
+				System.out.println("이전 화면으로 돌아갑니다.");
+				System.out.println("                          ");
 				UIOwnerMainDetail.getInstance().run();
 				break;
 			case "0":
