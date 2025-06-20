@@ -114,7 +114,7 @@ public class ConsoleUIIndex {
 
 			if (tablePickServiceCommon.login(id, password) != null) {
 				System.out.println("로그인 성공");
-				AccountVO loginData = tablePickServiceCommon.getLoginData(); // 로그인 데이터 출력 또는 유지
+				AccountVO loginData = tablePickServiceCommon.getLoginDataSession(); // 로그인 데이터 출력 또는 유지
 				tablePickServiceCommon.checkAccountTypeAndMovePage(loginData);
 			} else {
 				System.out.println("로그인 실패");

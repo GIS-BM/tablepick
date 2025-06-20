@@ -7,9 +7,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
+<<<<<<< HEAD
 import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundRestaurantException;
+=======
+import com.tablepick.exception.NotFoundAccountException;
+>>>>>>> main
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.AdminDao;
 import com.tablepick.model.ReserveVO;
@@ -86,7 +90,11 @@ public class AdminCRUDUnitTest {
 				System.out.println("해당 ID의 계정이 존재하지 않습니다.");
 			}
 		} catch (NotFoundAccountException e) {
+<<<<<<< HEAD
 			System.out.println(e.getMessage());
+=======
+			e.printStackTrace();
+>>>>>>> main
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

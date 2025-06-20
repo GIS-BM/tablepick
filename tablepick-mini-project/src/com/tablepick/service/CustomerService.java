@@ -7,43 +7,43 @@ import com.tablepick.model.CustomerDao;
 import com.tablepick.model.ReviewVO;
 
 public class CustomerService {
+	private static CustomerService instance;
+	private CustomerDao customerDao;
 
-    // 싱글톤 패턴 적용
-    private static CustomerService instance = new CustomerService();
-    private final CustomerDao customerDao;
+	private CustomerService() {
+		customerDao = new CustomerDao();
+	}
 
-    // private 생성자
-    private CustomerService() {
-        this.customerDao = new CustomerDao();
-    }
+	public static synchronized CustomerService getInstance() {
+		if (instance == null) {
+			instance = new CustomerService();
+		}
+		return instance;
+	}
 
-    // public 싱글톤 인스턴스 반환 메서드
-    public static CustomerService getInstance() {
-        return instance;
-    }
+	// 리뷰 작성
+	public ReviewVO writeReview(int reserveIdx, int star, String comment) throws SQLException {
+		return customerDao.createReview(reserveIdx, star, comment);
+	}
 
-    // 리뷰 등록
-    public ReviewVO registerReview(int reserveId, int star, String comment) throws SQLException {
-        return customerDao.registerReview(reserveId, star, comment);
-    }
+	// 아이디로 내 리뷰 조회
+	public ArrayList<ReviewVO> getMyReviews(String accountId) throws SQLException {
+		return customerDao.findMyReviewById(accountId);
+	}
 
-    // 내 리뷰 전체 조회
-    public ArrayList<ReviewVO> findMyReviews(String accountId) throws SQLException {
-        return customerDao.findMyReviewById(accountId);
-    }
+	// 내 리뷰 수정(아이디랑 리뷰 번호로 변경 데이터 찾기)
+	public ReviewVO updateMyReview(String accountId, int reviewIdx, int newStar, String newComment) throws SQLException {
+		return customerDao.updateMyReviewById(accountId, reviewIdx, newStar, newComment);
+	}
 
-    // 내 리뷰 수정
-    public ReviewVO updateMyReview(String accountId, int reviewIdx, int star, String comment) throws SQLException {
-        return customerDao.changeMyReviewById(accountId, reviewIdx, star, comment);
-    }
+	// 리뷰 번호로 리뷰 조회
+	public ReviewVO getReviewByIdx(int reviewIdx) throws SQLException {
+		return customerDao.findReviewByIdx(reviewIdx);
+	}
 
-    // 리뷰 상세 조회
-    public ReviewVO getReviewById(int reviewIdx) throws SQLException {
-        return customerDao.getReviewById(reviewIdx);
-    }
-
-    // 내 리뷰 삭제
-    public boolean deleteReviewById(int reviewIdx) throws SQLException {
-        return customerDao.deleteReviewById(reviewIdx);
-    }
+	// 리뷰 삭제
+	public boolean deleteReview(int reviewIdx) throws SQLException {
+		return customerDao.deleteReviewById(reviewIdx);
+	}
 }
+

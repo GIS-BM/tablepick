@@ -18,7 +18,6 @@ import com.tablepick.common.DbConfig;
 import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundRestaurantException;
-import com.tablepick.exception.NotMatchedPasswordException;
 
 public class AdminDao {
 	public AdminDao() throws ClassNotFoundException {
@@ -41,10 +40,9 @@ public class AdminDao {
 			rs.close();
 		closeAll(pstmt, con);
 	}
-	
+
 	// 계정 조회
-	public void findAccounts()
-			throws NotFoundAccountException, SQLException {
+	public void findAccounts() throws NotFoundAccountException, SQLException {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -59,7 +57,7 @@ public class AdminDao {
 			if (rs.next() == false) {
 				throw new NotFoundAccountException("조회된 계정이 없습니다.");
 			}
-		}finally {
+		} finally {
 			DatabaseUtil.closeAll(rs, pstmt, con);
 		}
 	}
@@ -128,14 +126,14 @@ public class AdminDao {
 			pstmt.setString(4, accountVO.getTel());
 			pstmt.setString(5, accountVO.getId());
 			int rows = pstmt.executeUpdate();
-			if(result = rows > 0)
+			if (result = rows > 0)
 				con.commit();
 			else
 				throw new InfoNotEnoughException("정보가 충분하지 않습니다.");
-		} catch(InfoNotEnoughException e){
+		} catch (InfoNotEnoughException e) {
 			con.rollback();
 			throw e;
-		}finally {
+		} finally {
 			closeAll(pstmt, con);
 		}
 		return result;
@@ -153,14 +151,14 @@ public class AdminDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			int rows = pstmt.executeUpdate();
-			if(result = rows > 0)
+			if (result = rows > 0)
 				con.commit();
 			else
 				throw new InfoNotEnoughException("정보가 충분하지 않습니다.");
-		} catch(InfoNotEnoughException e){
+		} catch (InfoNotEnoughException e) {
 			con.rollback();
 			throw e;
-		}finally {
+		} finally {
 			closeAll(pstmt, con);
 		}
 		return result;
@@ -187,7 +185,7 @@ public class AdminDao {
 		}
 		return name;
 	}
-	
+
 	// 모든 예약 조회
 	public ArrayList<ReserveVO> getAllReserves() throws SQLException {
 		ArrayList<ReserveVO> list = new ArrayList<ReserveVO>();
@@ -241,6 +239,5 @@ public class AdminDao {
 		}
 		return map;
 	}
-
 
 }

@@ -25,7 +25,7 @@ public class CustomerUnit {
 	private CustomerUnit() {
 		try {
 			customerDao = new CustomerDao();
-			accountId = CommonService.getInstance().getLoginData();
+			accountId = CommonService.getInstance().getLoginDataSession();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

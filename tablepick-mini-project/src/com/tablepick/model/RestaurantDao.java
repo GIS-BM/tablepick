@@ -11,8 +11,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.login.AccountNotFoundException;
-
 import com.tablepick.common.DatabaseUtil;
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.exception.NotFoundAccountException;
@@ -32,7 +30,7 @@ public class RestaurantDao {
 	 * @param password
 	 * @return
 	 * @throws NotMatchedPasswordException
-	 * @throws AccountNotFoundException
+	 * @throws NotFoundAccountException
 	 * @throws SQLException
 	 */
 	public boolean findAccount(String accountId, String password)
@@ -170,7 +168,7 @@ public class RestaurantDao {
 	 * @param accountId
 	 * @param password
 	 * @throws SQLException
-	 * @throws AccountNotFoundException
+	 * @throws NotFoundAccountException
 	 * @throws NotMatchedPasswordException
 	 */
 	public void deleteMyRestaurant(String accountId, String password)
@@ -561,12 +559,12 @@ public class RestaurantDao {
 	 * 메뉴를 찾는 메소드 입니다. 가격 수정 및 삭제 시 이 메소드가 먼저 호출됩니다.
 	 * 
 	 * @throws SQLException
-	 * @throws AccountNotFoundException
+	 * @throws NotFoundAccountException
 	 * @throws RestaurantNotFoundException
 	 */
 
 	public boolean findMenuDetail(String accountId, String name)
-			throws NotFoundMenuException, SQLException, AccountNotFoundException, NotFoundRestaurantException {
+			throws NotFoundMenuException, SQLException, NotFoundAccountException, NotFoundRestaurantException {
 		RestaurantVO restaurantVo = findMyRestaurant(accountId);
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -601,13 +599,13 @@ public class RestaurantDao {
 	 * 
 	 * @param menuVO
 	 * @throws SQLException
-	 * @throws AccountNotFoundException
+	 * @throws NotFoundAccountException
 	 * @throws NotFoundMenuException
 	 * @throws RestaurantNotFoundException
 	 */
 
 	public void updateMenu(String accountId, String name, int price)
-			throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
+			throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -639,12 +637,12 @@ public class RestaurantDao {
 	 * @param name
 	 * @throws SQLException
 	 * @throws NotFoundMenuException
-	 * @throws AccountNotFoundException
+	 * @throws NotFoundAccountException
 	 * @throws RestaurantNotFoundException
 	 */
 
 	public void deleteMenu(String accountId, String name)
-			throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
+			throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 

@@ -24,7 +24,7 @@ public class ReviewCRUDUnitTest {
 	public void registerReviewTest() {
 		try {
 			System.out.println("registerReviewTest 테스트");
-			ReviewVO reviewresult = customerDao.registerReview(5, 3, "리뷰테스트");
+			ReviewVO reviewresult = customerDao.createReview(5, 3, "리뷰테스트");
 			System.out.println(reviewresult);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class ReviewCRUDUnitTest {
 			String newComment = br.readLine();
 
 			// 리뷰 수정 시도
-			ReviewVO updatedReview = customerDao.changeMyReviewById(accountId, reviewIdx, newStar, newComment);
+			ReviewVO updatedReview = customerDao.updateMyReviewById(accountId, reviewIdx, newStar, newComment);
 
 			if (updatedReview != null) {
 				System.out.println("\n 리뷰가 성공적으로 수정되었습니다.");

@@ -1,4 +1,4 @@
-package com.tablepick.Restaurant.UnitTest;
+package com.tablepick.test.owner;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
@@ -28,7 +28,7 @@ public class TestCreateRestaurant {
 
 		AccountVO loginData = null;
 		try {
-			loginData = CommonService.getInstance().getLoginData();
+			loginData = CommonService.getInstance().getLoginDataSession();
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}

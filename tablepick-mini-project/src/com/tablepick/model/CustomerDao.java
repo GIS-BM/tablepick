@@ -40,7 +40,7 @@ public class CustomerDao {
 	// 리뷰 등록 메서드
 	// 해당 예약에 대한 리뷰를 등록해야한다.
 	// 예약 번호를 매개변수로 입력받아 리뷰 객체를 반환한다.
-	public ReviewVO registerReview(int reserveId, int star, String comment) throws SQLException {
+	public ReviewVO createReview(int reserveId, int star, String comment) throws SQLException {
 		// 메서드에서 사용하는 메서드 지역 변수 선언
 		ReviewVO review = null;
 		Connection con = null;
@@ -144,7 +144,7 @@ public class CustomerDao {
 	 * r.comment = '가격에 비해서 너무 음식이 질이 낮습니다.' WHERE rs.account_id = 'cust05' AND
 	 * r.idx = 5;
 	 */
-	public ReviewVO changeMyReviewById(String accountId, int reviewIdx, int star, String comment) throws SQLException {
+	public ReviewVO updateMyReviewById(String accountId, int reviewIdx, int star, String comment) throws SQLException {
 		ReviewVO updatedReview = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -166,7 +166,7 @@ public class CustomerDao {
 
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
-				updatedReview = getReviewById(reviewIdx);
+				updatedReview = findReviewByIdx(reviewIdx);
 			}
 		} finally {
 			closeAll(pstmt, con);
@@ -175,7 +175,7 @@ public class CustomerDao {
 	}
 
 	// reviewIdx로 리뷰 데이터 가져오는 메서드
-	public ReviewVO getReviewById(int reviewIdx) throws SQLException {
+	public ReviewVO findReviewByIdx(int reviewIdx) throws SQLException {
 		ReviewVO review = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;

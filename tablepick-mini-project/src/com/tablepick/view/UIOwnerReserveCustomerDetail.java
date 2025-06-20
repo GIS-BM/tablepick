@@ -1,22 +1,22 @@
-package com.tablepick.RestaurantOwner.View;
+package com.tablepick.view;
 
 import java.util.Scanner;
 
-import com.tablepick.Restaurant.UnitTest.MostReservedCustomersTest;
-import com.tablepick.Restaurant.UnitTest.TestInputCustomerSales;
-import com.tablepick.Restaurant.UnitTest.TestSelectReservationListByOwner;
+import com.tablepick.test.owner.MostReservedCustomersTest;
+import com.tablepick.test.owner.TestInputCustomerSales;
+import com.tablepick.test.owner.TestSelectReservationListByOwner;
 
 //식당을 예약한 예약자를 확인할수 있는 페이지 입니다.
 //여기서 예약을 확인한 다음, 예약의 매출액을 적을 수 있습니다.
 //매출액은 이후 OwnerMainDetail 페이지의 총 매출액으로 합산된 것을 확인할 수 있습니다.
 
-public class OwnerReserveCustomerDetail {
-	private static OwnerReserveCustomerDetail instance = new OwnerReserveCustomerDetail();
+public class UIOwnerReserveCustomerDetail {
+	private static UIOwnerReserveCustomerDetail instance = new UIOwnerReserveCustomerDetail();
 
-	private OwnerReserveCustomerDetail() {
+	private UIOwnerReserveCustomerDetail() {
 	}
 
-	public static OwnerReserveCustomerDetail getInstance() {
+	public static UIOwnerReserveCustomerDetail getInstance() {
 		return instance;
 	}
 
@@ -56,7 +56,7 @@ public class OwnerReserveCustomerDetail {
 				TestInputCustomerSales.getInstance().run();
 				break;
 			case "4":
-				OwnerMainDetail.getInstance().run();
+				UIOwnerMainDetail.getInstance().run();
 				break;
 			case "5":
 				System.out.println("프로그램을 종료합니다.");
@@ -72,6 +72,6 @@ public class OwnerReserveCustomerDetail {
 	}
 
 	public static void main(String[] args) {
-		new OwnerReserveCustomerDetail().run();
+		new UIOwnerReserveCustomerDetail().run();
 	}
 }

@@ -35,7 +35,7 @@ public class ConsoleUIIndex {
                 String input = reader.readLine().trim();
                 switch (input) {
                     case "1":
-                        loginView();
+                    		loginView();
                         break;
                     case "2":
                         registerView();
@@ -61,7 +61,8 @@ public class ConsoleUIIndex {
             String password = reader.readLine();
 
             if (tablePickServiceCommon.login(id, password) != null) {
-                AccountVO loginData = tablePickServiceCommon.getLoginData();
+                AccountVO loginData = CommonService.getInstance().getLoginDataSession();
+
                 System.out.println("[" + loginData.getType() + "] " + loginData.getName() + "님 환영합니다.");
 
                 // 사용자 타입에 따라 분기
@@ -70,8 +71,8 @@ public class ConsoleUIIndex {
                     	UICustomerMain.getInstance().run(reader);
                     	break;
                     case "owner":
-                    	System.out.println("ownerView 구현해야 한다");
-                        // new OwnerView().run(reader);
+                    	//System.out.println("ownerView 구현해야 한다");
+                    	UIOwnerMain.getInstance().run();
                         break;
                     case "admin":
                     	UIAdminMain.getInstance().run(reader);
@@ -82,7 +83,7 @@ public class ConsoleUIIndex {
             } else {
                 System.out.println("로그인 실패: 아이디 또는 비밀번호를 확인하세요.");
             }
-        } catch (IOException | SQLException e) {
+        } catch (IOException | SQLException | ClassNotFoundException e) {
             System.err.println("로그인 오류: " + e.getMessage());
         }
     }

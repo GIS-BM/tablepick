@@ -16,7 +16,7 @@ public class AccountLogoutUnitTest {
 			if(CommonService.getInstance().login("owner01", "pw1234")!=null) {
 				System.out.println("로그인 성공");
 			}
-			loginData = CommonService.getInstance().getLoginData();
+			loginData = CommonService.getInstance().getLoginDataSession();
 			System.out.println("로그인 데이터 값 출력 : " + loginData);
 			CommonService.getInstance().logout();
 			System.out.println(loginData);

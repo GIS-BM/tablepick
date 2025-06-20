@@ -112,4 +112,3 @@ public class OwnerService {
 		return ownerDao.findSelectedCustomer(accountId, reservationIdx);
 	}
 }
-

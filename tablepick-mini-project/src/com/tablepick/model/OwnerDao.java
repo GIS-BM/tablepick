@@ -171,6 +171,7 @@ public class OwnerDao {
 	 * @throws SQLException
 	 * @throws AccountNotFoundException
 	 * @throws NotMatchedPasswordException
+	 * @throws NotFoundAccountException 
 	 */
 	public void deleteMyRestaurant(String accountId, String password)
 			throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
@@ -233,7 +234,7 @@ public class OwnerDao {
 		ResultSet rs = null;
 		try {
 			con = DatabaseUtil.getConnection();
-			String sql = "SELECT 1 FROM reserve WHERE restaurant_idx = ?";
+			String sql = "SELECT 1 FROM reserve WHERE idx = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, reservationIdx);
 			rs = pstmt.executeQuery();

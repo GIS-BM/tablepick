@@ -1,4 +1,4 @@
-package com.tablepick.RestaurantOwner.View;
+package com.tablepick.view;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,12 +12,12 @@ import com.tablepick.session.SessionManager;
 
 //식당 주인이 자신의 식당의 리뷰를 조회할 수 있습니다.
 
-public class OwnerReviewDetail {
+public class UIOwnerReviewDetail {
 	
-	private static OwnerReviewDetail instance = new OwnerReviewDetail();
-	private OwnerReviewDetail() {
+	private static UIOwnerReviewDetail instance = new UIOwnerReviewDetail();
+	private UIOwnerReviewDetail() {
 	}
-	public static OwnerReviewDetail getInstance() {
+	public static UIOwnerReviewDetail getInstance() {
 		return instance;
 	}
 	
@@ -74,7 +74,7 @@ public class OwnerReviewDetail {
 			case "2":
 				System.out.println("이전 화면으로 돌아갑니다.");
 				exit = true;
-				OwnerMainDetail.getInstance().run();
+				UIOwnerMainDetail.getInstance().run();
 				break;
 			case "3":
 				System.out.println("프로그램을 종료합니다.");
@@ -90,6 +90,6 @@ public class OwnerReviewDetail {
 	}
 
 	public static void main(String[] args) {
-		new OwnerReviewDetail().run();
+		new UIOwnerReviewDetail().run();
 	}
 }

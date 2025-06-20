@@ -15,6 +15,8 @@ import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
 
 public class ReserveCRUDUnitTest {
+	/*
+}
 	private CustomerDao customerDao;
 	private static ReserveCRUDUnitTest instance = new ReserveCRUDUnitTest();
 	private AccountVO accountId;
@@ -45,6 +47,7 @@ public class ReserveCRUDUnitTest {
 				System.out.println("예약 시간:");
 				int time = Integer.parseInt(reader.readLine());
 
+<<<<<<< HEAD
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				LocalDate registerDate = LocalDate.parse(date, formatter);
 				int restaurantId = customerDao.findRestaurantIdByName(name);
@@ -53,12 +56,49 @@ public class ReserveCRUDUnitTest {
 					System.out.println("예약이 성공하였습니다.");
 				} else {
 					System.out.println("예약 등록 실패");
+=======
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDate registerDate = LocalDate.parse(date, formatter);
+			int restaurantId = accountdao.findRestaurantIdByName(name);
+
+			AccountVO loginData = commonService.getLoginDataSession();
+			ReserveVO reserveVO = new ReserveVO(loginData.getId(), restaurantId, count, registerDate, time);
+			if (accountdao.insertReserve(reserveVO)) {
+				System.out.println("예약이 성공하였습니다.");
+			} else {
+				System.out.println("예약 등록 실패");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 식당 예약 조회
+	public void readReserveView(BufferedReader reader) throws IOException {
+		try {
+			System.out.println("[식당 예약 조회]");
+			System.out.println("조회할 식당 이름을 입력하세요.");
+			String name = reader.readLine();
+			int idx = accountdao.findRestaurantIdByName(name);
+			ArrayList<ReserveVO> list = accountdao.getRestaurantReserves(idx);
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			if (list.isEmpty()) {
+				System.out.println("등록된 예약이 없습니다.");
+			} else {
+				System.out.println(name + " 식당에 등록된 예약");
+				for (ReserveVO vo : list) {
+					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
+					System.out.println("식당명: " + accountdao.findRestaurantNameById(vo.getRestaurantId()) + " 인원 수: "
+							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
+							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
+>>>>>>> main
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
+<<<<<<< HEAD
 		// 식당 예약 조회
 		public void readReserve(BufferedReader reader) throws IOException {
 			try {
@@ -78,6 +118,24 @@ public class ReserveCRUDUnitTest {
 								+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
 								+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
 					}
+=======
+	// 예약 update
+	public void reserveUpdateView(BufferedReader reader) {
+		try {
+			System.out.println("등록된 예약 목록");
+			AccountVO loginData = commonService.getLoginDataSession();
+			ArrayList<ReserveVO> list = accountdao.getAccountReserves(loginData.getId());
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			if (list.isEmpty()) {
+				System.out.println("등록된 예약이 없습니다.");
+			} else {
+				for (int i = 0; i < list.size(); i++) {
+					ReserveVO vo = list.get(i);
+					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
+					System.out.println((i + 1) + ". 식당명: " + accountdao.findRestaurantNameById(vo.getRestaurantId())
+							+ " 인원 수: " + vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
+							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
+>>>>>>> main
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -86,6 +144,7 @@ public class ReserveCRUDUnitTest {
 			}
 		}
 
+<<<<<<< HEAD
 		// 예약 update
 		public void reserveUpdate(BufferedReader reader) {
 			try {
@@ -102,6 +161,24 @@ public class ReserveCRUDUnitTest {
 								+ " 인원 수: " + vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
 								+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
 					}
+=======
+	// 예약 delete
+	public void reserveDeleteView(BufferedReader reader) {
+		try {
+			System.out.print("등록된 예약 목록");
+			AccountVO loginData = commonService.getLoginDataSession();
+			ArrayList<ReserveVO> list = accountdao.getAccountReserves(loginData.getId());
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			if (list.isEmpty()) {
+				System.out.println("등록된 예약이 없습니다.");
+			} else {
+				for (int i = 0; i < list.size(); i++) {
+					ReserveVO vo = list.get(i);
+					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
+					System.out.println((i + 1) + ". 식당명: " + accountdao.findRestaurantNameById(vo.getRestaurantId())
+							+ " 인원 수: " + vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
+							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
+>>>>>>> main
 				}
 				System.out.print("수정할 예약: ");
 				int choice = Integer.parseInt(reader.readLine());
@@ -181,4 +258,5 @@ public class ReserveCRUDUnitTest {
 				e.printStackTrace();
 			}
 		}
+		*/
 }

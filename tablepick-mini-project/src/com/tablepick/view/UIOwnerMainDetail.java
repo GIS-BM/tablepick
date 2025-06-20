@@ -1,19 +1,19 @@
-package com.tablepick.RestaurantOwner.View;
+package com.tablepick.view;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.tablepick.Restaurant.UnitTest.TestSelectRestaurantAndSales;
-import com.tablepick.Restaurant.UnitTest.TestUpdateRestaurantAndSales;
+import com.tablepick.test.owner.TestSelectRestaurantAndSales;
+import com.tablepick.test.owner.TestUpdateRestaurantAndSales;
 
 //식당 상세 정보 화면입니다.
 //식당주인 메인 화면에서 넘어옵니다.
-public class OwnerMainDetail {
+public class UIOwnerMainDetail {
 
-	private static OwnerMainDetail instance = new OwnerMainDetail();
-	private OwnerMainDetail() {
+	private static UIOwnerMainDetail instance = new UIOwnerMainDetail();
+	private UIOwnerMainDetail() {
 	}
-	public static OwnerMainDetail getInstance() {
+	public static UIOwnerMainDetail getInstance() {
 		return instance;
 	}
 
@@ -55,16 +55,16 @@ public class OwnerMainDetail {
 				TestUpdateRestaurantAndSales.getInstance().run();
 				break;
 			case "2":
-				OwnerMenuDetail.getInstance().run();
+				UIOwnerMenuDetail.getInstance().run();
 				break;
 			case "3":
-				OwnerReserveCustomerDetail.getInstance().run();
+				UIOwnerReserveCustomerDetail.getInstance().run();
 				break;
 			case "4":
-				OwnerReviewDetail.getInstance().run();
+				UIOwnerReviewDetail.getInstance().run();
 				break;
 			case "5":
-				OwnerMain.getInstance().run();
+				UIOwnerMain.getInstance().run();
 				break;
 			case "6":
 				System.out.println("프로그램을 종료합니다.");
@@ -80,6 +80,6 @@ public class OwnerMainDetail {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		new OwnerMainDetail().run();
+		new UIOwnerMainDetail().run();
 	}
 }
