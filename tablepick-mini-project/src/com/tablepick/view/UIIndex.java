@@ -12,7 +12,6 @@ import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
-import com.tablepick.test.admin.UIAdminMain;
 
 public class UIIndex {
 	private final AccountDao accountDao;

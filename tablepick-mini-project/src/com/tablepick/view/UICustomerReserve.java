@@ -48,10 +48,10 @@ public class UICustomerReserve {
 					break;
 				// customer main UI 로 이동
 				case "5":
-					System.out.println("Customer 메인 페이지로 돌아갑니다.");
+					System.out.println("이전 화면으로 돌아갑니다.");
 					return;
 				// 서비스 종료
-				case "6":
+				case "0":
 					System.out.println("종료합니다.");
 					System.exit(0);
 					break;
@@ -67,7 +67,7 @@ public class UICustomerReserve {
 	private void printReserveMenu() {
 		System.out.println(
 				"\n============================================================================================");
-		System.out.println("                               *** Customer 예약 서비스 ***");
+		System.out.println("                                 *** 식당 예약 서비스 ***");
 		System.out.println(
 				"============================================================================================");
 		System.out.println("                                    1. 식당 예약");
@@ -75,7 +75,7 @@ public class UICustomerReserve {
 		System.out.println("                                    3. 예약 변경");
 		System.out.println("                                    4: 예약 삭제");
 		System.out.println("                                    5. 뒤로가기");
-		System.out.println("                                    6. 서비스 종료하기");
+		System.out.println("                                    0. 프로그램 종료하기");
 		System.out.println(
 				"============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");

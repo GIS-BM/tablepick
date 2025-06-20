@@ -48,10 +48,10 @@ public class UICustomerFindRestaurant {
 					break;
 				// customer main UI 로 이동
 				case "5":
-					System.out.println("Customer 메인 페이지로 돌아갑니다.");
+					System.out.println("이전 화면으로 돌아갑니다.");
 					return;
 				// 서비스 종료
-				case "exit":
+				case "0":
 					System.out.println("종료합니다.");
 					System.exit(0);
 				default:
@@ -66,7 +66,7 @@ public class UICustomerFindRestaurant {
 	private void printSearchRestaurantMenu() {
 		System.out.println(
 				"\n============================================================================================");
-		System.out.println("                               *** Customer 조회 서비스 ***");
+		System.out.println("                                 *** 식당 조회 서비스 ***");
 		System.out.println(
 				"============================================================================================");
 		System.out.println("                                    1. 식당 전체 조회");
@@ -74,7 +74,7 @@ public class UICustomerFindRestaurant {
 		System.out.println("                                    3. 해당 식당 리뷰 조회");
 		System.out.println("                                    4: 평균 별점 높은순 식당 조회");
 		System.out.println("                                    5. 뒤로가기");
-		System.out.println("                                    6. 서비스 종료하기");
+		System.out.println("                                    0. 서비스 종료하기");
 		System.out.println(
 				"============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");

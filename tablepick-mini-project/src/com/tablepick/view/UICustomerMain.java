@@ -48,8 +48,13 @@ public class UICustomerMain {
 					System.out.println("로그아웃합니다.");
 					CommonService.getInstance().logoutSession();
 					return;
-				// 서비스 종료
+				// 이전화면으로 이동
 				case "5":
+					System.out.println("이전 화면으로 돌아갑니다.");
+					CommonService.getInstance().logoutSession();
+					return;
+				// 서비스 종료
+				case "0":
 					System.out.println("종료합니다.");
 					System.exit(0);
 					break;
@@ -81,7 +86,8 @@ public class UICustomerMain {
 		System.out.println("                                    2. 식당 예약");
 		System.out.println("                                    3. 식당 리뷰");
 		System.out.println("                                    4. 로그아웃");
-		System.out.println("                                    5. 서비스 종료하기");
+		System.out.println("                                    5. 뒤로가기");
+		System.out.println("                                    0. 프로그램 종료하기");
 		System.out.println(
 				"============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");

@@ -1,7 +1,9 @@
-package com.tablepick.test.admin;
+package com.tablepick.view;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+
+import com.tablepick.test.admin.AdminUnit;
 
 public class UIAdminMain {
 	private static UIAdminMain instance = new UIAdminMain();
@@ -48,8 +50,11 @@ public class UIAdminMain {
 				case "5":
 					System.out.println("로그아웃합니다.");
 					return;
-				// 서비스 종료
 				case "6":
+					System.out.println("이전 화면으로 돌아갑니다.");
+					return;
+				// 서비스 종료
+				case "0":
 					System.out.println("종료합니다.");
 					System.exit(0);
 				default:
@@ -88,7 +93,8 @@ public class UIAdminMain {
 		System.out.println("                                   3. 전체 예약 목록");
 		System.out.println("                                   4. 최대 예약자 조회");
 		System.out.println("                                   5. 로그아웃");
-		System.out.println("                                   6. 서비스 종료하기");
+		System.out.println("                                   6. 뒤로가기");
+		System.out.println("                                   0. 프로그램 종료하기");
 		System.out.println(
 				"============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");
