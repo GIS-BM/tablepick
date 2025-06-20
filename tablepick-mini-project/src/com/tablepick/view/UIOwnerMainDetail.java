@@ -43,7 +43,7 @@ public class UIOwnerMainDetail {
 			System.out.println("                          3. 내 식당 예약자 조회하기");
 			System.out.println("                          4. 내 식당 리뷰 조회하기");
 			System.out.println("                          5. 뒤로가기");
-			System.out.println("                          6. 프로그램 종료하기");
+			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -66,7 +66,7 @@ public class UIOwnerMainDetail {
 			case "5":
 				UIOwnerMain.getInstance().run();
 				break;
-			case "6":
+			case "0":
 				System.out.println("프로그램을 종료합니다.");
 				exit = true;
 				System.exit(0); // 시스템 종료

@@ -47,7 +47,12 @@ public class UIOwnerMain {
 		
 		AccountVO loginData = null;
 		//String accountId = SessionManager.getLoginDataSession().getId();
-		loginData = CommonService.getInstance().getLoginDataSession();
+		try {
+			loginData = CommonService.getInstance().getLoginDataSession();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String accountId = loginData.getId();
 
 		//세션으로 id와 패스워드 가져오기
@@ -87,7 +92,7 @@ public class UIOwnerMain {
 		System.out.println("                          3. 내 식당 삭제하기 ");
 		System.out.println("                          4. 로그아웃 ");
 		System.out.println("                          5. 뒤로가기 ");
-		System.out.println("                          6. 프로그램 종료하기");
+		System.out.println("                          0. 프로그램 종료하기");
 		System.out.println("                          ");
 		System.out.println(
 				"============================================================================================");
@@ -113,7 +118,12 @@ public class UIOwnerMain {
 //				e.printStackTrace();
 //			}
 			//SessionManager.logout();
-			CommonService.getInstance().logoutSession();
+			try {
+				CommonService.getInstance().logoutSession();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다.");
 			System.out.println("                          ");
 			new ConsoleUIIndex().execute();
@@ -123,7 +133,7 @@ public class UIOwnerMain {
 			System.out.println("                          ");
 			new ConsoleUIIndex().execute();
 			break;
-		case "6":
+		case "0":
 			System.out.println("프로그램을 종료합니다.");
 			exit = true;
 			System.exit(0); // 시스템 종료2
