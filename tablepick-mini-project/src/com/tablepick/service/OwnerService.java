@@ -17,13 +17,11 @@ import com.tablepick.model.RestaurantVO;
 public class OwnerService {
 
 	private OwnerDao ownerDao = new OwnerDao();
-	private int restaurantIdx;
-	private int newSales;
+
 
 	public OwnerService() {
 		this.ownerDao = ownerDao;
-		this.restaurantIdx = restaurantIdx;
-		this.newSales = newSales;
+
 	}
 	
 
@@ -60,7 +58,7 @@ public class OwnerService {
 		
 	}
 	
-	public List<Map<String, String>> findMyRestaurantAndSales(String accountId, int reservationIdx) throws SQLException, NotFoundRestaurantException {
+	public List<Map<String, String>> findMyRestaurantAndSales(String accountId, int restaurantIdx) throws SQLException, NotFoundRestaurantException {
 		
 		return ownerDao.findMyRestaurantAndSales(accountId, restaurantIdx);
 		
@@ -101,7 +99,7 @@ public class OwnerService {
 	}
 	
 	public void updateCustomerSale(String accountId, int reservationIdx, int newSale) throws NoReservationException, SQLException {
-		ownerDao.updateCustomerSale(accountId, reservationIdx,  newSales);
+		ownerDao.updateCustomerSale(accountId, reservationIdx,  newSale);
 	}
 	
 	public List<Map<String, String>> findMyRestaurantReservationMostList(String accountId) throws NotFoundRestaurantException, SQLException {
