@@ -3,8 +3,12 @@ package com.tablepick.view;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
+import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.test.owner.TestSelectRestaurantAndSales;
-import com.tablepick.test.owner.TestUpdateRestaurantAndSales;
+import com.tablepick.test.owner.TestUpdateRestaurant;
 
 //식당 상세 정보 화면입니다.
 //식당주인 메인 화면에서 넘어옵니다.
@@ -17,7 +21,7 @@ public class UIOwnerMainDetail {
 		return instance;
 	}
 
-	public void run() {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 
 		boolean exit = false;
 
@@ -43,7 +47,7 @@ public class UIOwnerMainDetail {
 			System.out.println("                          3. 내 식당 예약자 조회하기");
 			System.out.println("                          4. 내 식당 리뷰 조회하기");
 			System.out.println("                          5. 뒤로가기");
-			System.out.println("                          6. 프로그램 종료하기");
+			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -52,7 +56,7 @@ public class UIOwnerMainDetail {
 
 			switch (console) {
 			case "1":
-				TestUpdateRestaurantAndSales.getInstance().run();
+				TestUpdateRestaurant.getInstance().run();
 				break;
 			case "2":
 				UIOwnerMenuDetail.getInstance().run();
@@ -66,7 +70,7 @@ public class UIOwnerMainDetail {
 			case "5":
 				UIOwnerMain.getInstance().run();
 				break;
-			case "6":
+			case "0":
 				System.out.println("프로그램을 종료합니다.");
 				exit = true;
 				System.exit(0); // 시스템 종료
@@ -79,7 +83,7 @@ public class UIOwnerMainDetail {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerMainDetail().run();
 	}
 }

@@ -25,7 +25,7 @@ public class UIOwnerMenuDetail {
 		return instance;
 	}
 
-	public void run() {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 
 		String console;
 		String name;
@@ -53,7 +53,7 @@ public class UIOwnerMenuDetail {
 			System.out.println("                          3. 메뉴 수정하기");
 			System.out.println("                          4. 메뉴 삭제하기");
 			System.out.println("                          5. 이전 화면으로 돌아가기");
-			System.out.println("                          6. 프로그램 종료하기");
+			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -107,11 +107,9 @@ public class UIOwnerMenuDetail {
 						service.createMenu(accountId, name, price);
 						System.out.println("메뉴가 성공적으로 등록되었습니다.");
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					} catch (NotFoundRestaurantException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					}
 
 				} else {
@@ -141,11 +139,9 @@ public class UIOwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 
 				System.out.println("수정하려는 메뉴를 입력해 주세요.");
@@ -164,11 +160,11 @@ public class UIOwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
+
+
 				} catch (NotFoundRestaurantException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NotFoundAccountException e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 
 				break;
@@ -214,18 +210,17 @@ public class UIOwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
+
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (AccountNotFoundException e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
+
 				}
 				break;
 			case "5":
 				System.out.println("이전 화면으로 돌아갑니다.");
 				UIOwnerMainDetail.getInstance().run();
 				break;
-			case "6":
+			case "0":
 				create = false;
 				System.out.println("프로그램을 종료합니다.");
 				System.exit(0); // 시스템 종료
@@ -238,7 +233,7 @@ public class UIOwnerMenuDetail {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 
 		new UIOwnerMenuDetail().run();
 

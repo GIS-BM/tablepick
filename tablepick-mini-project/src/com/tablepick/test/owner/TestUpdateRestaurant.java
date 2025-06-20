@@ -17,12 +17,12 @@ import com.tablepick.service.CommonService;
 import com.tablepick.service.OwnerService;
 
 
-public class TestUpdateRestaurantAndSales {
+public class TestUpdateRestaurant {
 	
-	private static TestUpdateRestaurantAndSales instance = new TestUpdateRestaurantAndSales();
-	private TestUpdateRestaurantAndSales() {
+	private static TestUpdateRestaurant instance = new TestUpdateRestaurant();
+	private TestUpdateRestaurant() {
 	}
-	public static TestUpdateRestaurantAndSales getInstance() {
+	public static TestUpdateRestaurant getInstance() {
 		return instance;
 	}
 	
@@ -35,7 +35,7 @@ public class TestUpdateRestaurantAndSales {
 			//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
 			//1. 따라서 로그인 정보의 accountId를 받아온 후
 			//2. 이 정보를 가지고 restaurantId 를 조회합니다.
-			AccountVO loginData = null;
+//			AccountVO loginData = null;
 		
 
 //			try {
@@ -54,14 +54,11 @@ public class TestUpdateRestaurantAndSales {
 			
 			int reservationIdx = service.findMyRestaurant(accountId).getRestaurantId();
 			
-			//System.out.println(reservationIdx);
-			
 			List<Map<String, String>> existList = service.findMyRestaurantAndSales(accountId, reservationIdx);
 			String newName = null;
 			String newType = null;
 			String newAddress = null;
 			String newTel = null;
-			String inputSales = null;
 			
 			if (existList != null) {
 				System.out.println("                          *** 식당의 상세 정보를 변경합니다. ***");
@@ -73,7 +70,6 @@ public class TestUpdateRestaurantAndSales {
 					String address = map.get("address");
 					String tel = map.get("tel");
 					String sales = map.get("sales");
-//					System.out.println("식당 명 : " + name + ", 주소 : " + address + ", 연락처 : " + tel + ", 매출액: " + sales);
 
 					System.out.print("식당 명 (현재 : " + name + ") : ");
 					newName = br.readLine();
@@ -105,7 +101,7 @@ public class TestUpdateRestaurantAndSales {
 		
 	}
 	public static void main(String[] args) {
-		new TestUpdateRestaurantAndSales().run();
+		new TestUpdateRestaurant().run();
 		
 	}
 }
