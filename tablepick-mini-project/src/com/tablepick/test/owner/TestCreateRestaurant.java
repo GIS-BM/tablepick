@@ -1,4 +1,4 @@
-package com.tablepick.Restaurant.UnitTest;
+package com.tablepick.test.owner;
 
 import java.sql.SQLException;
 import java.time.LocalTime;

@@ -1,4 +1,4 @@
-package com.tablepick.Restaurant.UnitTest;
+package com.tablepick.test.owner;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
