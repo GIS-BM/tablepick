@@ -76,7 +76,7 @@ public class CustomerDao {
 		return review;
 	}
 
-//내 리뷰 조회
+//아이디로 리뷰 조회
 	public ArrayList<ReviewVO> findMyReviewById(String accountId) throws SQLException {
 		ArrayList<ReviewVO> reviewList = new ArrayList<>(); // NullPointer 방지 위해 초기화
 		Connection con = null;
