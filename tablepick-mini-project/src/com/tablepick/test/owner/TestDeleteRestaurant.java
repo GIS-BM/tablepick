@@ -4,6 +4,8 @@ import java.sql.SQLException;
 
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.AccountVO;
@@ -70,6 +72,8 @@ public class TestDeleteRestaurant {
 				System.out.println(e.getMessage());
 			} catch (NotMatchedPasswordException e) {
 				System.out.println(e.getMessage());
+			} catch (AccountNotFoundException e) {
+				e.printStackTrace();
 			}
 		}
 	}
