@@ -22,33 +22,18 @@ public class TestInputCustomerSales {
 	}
 
 	public void run() {
-
+		/*
+		 * 해당 식당의 예약을 조회하고 예약 당 매출액을 입력 가능하는 클래스
+		 */
+		
 		boolean create = false;
 		while (!create) {
 			
-			// 해당 식당의 예약을 조회하고 예약 당 매출액을 입력 가능하게 한다.
 			try {
 				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 				OwnerService service = new OwnerService();
 
-				AccountVO loginData = null;
-				try {
-					loginData = CommonService.getInstance().getLoginDataSession();
-				} catch (ClassNotFoundException e) {
-					System.out.println(e.getMessage());
-				}
-
-//				try {
-//					loginData = TablePickSerivceCommon.getInstance().getLoginData();
-//				} catch (ClassNotFoundException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//
-//				String accountId = loginData.getId();
-				//세션으로 id 가져오기
 				String accountId = SessionManager.getLoginDataSession().getId();
-
 
 				String reservationIdxStr = null;
 				String sale = null;
@@ -99,13 +84,10 @@ public class TestInputCustomerSales {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-
 		} // while
-
 	}
 
 	public static void main(String[] args) throws NoReservationException {
-
 		new TestInputCustomerSales().run();
 	}
 

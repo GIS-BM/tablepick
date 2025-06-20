@@ -24,49 +24,34 @@ public class TestSelectRestaurantAndSales {
 	}
 	
 	public void run() {
+		/*
+		 * 식당 정보와 총 매출액을 조회하는 클래스
+		 */
 		
-		// 식당 정보와 총 매출액을 조회한다.
-				try {
-					OwnerService service = new OwnerService();
-					//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
-					//1. 따라서 로그인 정보의 accountId를 받아온 후
-					//2. 이 정보를 가지고 restaurantId 를 조회합니다.
-					AccountVO loginData = null;
+		try {
+			OwnerService service = new OwnerService();
+			String accountId = SessionManager.getLoginDataSession().getId();
+			
+			int reservationIdx = service.findMyRestaurant(accountId).getRestaurantId();
 
-//				
-//					try {
-//						loginData = TablePickSerivceCommon.getInstance().getLoginData();
-//					} catch (ClassNotFoundException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					
-//					String accountId = loginData.getId();
-					//세션으로 id 가져오기
-					String accountId = SessionManager.getLoginDataSession().getId();
+			List<Map<String, String>> resList = service.findMyRestaurantAndSales(accountId, reservationIdx);
+			
+			for (int i = 0; i < resList.size(); i++) {
+				
+				Map<String, String> map = resList.get(i);
+				
+				String name = map.get("name");
+				String type = map.get("type");
+				String address = map.get("address");
+				String tel = map.get("tel");
+				String sales = map.get("sales");
+				System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 총 매출액: " + sales);
 
-					
-					
-					int reservationIdx = service.findMyRestaurant(accountId).getRestaurantId();
-		
-					
-					List<Map<String, String>> resList = service.findMyRestaurantAndSales(accountId, reservationIdx);
-					
-					for (int i = 0; i < resList.size(); i++) {
-						Map<String, String> map = resList.get(i);
-						
-						String name = map.get("name");
-						String type = map.get("type");
-						String address = map.get("address");
-						String tel = map.get("tel");
-						String sales = map.get("sales");
-						System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 매출액: " + sales);
-
-					}
-					
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		
 	}
 	public static void main(String[] args) throws NotFoundRestaurantException {

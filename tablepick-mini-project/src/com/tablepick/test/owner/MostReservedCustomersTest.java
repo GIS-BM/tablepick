@@ -25,27 +25,15 @@ public class MostReservedCustomersTest {
 	}
 
 	public void run() {
-		// 해당 식당의 예약을 가장 많이 한 고객 리스트
-		// 한 명만 출력할지 리스트로 최다 예약자 순으로 뽑을지 선택 필요
+		/*
+		 * 해당 식당의 예약을 가장 많이 한 고객 리스트 조회 클래스
+		 * 최다 예약 고객 한 명 출력
+		 */
+		
 		try {
 			OwnerService service = new OwnerService();
 
-			AccountVO loginData = null;
-
-
-//			try {
-//				loginData = TablePickSerivceCommon.getInstance().getLoginData();
-//			} catch (ClassNotFoundException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//			String accountId = loginData.getId();
-			//세션으로 id 가져오기
 			String accountId = SessionManager.getLoginDataSession().getId();
-
-			
-			//System.out.println(accountId);
 
 			List<Map<String, String>> mostReservationList = service.findMyRestaurantReservationMostList(accountId);
 
@@ -58,7 +46,6 @@ public class MostReservedCustomersTest {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-
 	}
 
 	public static void main(String[] args) throws NoReservationException {
