@@ -3,6 +3,7 @@ package com.tablepick.view;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
 import com.tablepick.test.owner.TestCreateRestaurant;
@@ -43,8 +44,17 @@ public class UIOwnerMain {
 //		}
 //		// 테스트 로그인
 		
-		String accountId = SessionManager.getLoginDataSession().getId();
 		
+		AccountVO loginData = null;
+		//String accountId = SessionManager.getLoginDataSession().getId();
+		try {
+			loginData = CommonService.getInstance().getLoginDataSession();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String accountId = loginData.getId();
+
 		//세션으로 id와 패스워드 가져오기
 
 		//이 로그인 데이터로 하위 페이지에서 로그인 아이디를 사용할 수 있습니다.
@@ -82,7 +92,7 @@ public class UIOwnerMain {
 		System.out.println("                          3. 내 식당 삭제하기 ");
 		System.out.println("                          4. 로그아웃 ");
 		System.out.println("                          5. 뒤로가기 ");
-		System.out.println("                          6. 프로그램 종료하기");
+		System.out.println("                          0. 프로그램 종료하기");
 		System.out.println("                          ");
 		System.out.println(
 				"============================================================================================");
@@ -107,7 +117,13 @@ public class UIOwnerMain {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			SessionManager.logout();
+			//SessionManager.logout();
+			try {
+				CommonService.getInstance().logoutSession();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다.");
 			System.out.println("                          ");
 			new ConsoleUIIndex().execute();
@@ -117,7 +133,7 @@ public class UIOwnerMain {
 			System.out.println("                          ");
 			new ConsoleUIIndex().execute();
 			break;
-		case "6":
+		case "0":
 			System.out.println("프로그램을 종료합니다.");
 			exit = true;
 			System.exit(0); // 시스템 종료2

@@ -84,7 +84,8 @@ public class UIIndex {
 					}
 					break;
 				case "owner":
-					System.out.println("ownerView 구현해야 한다");
+					//System.out.println("ownerView 구현해야 한다");
+					UIOwnerMain.getInstance().run();
 					// new OwnerView().run(reader);
 					break;
 				case "admin":
