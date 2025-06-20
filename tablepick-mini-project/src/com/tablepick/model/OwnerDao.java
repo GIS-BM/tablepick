@@ -369,7 +369,8 @@ public class OwnerDao {
 
 			String updateRestaurantInfoSql = "UPDATE restaurant SET name = ?, type = ?, address = ?, tel = ? WHERE account_id = ?";
 			String updateSalesSql = "UPDATE sales SET sales = 0 WHERE reserve_idx = ?";
-
+			
+			
 			pstmt = con.prepareStatement(updateRestaurantInfoSql);
 			pstmt.setString(1, newName);
 			pstmt.setString(2, newType);
@@ -384,14 +385,37 @@ public class OwnerDao {
 			pstmt.setInt(1, reservationIdx);
 
 			pstmt.executeUpdate();
+			
+			deleteMyReservationList(accountId, con);
+			
 			 con.commit(); // 정보 업데이트 내의 모든 세부 작업 정상 처리
 			 
 		} catch (Exception e) {
 			con.rollback();
 			throw e;
 		} finally {
-			DatabaseUtil.closeAll(pstmt, con);
+//			DatabaseUtil.closeAll(pstmt, con);
+			pstmt.close();
 		}
+	}
+	
+	public void deleteMyReservationList(String accountId, Connection con) throws SQLException, NotFoundRestaurantException {
+	    PreparedStatement pstmt = null;
+
+	    try {
+	    	con = DatabaseUtil.getConnection();
+	        RestaurantVO restaurantVO = findMyRestaurant(accountId); 
+	        int restaurantIdx = restaurantVO.getRestaurantId(); 
+
+
+	        String deleteSql = "DELETE FROM reserve WHERE restaurant_idx = ?";
+	        pstmt = con.prepareStatement(deleteSql);
+	        pstmt.setInt(1, restaurantIdx);
+	        pstmt.executeUpdate();
+
+	    } finally {
+	        DatabaseUtil.closeAll(pstmt, con);
+	    }
 	}
 
 	/**
