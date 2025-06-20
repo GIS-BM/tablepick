@@ -52,7 +52,7 @@ public class UICustomerReview {
 					System.out.println("Customer 메인 페이지로 돌아갑니다.");
 					return;
 				// 서비스 종료
-				case "exit":
+				case "0":
 					System.out.println("종료합니다.");
 					System.exit(0);
 				default:
@@ -75,7 +75,7 @@ public class UICustomerReview {
 		System.out.println("                                    3. 내 리뷰 수정");
 		System.out.println("                                    4: 내 리뷰 삭제");
 		System.out.println("                                    5. 뒤로가기");
-		System.out.println("                                    6. 서비스 종료하기");
+		System.out.println("                                    0. 서비스 종료하기");
 		System.out.println(
 				"============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");
