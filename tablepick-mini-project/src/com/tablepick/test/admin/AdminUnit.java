@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.tablepick.exception.InfoNotEnoughException;
@@ -101,7 +103,7 @@ public class AdminUnit {
 		}
 	}
 
-	public void updateAccount(AccountVO vo, BufferedReader reader) {
+	public void updateAccount(AccountVO vo, BufferedReader reader){
 		try {
 			AccountVO old = vo;
 			if (old == null) {
@@ -117,7 +119,6 @@ public class AdminUnit {
 			String password = reader.readLine();
 			System.out.print("새 전화번호 (기존: " + old.getTel() + "): ");
 			String tel = reader.readLine();
-
 			AccountVO updated = new AccountVO(vo.getId(), type.isEmpty() ? old.getType() : type,
 					name.isEmpty() ? old.getName() : name, password.isEmpty() ? old.getPassword() : password,
 					tel.isEmpty() ? old.getTel() : tel);
@@ -125,15 +126,17 @@ public class AdminUnit {
 			if (admindao.updateAccount(updated)) {
 				System.out.println("\n계정이 성공적으로 수정되었습니다.");
 			} else {
-				System.out.println("수정 실패");
+				throw new NotFoundAccountException("계정 수정이 실패하였습니다.");
 			}
 		} catch (InfoNotEnoughException e) {
 			System.out.println(e.getMessage());
-		} catch (SQLException e) {
-			e.printStackTrace();
+		}catch (NotFoundAccountException e) {
+			System.out.println(e.getMessage());
+		}catch (SQLException e) {
+			System.out.println("\n계정 수정이 실패하였습니다.");
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 
 	public void deleteAccount(AccountVO vo, BufferedReader reader) {

@@ -1,9 +1,10 @@
 package com.tablepick.view;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.tablepick.test.customer.CustomerUnit;
+import com.tablepick.service.CustomerService;
 
 public class UICustomerReserve {
 	private static UICustomerReserve instance = new UICustomerReserve();
@@ -32,23 +33,23 @@ public class UICustomerReserve {
 				switch (main) {
 				// 식당 예약
 				case "1":
-					CustomerUnit.getInstance().reserveRestaurant(reader);
+					CustomerService.getInstance().reserveRestaurant(reader);
 					break;
 				// 예약 조회
 				case "2":
-					CustomerUnit.getInstance().readReserve(reader);
+					CustomerService.getInstance().readReserve(reader);
 					break;
 				// 예약 수정
 				case "3":
-					CustomerUnit.getInstance().reserveUpdate(reader);
+					CustomerService.getInstance().reserveUpdate(reader);
 					break;
 				// 예약 삭제
 				case "4":
-					CustomerUnit.getInstance().reserveDelete(reader);
+					CustomerService.getInstance().reserveDelete(reader);
 					break;
 				// customer main UI 로 이동
 				case "5":
-					System.out.println("Customer 메인 페이지로 돌아갑니다.");
+					System.out.println("이전 화면으로 돌아갑니다.");
 					return;
 				// 서비스 종료
 				case "0":
@@ -67,7 +68,7 @@ public class UICustomerReserve {
 	private void printReserveMenu() {
 		System.out.println(
 				"\n============================================================================================");
-		System.out.println("                               *** Customer 예약 서비스 ***");
+		System.out.println("                                 *** 식당 예약 서비스 ***");
 		System.out.println(
 				"============================================================================================");
 		System.out.println("                                    1. 식당 예약");

@@ -24,6 +24,14 @@ public class ReviewVO {
 		this.comment = comment;
 		this.registerDate = registerDate;
 	}	
+	
+	public ReviewVO(int idx, int reserveIdx, int star, String comment) {
+		super();
+		this.idx = idx;
+		this.reserveIdx = reserveIdx;
+		this.star = star;
+		this.comment = comment;
+	}
 	//getter, setter 메서드
 	public int getIdx() {
 		return idx;

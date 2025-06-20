@@ -126,7 +126,8 @@ public class AdminDao {
 			pstmt.setString(4, accountVO.getTel());
 			pstmt.setString(5, accountVO.getId());
 			int rows = pstmt.executeUpdate();
-			if (result = rows > 0)
+			result = rows > 0;
+			if (result)
 				con.commit();
 			else
 				throw new InfoNotEnoughException("정보가 충분하지 않습니다.");
