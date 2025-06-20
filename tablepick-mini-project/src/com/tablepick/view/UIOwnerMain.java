@@ -3,6 +3,7 @@ package com.tablepick.view;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
 import com.tablepick.test.owner.TestCreateRestaurant;
@@ -43,8 +44,12 @@ public class UIOwnerMain {
 //		}
 //		// 테스트 로그인
 		
-		String accountId = SessionManager.getLoginDataSession().getId();
 		
+		AccountVO loginData = null;
+		//String accountId = SessionManager.getLoginDataSession().getId();
+		loginData = CommonService.getInstance().getLoginDataSession();
+		String accountId = loginData.getId();
+
 		//세션으로 id와 패스워드 가져오기
 
 		//이 로그인 데이터로 하위 페이지에서 로그인 아이디를 사용할 수 있습니다.
@@ -107,7 +112,8 @@ public class UIOwnerMain {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			SessionManager.logout();
+			//SessionManager.logout();
+			CommonService.getInstance().logoutSession();
 			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다.");
 			System.out.println("                          ");
 			new ConsoleUIIndex().execute();
