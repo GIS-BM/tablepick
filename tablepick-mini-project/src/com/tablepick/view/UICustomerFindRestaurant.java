@@ -37,15 +37,15 @@ public class UICustomerFindRestaurant {
 					break;
 				// 식당 타입별 조회
 				case "2":
-					CustomerService.getInstance().searchRestaurantByType(reader);
+					CustomerService.getInstance().searchRestaurantByType();
 					break;
 				// 해당 식당 리뷰 조회
 				case "3":
-					CustomerService.getInstance().searchRestaurantReview(reader);
+					CustomerService.getInstance().searchRestaurantReview();
 					break;
 				// 평균 별점 높은순 식당 조회
 				case "4":
-					CustomerService.getInstance().searchRestaurantByStar(reader);
+					CustomerService.getInstance().searchRestaurantByStar();
 					break;
 				// customer main UI 로 이동
 				case "5":

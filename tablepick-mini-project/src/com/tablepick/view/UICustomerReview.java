@@ -34,19 +34,19 @@ public class UICustomerReview {
 				switch (main) {
 				// 리뷰 등록
 				case "1":
-					CustomerService.getInstance().createReview(reader);
+					CustomerService.getInstance().createReview();
 					break;
 				// 리뷰 검색
 				case "2":
-					CustomerService.getInstance().findMyReviewById(reader);
+					CustomerService.getInstance().findMyReviewById();
 					break;
 				// 리뷰 수정
 				case "3":
-					CustomerService.getInstance().updateReviewById(reader);
+					CustomerService.getInstance().updateReviewById();
 					break;
 				// 리뷰 삭제
 				case "4":
-					CustomerService.getInstance().deleteMyReviewById(reader);;
+					CustomerService.getInstance().deleteMyReviewById();;
 					break;
 				// customer main UI 로 이동 
 				case "5":
