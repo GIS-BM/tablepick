@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
+import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
@@ -21,7 +24,7 @@ public class UIOwnerReviewDetail {
 		return instance;
 	}
 	
-	public void run() {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		Scanner sc = new Scanner(System.in);
 		OwnerService service = new OwnerService();
 		List list = new ArrayList<>();
@@ -44,7 +47,7 @@ public class UIOwnerReviewDetail {
 			System.out.println("                  ");
 			System.out.println("                          1. 리뷰 조회하기");
 			System.out.println("                          2. 뒤로 가기");
-			System.out.println("                          3. 프로그램 종료하기");
+			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -76,7 +79,7 @@ public class UIOwnerReviewDetail {
 				exit = true;
 				UIOwnerMainDetail.getInstance().run();
 				break;
-			case "3":
+			case "0":
 				System.out.println("프로그램을 종료합니다.");
 				exit = true;
 				System.exit(0); // 시스템 종료
@@ -89,7 +92,7 @@ public class UIOwnerReviewDetail {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerReviewDetail().run();
 	}
 }

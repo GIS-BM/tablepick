@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 
 import com.tablepick.test.ReserveCRUDView.ReserveCRUDUnitTest;
 import com.tablepick.test.SearchRestaurant.SearchRestaurantUnitTest;
+import com.tablepick.view.UICustomerFindRestaurant;
+import com.tablepick.view.UICustomerReserve;
 
 public class CustomerViewUnitTest {
 	public CustomerViewUnitTest() throws ClassNotFoundException {

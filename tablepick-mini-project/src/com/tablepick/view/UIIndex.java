@@ -5,13 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 
+import javax.security.auth.login.AccountNotFoundException;
+
+import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
-import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
 import com.tablepick.test.admin.UIAdminMain;
-import com.tablepick.test.customer.CustomerViewUnitTest;
-import com.tablepick.test.customer.UICustomerMain;
 
 public class UIIndex {
 	private final AccountDao accountDao;
@@ -84,7 +85,16 @@ public class UIIndex {
 					}
 					break;
 				case "owner":
-					System.out.println("ownerView 구현해야 한다");
+					//System.out.println("ownerView 구현해야 한다");
+					try {
+						UIOwnerMain.getInstance().run();
+					} catch (AccountNotFoundException e) {
+						e.printStackTrace();
+					} catch (NotFoundAccountException e) {
+						e.printStackTrace();
+					} catch (NotFoundRestaurantException e) {
+						e.printStackTrace();
+					}
 					// new OwnerView().run(reader);
 					break;
 				case "admin":

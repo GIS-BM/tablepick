@@ -2,6 +2,10 @@ package com.tablepick.view;
 
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountNotFoundException;
+
+import com.tablepick.exception.NotFoundAccountException;
+import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.test.owner.MostReservedCustomersTest;
 import com.tablepick.test.owner.TestInputCustomerSales;
 import com.tablepick.test.owner.TestSelectReservationListByOwner;
@@ -20,7 +24,7 @@ public class UIOwnerReserveCustomerDetail {
 		return instance;
 	}
 
-	public void run() {
+	public void run() throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		boolean exit = false;
 
 		while (!exit) {
@@ -38,7 +42,7 @@ public class UIOwnerReserveCustomerDetail {
 			System.out.println("                          2. 가장 많이 예약한 사람 조회하기");
 			System.out.println("                          3. 예약 당 매출액 입력 및 수정하기");
 			System.out.println("                          4. 뒤로 가기");
-			System.out.println("                          5. 프로그램 종료하기");
+			System.out.println("                          0. 프로그램 종료하기");
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
@@ -58,7 +62,7 @@ public class UIOwnerReserveCustomerDetail {
 			case "4":
 				UIOwnerMainDetail.getInstance().run();
 				break;
-			case "5":
+			case "0":
 				System.out.println("프로그램을 종료합니다.");
 				exit = true;
 				System.exit(0); // 시스템 종료
@@ -71,7 +75,7 @@ public class UIOwnerReserveCustomerDetail {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerReserveCustomerDetail().run();
 	}
 }
