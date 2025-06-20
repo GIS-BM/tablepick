@@ -82,7 +82,7 @@ public class UIIndex {
 				case "admin":
 					try {
 						AdminCRUDUnitTest admin = new AdminCRUDUnitTest();
-						admin.run(reader);
+						// admin.run(reader);
 					} catch (Exception e) {
 						System.out.println("admin 실행 중 오류가 발생했습니다.");
 						e.printStackTrace();

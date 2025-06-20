@@ -174,7 +174,7 @@ public class OwnerDao {
 	 * @throws NotFoundAccountException 
 	 */
 	public void deleteMyRestaurant(String accountId, String password)
-			throws SQLException, NotMatchedPasswordException, AccountNotFoundException, NotFoundAccountException {
+			throws SQLException, NotMatchedPasswordException, NotFoundAccountException, NotFoundAccountException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
@@ -566,7 +566,7 @@ public class OwnerDao {
 	 */
 
 	public boolean findMenuDetail(String accountId, String name)
-			throws NotFoundMenuException, SQLException, AccountNotFoundException, NotFoundRestaurantException {
+			throws NotFoundMenuException, SQLException, NotFoundAccountException, NotFoundRestaurantException {
 		RestaurantVO restaurantVo = findMyRestaurant(accountId);
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -601,13 +601,13 @@ public class OwnerDao {
 	 * 
 	 * @param menuVO
 	 * @throws SQLException
-	 * @throws AccountNotFoundException
 	 * @throws NotFoundMenuException
+	 * @throws NotFoundAccountException 
 	 * @throws RestaurantNotFoundException
 	 */
 
 	public void updateMenu(String accountId, String name, int price)
-			throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
+			throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException, NotFoundAccountException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -644,7 +644,7 @@ public class OwnerDao {
 	 */
 
 	public void deleteMenu(String accountId, String name)
-			throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
+			throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 

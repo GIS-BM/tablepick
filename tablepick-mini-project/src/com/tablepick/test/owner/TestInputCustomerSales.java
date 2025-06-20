@@ -33,7 +33,7 @@ public class TestInputCustomerSales {
 
 				AccountVO loginData = null;
 				try {
-					loginData = CommonService.getInstance().getLoginData();
+					loginData = CommonService.getInstance().getLoginDataSession();
 				} catch (ClassNotFoundException e) {
 					System.out.println(e.getMessage());
 				}
