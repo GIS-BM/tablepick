@@ -107,11 +107,9 @@ public class UIOwnerMenuDetail {
 						service.createMenu(accountId, name, price);
 						System.out.println("메뉴가 성공적으로 등록되었습니다.");
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					} catch (NotFoundRestaurantException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getMessage());
 					}
 
 				} else {
@@ -141,11 +139,9 @@ public class UIOwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 
 				System.out.println("수정하려는 메뉴를 입력해 주세요.");
