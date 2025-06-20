@@ -55,7 +55,7 @@ public class OwnerMenuDetail {
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
-			System.out.println("                          ");
+		
 			console = sc.nextLine();
 
 			switch (console) {
