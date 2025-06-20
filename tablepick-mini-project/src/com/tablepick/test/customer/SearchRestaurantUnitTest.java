@@ -1,4 +1,4 @@
-package com.tablepick.test.SearchRestaurant;
+package com.tablepick.test.customer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
