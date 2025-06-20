@@ -46,7 +46,7 @@ public class UIOwnerReserveCustomerDetail {
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
-
+			System.out.print("메뉴를 선택하세요: ");
 			console = sc.nextLine();
 
 			switch (console) {

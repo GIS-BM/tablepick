@@ -15,8 +15,10 @@ import com.tablepick.test.owner.TestUpdateRestaurant;
 public class UIOwnerMainDetail {
 
 	private static UIOwnerMainDetail instance = new UIOwnerMainDetail();
+
 	private UIOwnerMainDetail() {
 	}
+
 	public static UIOwnerMainDetail getInstance() {
 		return instance;
 	}
@@ -51,7 +53,7 @@ public class UIOwnerMainDetail {
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
-			
+			System.out.print("메뉴를 선택하세요: ");
 			console = sc.nextLine();
 
 			switch (console) {
@@ -77,13 +79,14 @@ public class UIOwnerMainDetail {
 				break;
 			default:
 				System.out.println("없는 선택지 입니다. 다시 선택해 주세요.");
-				
+
 				break;
 			}
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException,
+			AccountNotFoundException, NotFoundRestaurantException {
 		new UIOwnerMainDetail().run();
 	}
 }

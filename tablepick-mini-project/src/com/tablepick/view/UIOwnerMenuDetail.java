@@ -31,10 +31,8 @@ public class UIOwnerMenuDetail {
 		String name;
 		int price;
 
-		
-		//세션으로 id 가져오기
+		// 세션으로 id 가져오기
 		String accountId = SessionManager.getLoginDataSession().getId();
-		
 
 		boolean create = true;
 
@@ -57,7 +55,7 @@ public class UIOwnerMenuDetail {
 			System.out.println("                          ");
 			System.out.println(
 					"============================================================================================");
-		
+			System.out.print("메뉴를 선택하세요: ");
 			console = sc.nextLine();
 
 			switch (console) {
@@ -82,11 +80,9 @@ public class UIOwnerMenuDetail {
 					break;
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 
 			case "2":
@@ -133,10 +129,8 @@ public class UIOwnerMenuDetail {
 						for (int i = 0; i < list.size(); i++) {
 							System.out.println(list.get(i));
 						}
-					
-					}
 
-				
+					}
 
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
@@ -155,22 +149,16 @@ public class UIOwnerMenuDetail {
 					System.out.println("메뉴가 성공적으로 수정되었습니다.");
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
-					//e.printStackTrace();
 				} catch (NotFoundMenuException e) {
-					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
-					//e.printStackTrace();
-
-
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
 					System.out.println(e.getMessage());
 				}
 
 				break;
 
 			case "4":
-				
+
 				try {
 
 					List<Map<String, String>> list = service.findMenu(accountId);
@@ -187,16 +175,12 @@ public class UIOwnerMenuDetail {
 						System.out.println("                     ");
 					}
 
-				
-
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				} catch (NotFoundRestaurantException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
-				
+
 				System.out.println("삭제하려는 메뉴를 입력해 주세요.");
 				name = sc.nextLine();
 				try {
@@ -205,15 +189,10 @@ public class UIOwnerMenuDetail {
 
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
-					//e.printStackTrace();
 				} catch (NotFoundMenuException e) {
-					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
-					//e.printStackTrace();
-
 				} catch (NotFoundRestaurantException e) {
 					System.out.println(e.getMessage());
-
 				}
 				break;
 			case "5":
@@ -233,7 +212,8 @@ public class UIOwnerMenuDetail {
 		}
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException, AccountNotFoundException, NotFoundRestaurantException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NotFoundAccountException,
+			AccountNotFoundException, NotFoundRestaurantException {
 
 		new UIOwnerMenuDetail().run();
 
