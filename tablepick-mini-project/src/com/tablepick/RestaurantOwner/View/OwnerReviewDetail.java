@@ -65,11 +65,10 @@ public class OwnerReviewDetail {
 					}
 					
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				break;
 			case "2":

@@ -76,11 +76,11 @@ public class OwnerMenuDetail {
 					break;
 
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 			case "2":
@@ -101,11 +101,11 @@ public class OwnerMenuDetail {
 						service.createMenu(accountId, name, price);
 						System.out.println("메뉴가 성공적으로 등록되었습니다.");
 					} catch (SQLException e) {
-						System.out.println(e.getMessage());
-						//e.printStackTrace();
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					} catch (NotFoundRestaurantException e) {
-						System.out.println(e.getMessage());
-						//e.printStackTrace();
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 
 				} else {
@@ -135,11 +135,11 @@ public class OwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				System.out.println("수정하려는 메뉴를 입력해 주세요.");
@@ -159,11 +159,11 @@ public class OwnerMenuDetail {
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
 				} catch (AccountNotFoundException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				break;
@@ -189,11 +189,11 @@ public class OwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				System.out.println("삭제하려는 메뉴를 입력해 주세요.");
@@ -210,11 +210,11 @@ public class OwnerMenuDetail {
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
 				} catch (AccountNotFoundException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				break;
 			case "5":

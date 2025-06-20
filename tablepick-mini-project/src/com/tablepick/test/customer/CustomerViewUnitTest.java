@@ -7,12 +7,7 @@ import com.tablepick.test.ReserveCRUDView.ReserveCRUDUnitTest;
 import com.tablepick.test.SearchRestaurant.SearchRestaurantUnitTest;
 
 public class CustomerViewUnitTest {
-	private SearchRestaurantUnitTest searchRestaurantUnitTest;
-	private ReserveCRUDUnitTest reserveCRUDUnitTest;
-
 	public CustomerViewUnitTest() throws ClassNotFoundException {
-		searchRestaurantUnitTest = new SearchRestaurantUnitTest();
-		reserveCRUDUnitTest = new ReserveCRUDUnitTest();
 	}
 
 	public static void main(String[] args) {
@@ -30,13 +25,13 @@ public class CustomerViewUnitTest {
 	            String main = reader.readLine().trim();
 	            switch (main) {
 	                case "1":
-	                	searchRestaurantUnitTest.run(reader);
+	                	UICustomerSearch.getInstance().run(reader);
 	                    break;
 	                case "2":
-	                	reserveCRUDUnitTest.run(reader);
+	                	UICustomerReserve.getInstance().run(reader);
 	                    break;
 	                case "3":
-	                	searchRestaurantUnitTest.run(reader);
+	                	//searchRestaurantUnitTest.run(reader);
 	                    break;
 	                case "4":
 	                	System.out.println("로그아웃합니다.");

@@ -2,7 +2,6 @@ package com.tablepick.test.SearchRestaurant;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,50 +14,21 @@ import com.tablepick.model.ReviewVO;
 
 public class SearchRestaurantUnitTest {
 	private AccountDao accountdao;
+	private static SearchRestaurantUnitTest instance = new SearchRestaurantUnitTest();
 
-	public SearchRestaurantUnitTest() throws ClassNotFoundException {
-		accountdao = new AccountDao();
-	}
-
-	public static void main(String[] args) throws ClassNotFoundException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		new SearchRestaurantUnitTest().run(reader);
-	}
-
-	public void run(BufferedReader reader) {
+	private SearchRestaurantUnitTest() {
 		try {
-			while (true) {
-				printSearchRestaurantMenu();
-				String main = reader.readLine().trim();
-				switch (main) {
-				case "1":
-					searchAllRestaurantView();
-					break;
-				case "2":
-					searchRestaurantByTypeView(reader);
-					break;
-				case "3":
-					searchRestaurantReviewView(reader);
-					break;
-				case "4":
-					searchRestaurantByStar(reader);
-					break;
-				case "5":
-					System.out.println("Customer 메인 페이지로 돌아갑니다.");
-                	return;
-				case "exit":
-					System.out.println("종료합니다.");
-					System.exit(0);
-				default:
-					System.out.println("잘못된 입력입니다.");
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			accountdao = new AccountDao();
+		} catch (ClassNotFoundException e) {
+			
 		}
 	}
 
-	private void searchAllRestaurantView() {
+	public static SearchRestaurantUnitTest getInstance() {
+		return instance;
+	}
+
+	public void searchAllRestaurant() {
 		try {
 			System.out.println("[식당 전체 조회]");
 			ArrayList<RestaurantVO> list = accountdao.searchAllRestaurants();
@@ -75,7 +45,7 @@ public class SearchRestaurantUnitTest {
 		}
 	}
 
-	private void searchRestaurantByTypeView(BufferedReader reader) {
+	public void searchRestaurantByType(BufferedReader reader) {
 		try {
 			System.out.println("조회할 식당 타입을 선택하세요");
 			System.out.println(" 1. 한식 2. 중식 3. 일식 4. 양식");
@@ -111,7 +81,7 @@ public class SearchRestaurantUnitTest {
 		}
 	}
 
-	private void searchRestaurantReviewView(BufferedReader reader) throws IOException {
+	public void searchRestaurantReview(BufferedReader reader) throws IOException {
 		try {
 			System.out.println("리뷰를 조회할 식당을 선택하세요 ");
 			ArrayList<RestaurantVO> list = accountdao.searchAllRestaurants();
@@ -134,10 +104,8 @@ public class SearchRestaurantUnitTest {
 			} else {
 				for (ReviewVO rvo : reviewList) {
 					String formattedRegisterDate = rvo.getRegisterDate().format(dateTimeFormatter);
-					System.out.println("식당명: "
-							+ accountdao.findRestaurantNameById(vo.getRestaurantId())
-							+ " 별점: " + rvo.getStar() + "점 " + " 내용: " + rvo.getComment() + " 등록일: "
-							+ formattedRegisterDate);
+					System.out.println("식당명: " + accountdao.findRestaurantNameById(vo.getRestaurantId()) + " 별점: "
+							+ rvo.getStar() + "점 " + " 내용: " + rvo.getComment() + " 등록일: " + formattedRegisterDate);
 				}
 			}
 		} catch (SQLException e) {
@@ -147,7 +115,7 @@ public class SearchRestaurantUnitTest {
 		}
 	}
 
-	private void searchRestaurantByStar(BufferedReader reader) {
+	public void searchRestaurantByStar(BufferedReader reader) {
 		try {
 			System.out.println("[별점 높은순 조회]");
 			Map<RestaurantVO, double[]> map = accountdao.searchRestaurantByStar();
@@ -157,26 +125,13 @@ public class SearchRestaurantUnitTest {
 				for (RestaurantVO vo : map.keySet()) {
 					double[] values = map.get(vo);
 					double avgStar = values[0];
-					int count = (int)values[1];
+					int count = (int) values[1];
 					System.out.println(vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: "
-							+ vo.getOpenTime() + " 평균 별점: " + avgStar + " 예약자 수: "+count);
+							+ vo.getOpenTime() + " 평균 별점: " + avgStar + " 예약자 수: " + count);
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	private void printSearchRestaurantMenu() {
-        System.out.println("\n============================================================================================");
-        System.out.println("                               *** Customer 조회 서비스 ***");
-        System.out.println("============================================================================================");
-        System.out.println("                                    1. 식당 전체 조회");
-        System.out.println("                                    2. 식당 타입별 조회");
-        System.out.println("                                    3. 해당 식당 리뷰 조회");
-        System.out.println("                                    4: 평균 별점 높은순 식당 조회");
-        System.out.println("                                    5. 뒤로가기");
-        System.out.println("                                    6. 서비스 종료하기");
-        System.out.println("============================================================================================");
-        System.out.print("메뉴를 선택하세요: ");
 	}
 }
