@@ -15,7 +15,7 @@ public class GetLoginDataUnit {
 			if(CommonService.getInstance().login("owner04", "pw1234")!=null) {
 				System.out.println("로그인 성공");
 			}
-			loginData = CommonService.getInstance().getLoginData();
+			loginData = CommonService.getInstance().getLoginDataSession();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}

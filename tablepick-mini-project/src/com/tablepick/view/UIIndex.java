@@ -61,7 +61,7 @@ public class UIIndex {
 			String password = reader.readLine();
 
 			if (commonService.login(id, password) != null) {
-				AccountVO loginData = commonService.getLoginData();
+				AccountVO loginData = commonService.getLoginDataSession();
 				System.out.println("[" + loginData.getType() + "] " + loginData.getName() + "님 환영합니다.");
 
 				// 사용자 타입에 따라 분기

@@ -1,15 +1,16 @@
-package com.tablepick.Restaurant.UnitTest;
+package com.tablepick.test.owner;
 
 import java.util.List;
 import java.util.Map;
 
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.model.RestaurantDao;
+import com.tablepick.model.OwnerDao;
 
 import com.tablepick.session.SessionManager;
 
 import com.tablepick.service.CommonService;
+import com.tablepick.service.OwnerService;
 
 
 public class MostReservedCustomersTest {
@@ -27,7 +28,7 @@ public class MostReservedCustomersTest {
 		// 해당 식당의 예약을 가장 많이 한 고객 리스트
 		// 한 명만 출력할지 리스트로 최다 예약자 순으로 뽑을지 선택 필요
 		try {
-			RestaurantDao restaurantDao = new RestaurantDao();
+			OwnerService service = new OwnerService();
 
 			AccountVO loginData = null;
 
@@ -46,7 +47,7 @@ public class MostReservedCustomersTest {
 			
 			//System.out.println(accountId);
 
-			List<Map<String, String>> mostReservationList = restaurantDao.findMyRestaurantReservationMostList(accountId);
+			List<Map<String, String>> mostReservationList = service.findMyRestaurantReservationMostList(accountId);
 
 			System.out.println("                  *** 내 식당의 최다 예약자를 확인합니다. ***");
 			System.out.println("                  ");

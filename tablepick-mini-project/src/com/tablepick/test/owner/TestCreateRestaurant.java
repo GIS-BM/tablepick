@@ -1,21 +1,18 @@
-package com.tablepick.Restaurant.UnitTest;
+package com.tablepick.test.owner;
 
 import java.sql.SQLException;
-
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.model.RestaurantDao;
 import com.tablepick.model.RestaurantVO;
-
+import com.tablepick.service.CommonService;
+import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
 
 //식당 등록을 테스트하는 클래스 입니다.
-
 public class TestCreateRestaurant {
 
 	private static TestCreateRestaurant instance = new TestCreateRestaurant();
@@ -29,6 +26,12 @@ public class TestCreateRestaurant {
 
 	public void run() {
 
+		AccountVO loginData = null;
+		try {
+			loginData = CommonService.getInstance().getLoginData();
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
 
 //		AccountVO loginData = null;
 //		try {
@@ -43,7 +46,9 @@ public class TestCreateRestaurant {
 		String accountId = SessionManager.getLoginDataSession().getId();
 				
 
-		RestaurantDao dao = new RestaurantDao();
+		OwnerService service = new OwnerService();
+		
+		
 		ArrayList<String> restaurantType = new ArrayList<String>();
 		restaurantType.add("한식");
 		restaurantType.add("중식");
@@ -67,7 +72,7 @@ public class TestCreateRestaurant {
 
 		try {
 
-			if (dao.existRestaurant(accountId) == true) {
+			if (service.existRestaurant(accountId) == true) {
 				System.out.println("                          ");
 				System.out.println("이미 식당이 존재합니다. 새로 등록하시려면 기존 식당을 삭제하세요.");
 				System.out.println("                          ");
@@ -103,7 +108,7 @@ public class TestCreateRestaurant {
 				try {
 
 					System.out.println("식당이 등록되었습니다.");
-					System.out.println("내 식당 등록 번호 : " + dao.createRestaurant(vo1));
+					System.out.println("내 식당 등록 번호 : " + service.createRestaurant(vo1));
 				} catch (SQLException e) {
 
 					System.out.println(e.getMessage());

@@ -12,20 +12,19 @@ import com.tablepick.model.ReviewVO;
 public class ReviewCRUDUnitTest {
 	CustomerDao customerDao = new CustomerDao();
 	private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-	public static void main(String[] args) {
-		ReviewCRUDUnitTest test = new ReviewCRUDUnitTest();
-		test.registerReviewTest();
-		test.findMyReviewByIdTest();
-		// test.updateReviewByIdTest();
-		test.deleteMyReviewByIdTest();
+	private static ReviewCRUDUnitTest instance = new ReviewCRUDUnitTest();
+	private ReviewCRUDUnitTest() {
 	}
+	public static ReviewCRUDUnitTest getInstance() {
+		return instance;
+	}
+
 
 	// 리뷰 등록하는 테스트 메서드
 	public void registerReviewTest() {
 		try {
 			System.out.println("registerReviewTest 테스트");
-			ReviewVO reviewresult = customerDao.registerReview(5, 3, "리뷰테스트");
+			ReviewVO reviewresult = customerDao.createReview(5, 3, "리뷰테스트");
 			System.out.println(reviewresult);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -76,7 +75,7 @@ public class ReviewCRUDUnitTest {
 			String newComment = br.readLine();
 
 			// 리뷰 수정 시도
-			ReviewVO updatedReview = customerDao.changeMyReviewById(accountId, reviewIdx, newStar, newComment);
+			ReviewVO updatedReview = customerDao.updateMyReviewById(accountId, reviewIdx, newStar, newComment);
 
 			if (updatedReview != null) {
 				System.out.println("\n 리뷰가 성공적으로 수정되었습니다.");

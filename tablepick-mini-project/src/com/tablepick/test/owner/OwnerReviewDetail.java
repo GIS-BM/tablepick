@@ -1,18 +1,13 @@
-package com.tablepick.RestaurantOwner.View;
+package com.tablepick.test.owner;
 
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.tablepick.exception.NotFoundRestaurantException;
-import com.tablepick.model.AccountVO;
-import com.tablepick.model.RestaurantDao;
-
+import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
-
-import com.tablepick.service.CommonService;
 
 
 //식당 주인이 자신의 식당의 리뷰를 조회할 수 있습니다.
@@ -28,7 +23,7 @@ public class OwnerReviewDetail {
 	
 	public void run() {
 		Scanner sc = new Scanner(System.in);
-		RestaurantDao dao = new RestaurantDao();
+		OwnerService service = new OwnerService();
 		List list = new ArrayList<>();
 		boolean exit = false;
 
@@ -60,7 +55,7 @@ public class OwnerReviewDetail {
 				System.out.println("내 식당의 리뷰 목록을 조회합니다.");
 				System.out.println("                          ");
 				try {
-					list = dao.findMyRestaurantReview(accountId);
+					list = service.findMyRestaurantReview(accountId);
 					if (list.isEmpty()) {
 						System.out.println("등록된 리뷰가 없습니다.");
 					}else {
@@ -70,11 +65,10 @@ public class OwnerReviewDetail {
 					}
 					
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				break;
 			case "2":

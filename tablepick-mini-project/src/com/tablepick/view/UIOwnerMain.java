@@ -1,33 +1,30 @@
-package com.tablepick.RestaurantOwner.View;
+package com.tablepick.view;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.tablepick.Restaurant.UnitTest.TestCreateRestaurant;
-import com.tablepick.Restaurant.UnitTest.TestDeleteRestaurant;
-
-import com.tablepick.model.AccountVO;
-
-import com.tablepick.session.SessionManager;
-
 import com.tablepick.service.CommonService;
+import com.tablepick.session.SessionManager;
+import com.tablepick.test.owner.OwnerMainDetail;
+import com.tablepick.test.owner.TestCreateRestaurant;
+import com.tablepick.test.owner.TestDeleteRestaurant;
 
 
 //식당 주인의 메인 화면 입니다.
 //식당 등록 화면, 식당 상세 정보 화면으로 이동할 수 있습니다. 
 
-public class OwnerMain {
+public class UIOwnerMain {
 	
 	//OwnerMain을 싱글톤으로 단 하나의 객체만 생성할 수 있도록 합니다.
 	// 다른 페이지에서 OwnerMain을 싱글톤으로 불러올 수 있습니다. 
 	// 2. 변수의 명시적 초기화 시점에 생성자를 실행해 자신의 객체를 생성
-	private static OwnerMain instance = new OwnerMain();
+	private static UIOwnerMain instance = new UIOwnerMain();
 	// 1. private 생성자로 외부에서 객체 생성하는 것을 원천 차단
-	private OwnerMain() {
+	private UIOwnerMain() {
 		//System.out.println("CompanyService 객체 생성");
 	}
 	//3. static 메소드로 인스턴스를 공유
-		public static OwnerMain getInstance() {
+		public static UIOwnerMain getInstance() {
 				return instance;
 			}
 
@@ -35,9 +32,20 @@ public class OwnerMain {
 		Scanner sc = new Scanner(System.in);
 		boolean exit = false;
 		
-		//세션으로 id와 패스워드 가져오기
-		SessionManager.getLoginDataSession().getId();
+		//테스트 로그인 . 페이지 연결이 전부 완료되면 삭제해야 합니다.
+		try {
+			CommonService.getInstance().loginSessionManager("owner01","pw1234");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// 테스트 로그인
 		
+		String accountId = SessionManager.getLoginDataSession().getId();
+		//세션으로 id와 패스워드 가져오기
 
 		//이 로그인 데이터로 하위 페이지에서 로그인 아이디를 사용할 수 있습니다.
 	
@@ -93,12 +101,12 @@ public class OwnerMain {
 			TestDeleteRestaurant.getInstance().run();
 			break;
 		case "4":
-			try {
-				CommonService.getInstance().logout();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				CommonService.getInstance().logout();
+//			} catch (ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다. (로직 추가 필요)");
 			System.out.println("                          ");
 			break;
@@ -121,7 +129,7 @@ public class OwnerMain {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		new OwnerMain().run();
+		new UIOwnerMain().run();
 	}
 
 }

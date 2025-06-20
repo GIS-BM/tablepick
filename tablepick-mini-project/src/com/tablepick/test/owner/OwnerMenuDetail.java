@@ -1,7 +1,6 @@
-package com.tablepick.RestaurantOwner.View;
+package com.tablepick.test.owner;
 
 import java.sql.SQLException;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -9,12 +8,8 @@ import java.util.Scanner;
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotFoundRestaurantException;
-import com.tablepick.model.AccountVO;
-import com.tablepick.model.RestaurantDao;
-
+import com.tablepick.service.OwnerService;
 import com.tablepick.session.SessionManager;
-
-import com.tablepick.service.CommonService;
 
 //메뉴를 조회 및 생성하는 클래스 입니다.
 public class OwnerMenuDetail {
@@ -41,7 +36,7 @@ public class OwnerMenuDetail {
 
 		boolean create = true;
 
-		RestaurantDao dao = new RestaurantDao();
+		OwnerService service = new OwnerService();
 
 		Scanner sc = new Scanner(System.in);
 
@@ -65,7 +60,7 @@ public class OwnerMenuDetail {
 
 				try {
 
-					List<Map<String, String>> list = dao.findMenu(accountId);
+					List<Map<String, String>> list = service.findMenu(accountId);
 
 					System.out.println("등록된 메뉴를 조회합니다.");
 					System.out.println("                     ");
@@ -81,11 +76,11 @@ public class OwnerMenuDetail {
 					break;
 
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 			case "2":
@@ -103,14 +98,14 @@ public class OwnerMenuDetail {
 				if (yesOrNo.equals("예")) {
 
 					try {
-						dao.createMenu(accountId, name, price);
+						service.createMenu(accountId, name, price);
 						System.out.println("메뉴가 성공적으로 등록되었습니다.");
 					} catch (SQLException e) {
-						System.out.println(e.getMessage());
-						//e.printStackTrace();
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					} catch (NotFoundRestaurantException e) {
-						System.out.println(e.getMessage());
-						//e.printStackTrace();
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 
 				} else {
@@ -123,7 +118,7 @@ public class OwnerMenuDetail {
 			case "3":
 				try {
 
-					List<Map<String, String>> list = dao.findMenu(accountId);
+					List<Map<String, String>> list = service.findMenu(accountId);
 
 					System.out.println("등록된 메뉴를 조회합니다.");
 					System.out.println("                     ");
@@ -140,11 +135,11 @@ public class OwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				System.out.println("수정하려는 메뉴를 입력해 주세요.");
@@ -154,7 +149,7 @@ public class OwnerMenuDetail {
 				sc.nextLine();
 
 				try {
-					dao.updateMenu(accountId, name, price);
+					service.updateMenu(accountId, name, price);
 					System.out.println("메뉴가 성공적으로 수정되었습니다.");
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
@@ -163,12 +158,18 @@ public class OwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
+<<<<<<< HEAD:tablepick-mini-project/src/com/tablepick/RestaurantOwner/View/OwnerMenuDetail.java
 				} catch (NotFoundAccountException e) {
 					System.out.println(e.getMessage());
 					//e.printStackTrace();
+=======
+				} catch (AccountNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+>>>>>>> main:tablepick-mini-project/src/com/tablepick/test/owner/OwnerMenuDetail.java
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				break;
@@ -177,7 +178,7 @@ public class OwnerMenuDetail {
 				
 				try {
 
-					List<Map<String, String>> list = dao.findMenu(accountId);
+					List<Map<String, String>> list = service.findMenu(accountId);
 
 					System.out.println("등록된 메뉴를 조회합니다.");
 					System.out.println("                     ");
@@ -194,17 +195,17 @@ public class OwnerMenuDetail {
 				
 
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				System.out.println("삭제하려는 메뉴를 입력해 주세요.");
 				name = sc.nextLine();
 				try {
-					dao.deleteMenu(accountId, name);
+					service.deleteMenu(accountId, name);
 					System.out.println("메뉴가 삭제되었습니다.");
 
 				} catch (SQLException e) {
@@ -214,12 +215,18 @@ public class OwnerMenuDetail {
 					// TODO Auto-generated catch block
 					System.out.println("해당하는 메뉴가 없습니다. 다시 입력해 주세요.");
 					//e.printStackTrace();
+<<<<<<< HEAD:tablepick-mini-project/src/com/tablepick/RestaurantOwner/View/OwnerMenuDetail.java
 				} catch (NotFoundAccountException e) {
 					System.out.println(e.getMessage());
 					//e.printStackTrace();
+=======
+				} catch (AccountNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+>>>>>>> main:tablepick-mini-project/src/com/tablepick/test/owner/OwnerMenuDetail.java
 				} catch (NotFoundRestaurantException e) {
-					System.out.println(e.getMessage());
-					//e.printStackTrace();
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				break;
 			case "5":

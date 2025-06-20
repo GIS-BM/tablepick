@@ -130,6 +130,7 @@ public class RestaurantDao {
 	 * @param accountId
 	 * @return
 	 * @throws SQLException
+	 * @throws NotFoundRestaurantException 
 	 * @throws RestaurantNotFoundException
 	 */
 	public RestaurantVO findMyRestaurant(String accountId) throws SQLException, NotFoundRestaurantException {
