@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.login.AccountNotFoundException;
-
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundMenuException;
@@ -84,15 +82,17 @@ public class OwnerService {
 		return ownerDao.findMenu(accountId);
 	}
 	
-	public void findMenuDetail(String accountId, String name) throws NotFoundMenuException, SQLException, AccountNotFoundException, NotFoundRestaurantException {
+	public void findMenuDetail(String accountId, String name) throws NotFoundMenuException, SQLException, 
+  
+  , NotFoundRestaurantException {
 		ownerDao.findMenuDetail(accountId, name);
 	}
 	
-	public void updateMenu(String accountId, String name, int price) throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
+	public void updateMenu(String accountId, String name, int price) throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException, NotFoundAccountException {
 		ownerDao.updateMenu(accountId, name, price);
 	}
 	
-	public void deleteMenu(String accountId, String name) throws SQLException, NotFoundMenuException, AccountNotFoundException, NotFoundRestaurantException {
+	public void deleteMenu(String accountId, String name) throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException {
 		ownerDao.deleteMenu(accountId, name);
 	}
 	
