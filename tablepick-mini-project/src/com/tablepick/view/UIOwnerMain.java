@@ -108,6 +108,7 @@ public class UIOwnerMain {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
+			SessionManager.logout();
 			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다.");
 			System.out.println("                          ");
 			new ConsoleUIIndex().execute();
