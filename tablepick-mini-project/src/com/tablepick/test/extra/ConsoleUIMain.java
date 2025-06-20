@@ -1,4 +1,4 @@
-package com.tablepick.view;
+package com.tablepick.test.extra;
 
 
 public class ConsoleUIMain {

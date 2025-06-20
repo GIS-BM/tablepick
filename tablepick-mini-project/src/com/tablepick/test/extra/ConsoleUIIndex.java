@@ -1,4 +1,4 @@
-package com.tablepick.view;
+package com.tablepick.test.extra;
 
 import java.io.BufferedReader;
 import java.io.IOException;
