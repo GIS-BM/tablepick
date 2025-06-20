@@ -74,43 +74,10 @@ public class UIIndex {
 				AccountVO loginData = commonService.getLoginDataSession();
 				// CommonService.getInstance();
 				System.out.println("[" + loginData.getType() + "] " + loginData.getName() + "님 환영합니다.");
-
-				// 사용자 타입에 따라 분기
-				switch (loginData.getType().toLowerCase()) {
-				case "customer":
-					try {
-						UICustomerMain.getInstance().run(reader);
-					} catch (Exception e) {
-						System.out.println("customer 실행 중 오류가 발생했습니다.");
-					}
-					break;
-				case "owner":
-					//System.out.println("ownerView 구현해야 한다");
-					try {
-						UIOwnerMain.getInstance().run();
-					} catch (AccountNotFoundException e) {
-						e.printStackTrace();
-					} catch (NotFoundAccountException e) {
-						e.printStackTrace();
-					} catch (NotFoundRestaurantException e) {
-						e.printStackTrace();
-					}
-					// new OwnerView().run(reader);
-					break;
-				case "admin":
-					try {
-						UIAdminMain.getInstance().run(reader);
-					} catch (Exception e) {
-						System.out.println("admin 실행 중 오류가 발생했습니다.");
-					}
-					break;
-				default:
-					System.out.println("알 수 없는 사용자 유형입니다.");
-				}
-			} else {
-				System.out.println("로그인 실패: 아이디 또는 비밀번호를 확인하세요.");
+				
+				commonService.checkAccountTypeAndMovePage(loginData);
 			}
-		} catch (IOException | SQLException e) {
+		}catch (Exception e) {
 			System.err.println("로그인 오류: " + e.getMessage());
 		}
 	}
@@ -130,6 +97,7 @@ public class UIIndex {
 			String tel = reader.readLine();
 
 			AccountVO accountVO = new AccountVO(id, type, name, password, tel);
+			commonService.createAccount(accountVO);
 			boolean success = accountDao.insertAccount(accountVO);
 			if (success) {
 				System.out.println("회원가입이 성공적으로 완료되었습니다.");
