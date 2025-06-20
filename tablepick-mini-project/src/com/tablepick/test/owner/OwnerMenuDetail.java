@@ -52,6 +52,10 @@ public class OwnerMenuDetail {
 			System.out.println("                          4. 메뉴 삭제하기");
 			System.out.println("                          5. 이전 화면으로 돌아가기");
 			System.out.println("                          6. 프로그램 종료하기");
+			System.out.println("                          ");
+			System.out.println(
+					"============================================================================================");
+			System.out.println("                          ");
 			console = sc.nextLine();
 
 			switch (console) {
