@@ -50,7 +50,7 @@ public class ReserveCRUDUnitTest {
 			LocalDate registerDate = LocalDate.parse(date, formatter);
 			int restaurantId = accountdao.findRestaurantIdByName(name);
 
-			AccountVO loginData = commonService.getLoginData();
+			AccountVO loginData = commonService.getLoginDataSession();
 			ReserveVO reserveVO = new ReserveVO(loginData.getId(), restaurantId, count, registerDate, time);
 			if (accountdao.insertReserve(reserveVO)) {
 				System.out.println("예약이 성공하였습니다.");
@@ -93,7 +93,7 @@ public class ReserveCRUDUnitTest {
 	public void reserveUpdateView(BufferedReader reader) {
 		try {
 			System.out.println("등록된 예약 목록");
-			AccountVO loginData = commonService.getLoginData();
+			AccountVO loginData = commonService.getLoginDataSession();
 			ArrayList<ReserveVO> list = accountdao.getAccountReserves(loginData.getId());
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (list.isEmpty()) {
@@ -144,7 +144,7 @@ public class ReserveCRUDUnitTest {
 	public void reserveDeleteView(BufferedReader reader) {
 		try {
 			System.out.print("등록된 예약 목록");
-			AccountVO loginData = commonService.getLoginData();
+			AccountVO loginData = commonService.getLoginDataSession();
 			ArrayList<ReserveVO> list = accountdao.getAccountReserves(loginData.getId());
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (list.isEmpty()) {

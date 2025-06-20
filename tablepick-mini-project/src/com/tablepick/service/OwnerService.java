@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import com.tablepick.exception.AccountNotFoundException;
+import javax.security.auth.login.AccountNotFoundException;
+
+import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NoReservationException;
 import com.tablepick.exception.NotFoundMenuException;
 import com.tablepick.exception.NotFoundRestaurantException;
@@ -27,7 +29,7 @@ public class OwnerService {
 
 	
 	
-	public void findAccount(String accountId, String password) throws NotMatchedPasswordException, AccountNotFoundException, SQLException {
+	public void findAccount(String accountId, String password) throws NotMatchedPasswordException, NotFoundAccountException, SQLException {
 		ownerDao.findAccount(accountId, password);
 	}
 	
@@ -39,7 +41,7 @@ public class OwnerService {
 		return ownerDao.findMyRestaurant(accountId);
 		
 	}
-	public void deleteMyRestaurant(String accountId, String password) throws SQLException, NotMatchedPasswordException, AccountNotFoundException {
+	public void deleteMyRestaurant(String accountId, String password) throws SQLException, NotMatchedPasswordException, NotFoundAccountException, AccountNotFoundException {
 		ownerDao.deleteMyRestaurant(accountId,password);
 		
 	}
@@ -110,4 +112,3 @@ public class OwnerService {
 		return ownerDao.findSelectedCustomer(accountId, reservationIdx);
 	}
 }
-

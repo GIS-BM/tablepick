@@ -22,7 +22,7 @@ public class CustomerUnit {
 	private CustomerUnit() {
 		try {
 			accountdao = new AccountDao();
-			CommonService.getInstance().loginSessionManager("owner01","pw1234");
+			CommonService.getInstance().loginSession("owner01","pw1234");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
