@@ -9,7 +9,9 @@ import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
 import com.tablepick.test.AdminUnitTest.AdminCRUDUnitTest;
+import com.tablepick.test.admin.UIAdminMain;
 import com.tablepick.test.customer.CustomerViewUnitTest;
+import com.tablepick.test.customer.UICustomerMain;
 
 public class UIIndex {
 	private final AccountDao accountDao;
@@ -76,11 +78,9 @@ public class UIIndex {
 				switch (loginData.getType().toLowerCase()) {
 				case "customer":
 					try {
-						CustomerViewUnitTest cust = new CustomerViewUnitTest();
-						cust.run(reader);
+						UICustomerMain.getInstance().run(reader);
 					} catch (Exception e) {
 						System.out.println("customer 실행 중 오류가 발생했습니다.");
-						e.printStackTrace();
 					}
 					break;
 				case "owner":
@@ -89,11 +89,9 @@ public class UIIndex {
 					break;
 				case "admin":
 					try {
-						AdminCRUDUnitTest admin = new AdminCRUDUnitTest();
-						// admin.run(reader);
+						UIAdminMain.getInstance().run(reader);
 					} catch (Exception e) {
 						System.out.println("admin 실행 중 오류가 발생했습니다.");
-						e.printStackTrace();
 					}
 					break;
 				default:

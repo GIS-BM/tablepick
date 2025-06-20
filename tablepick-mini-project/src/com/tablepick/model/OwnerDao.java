@@ -174,7 +174,7 @@ public class OwnerDao {
 	 * @throws NotFoundAccountException 
 	 */
 	public void deleteMyRestaurant(String accountId, String password)
-			throws SQLException, NotMatchedPasswordException, NotFoundAccountException, NotFoundAccountException {
+			throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 

@@ -1,8 +1,7 @@
-package com.tablepick.test.customer;
+package com.tablepick.test.admin;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import com.tablepick.test.admin.AdminUnit;
 
 public class UIAdminMain {
 	private static UIAdminMain instance = new UIAdminMain();
@@ -29,21 +28,27 @@ public class UIAdminMain {
 				printAdminMenu();
 				String main = reader.readLine().trim();
 				switch (main) {
+				// 전체 계정 조회
 				case "1":
 					AdminUnit.getInstance().searchAllAccount();
 					break;
+				// 계정 조회
 				case "2":
 					AdminUnit.getInstance().searchAccount(reader);
 					break;
+				// 전체 예약 조회
 				case "3":
 					AdminUnit.getInstance().searchAllReserve();
 					break;
+				// 최대 예약자 조회
 				case "4":
 					AdminUnit.getInstance().searchMostReserve();
 					break;
+				// main UI 로 이동
 				case "5":
 					System.out.println("로그아웃합니다.");
 					return;
+				// 서비스 종료
 				case "6":
 					System.out.println("종료합니다.");
 					System.exit(0);

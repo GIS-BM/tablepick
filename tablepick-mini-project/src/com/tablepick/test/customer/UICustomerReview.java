@@ -29,21 +29,27 @@ public class UICustomerReview {
 				printSearchRestaurantMenu();
 				String main = reader.readLine().trim();
 				switch (main) {
+				// 리뷰 등록
 				case "1":
 					ReviewCRUDUnitTest.getInstance().registerReviewTest();
 					break;
+				// 리뷰 검색
 				case "2":
 					ReviewCRUDUnitTest.getInstance().findMyReviewByIdTest();
 					break;
+				// 리뷰 수정
 				case "3":
 					ReviewCRUDUnitTest.getInstance().updateReviewByIdTest();
 					break;
+				// 리뷰 삭제
 				case "4":
 					ReviewCRUDUnitTest.getInstance().deleteMyReviewByIdTest();
 					break;
+				// customer main UI 로 이동 
 				case "5":
 					System.out.println("Customer 메인 페이지로 돌아갑니다.");
 					return;
+				// 서비스 종료
 				case "exit":
 					System.out.println("종료합니다.");
 					System.exit(0);

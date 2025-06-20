@@ -39,7 +39,7 @@ public class OwnerService {
 		return ownerDao.findMyRestaurant(accountId);
 		
 	}
-	public void deleteMyRestaurant(String accountId, String password) throws SQLException, NotMatchedPasswordException, NotFoundAccountException, NotFoundAccountException {
+	public void deleteMyRestaurant(String accountId, String password) throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
 		ownerDao.deleteMyRestaurant(accountId,password);
 		
 	}
@@ -82,7 +82,9 @@ public class OwnerService {
 		return ownerDao.findMenu(accountId);
 	}
 	
-	public void findMenuDetail(String accountId, String name) throws NotFoundMenuException, SQLException, NotFoundAccountException, NotFoundRestaurantException {
+	public void findMenuDetail(String accountId, String name) throws NotFoundMenuException, SQLException, 
+  
+  , NotFoundRestaurantException {
 		ownerDao.findMenuDetail(accountId, name);
 	}
 	

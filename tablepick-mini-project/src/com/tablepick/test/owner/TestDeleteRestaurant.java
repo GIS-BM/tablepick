@@ -1,18 +1,13 @@
 package com.tablepick.test.owner;
 
 import java.sql.SQLException;
-
 import java.util.Scanner;
 
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.model.OwnerDao;
-
-import com.tablepick.session.SessionManager;
-
-import com.tablepick.service.CommonService;
 import com.tablepick.service.OwnerService;
+import com.tablepick.session.SessionManager;
 
 
 public class TestDeleteRestaurant {
