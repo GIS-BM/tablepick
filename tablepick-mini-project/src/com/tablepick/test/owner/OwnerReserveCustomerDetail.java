@@ -1,10 +1,6 @@
-package com.tablepick.RestaurantOwner.View;
+package com.tablepick.test.owner;
 
 import java.util.Scanner;
-
-import com.tablepick.Restaurant.UnitTest.MostReservedCustomersTest;
-import com.tablepick.Restaurant.UnitTest.TestInputCustomerSales;
-import com.tablepick.Restaurant.UnitTest.TestSelectReservationListByOwner;
 
 //식당을 예약한 예약자를 확인할수 있는 페이지 입니다.
 //여기서 예약을 확인한 다음, 예약의 매출액을 적을 수 있습니다.

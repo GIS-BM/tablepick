@@ -1,10 +1,9 @@
-package com.tablepick.RestaurantOwner.View;
+package com.tablepick.test.owner;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.tablepick.Restaurant.UnitTest.TestSelectRestaurantAndSales;
-import com.tablepick.Restaurant.UnitTest.TestUpdateRestaurantAndSales;
+import com.tablepick.view.UIOwnerMain;
 
 //식당 상세 정보 화면입니다.
 //식당주인 메인 화면에서 넘어옵니다.
@@ -64,7 +63,7 @@ public class OwnerMainDetail {
 				OwnerReviewDetail.getInstance().run();
 				break;
 			case "5":
-				OwnerMain.getInstance().run();
+				UIOwnerMain.getInstance().run();
 				break;
 			case "6":
 				System.out.println("프로그램을 종료합니다.");
