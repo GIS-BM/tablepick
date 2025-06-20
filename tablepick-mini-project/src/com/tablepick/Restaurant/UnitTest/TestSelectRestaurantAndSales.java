@@ -6,11 +6,12 @@ import java.util.Map;
 
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
-import com.tablepick.model.RestaurantDao;
+import com.tablepick.model.OwnerDao;
 
 import com.tablepick.session.SessionManager;
 
 import com.tablepick.service.CommonService;
+import com.tablepick.service.OwnerService;
 
 
 public class TestSelectRestaurantAndSales {
@@ -26,7 +27,7 @@ public class TestSelectRestaurantAndSales {
 		
 		// 식당 정보와 총 매출액을 조회한다.
 				try {
-					RestaurantDao resDao = new RestaurantDao();
+					OwnerService service = new OwnerService();
 					//메뉴를 생성할 시 해당 식당의 id를 받아와야 합니다.
 					//1. 따라서 로그인 정보의 accountId를 받아온 후
 					//2. 이 정보를 가지고 restaurantId 를 조회합니다.
@@ -46,10 +47,10 @@ public class TestSelectRestaurantAndSales {
 
 					
 					
-					int reservationIdx = resDao.findMyRestaurant(accountId).getRestaurantId();
+					int reservationIdx = service.findMyRestaurant(accountId).getRestaurantId();
 		
 					
-					List<Map<String, String>> resList = resDao.findMyRestaurantAndSales(accountId, reservationIdx);
+					List<Map<String, String>> resList = service.findMyRestaurantAndSales(accountId, reservationIdx);
 					
 					for (int i = 0; i < resList.size(); i++) {
 						Map<String, String> map = resList.get(i);
