@@ -1,7 +1,7 @@
 package com.tablepick.service;
 
 import java.sql.SQLException;
-
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -77,8 +77,8 @@ public class OwnerService {
 
 	// 나의 식당 정보를 변경하는 메소드
 	public void updateMyRestaurantInfo(String accountId, int reservationIdx, String newName, String newType,
-			String newAddress, String newTel) throws SQLException, NotFoundRestaurantException {
-		ownerDao.updateMyRestaurantInfo(accountId, reservationIdx, newName, newType, newAddress, newTel);
+			String newAddress, String newTel, LocalTime newTime) throws SQLException, NotFoundRestaurantException {
+		ownerDao.updateMyRestaurantInfo(accountId, reservationIdx, newName, newType, newAddress, newTel, newTime);
 
 	}
 
