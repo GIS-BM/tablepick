@@ -452,10 +452,15 @@ public class CustomerService {
 						System.out.println((i+1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId())
 								+ " 예약날짜: " + vo.getReserveDate() + " 예약시간: " + vo.getReserveTime() + "시");
 					}
-					
+					ReserveVO reserve = new ReserveVO();
 					System.out.print("\n리뷰를 등록할 예약 번호: ");
 					int num = Integer.parseInt(reader.readLine());
-					ReserveVO vo = reserveList.get(num-1);
+					if (num >reserveList.size() || num<1) {
+						System.out.println("범위 내의 번호를 선택해 주세요.");
+						return;
+					}else {
+						reserve = reserveList.get(num-1);
+					}
 					
 					int star = 0;
 					while (true) {
@@ -474,7 +479,7 @@ public class CustomerService {
 					System.out.print("코멘트: ");
 					String comment = reader.readLine();
 
-					int reserveId = customerDao.findReserveIdxByRestaurantIdx(vo.getRestaurantId(),accountId.getId());
+					int reserveId = customerDao.findReserveIdxByRestaurantIdx(reserve.getRestaurantId(),accountId.getId());
 					boolean reviewResult = customerDao.createReview(reserveId, star, comment);
 					if (reviewResult) {
 						System.out.println(customerDao.findRestaurantNameByReserveIdx(reserveId) + " 리뷰 등록하였습니다.");

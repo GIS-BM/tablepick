@@ -118,8 +118,9 @@ public class CustomerDao {
 		ResultSet rs = null;
 		try {
 			con = getConnection();
-			String sql = "SELECT v.* FROM reserve v LEFT JOIN review rv "
-					+ " ON v.idx = rv.reserve_idx WHERE v.account_id = ? AND rv.idx IS null";
+			String sql = "SELECT v.* FROM reserve v	LEFT JOIN review rv "
+					+ " ON v.idx = rv.reserve_idx "
+					+ " WHERE v.account_id = ? AND (rv.idx IS NULL OR rv.idx = 0);";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
