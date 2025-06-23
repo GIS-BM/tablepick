@@ -4,12 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.tablepick.exception.NoReservationException;
-import com.tablepick.model.AccountVO;
-import com.tablepick.model.OwnerDao;
 
 import com.tablepick.session.SessionManager;
 
-import com.tablepick.service.CommonService;
 import com.tablepick.service.OwnerService;
 
 
@@ -41,14 +38,14 @@ public class MostReservedCustomersTest {
 			System.out.println("                  ");
 			
 			if (mostReservationList.isEmpty()) {
-				System.out.println("예약자가 존재하지 않습니다.");
+//				System.out.println("예약자가 존재하지 않습니다.");
+				throw new NoReservationException("예약이 존재하지 않습니다.");
 			} else {
 				for (int i = 0; i < mostReservationList.size(); i++) {
 					System.out.println(mostReservationList.get(i));
 				}
 				
 			}
-			
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

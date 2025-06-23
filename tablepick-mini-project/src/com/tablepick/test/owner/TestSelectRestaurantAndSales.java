@@ -1,5 +1,7 @@
 package com.tablepick.test.owner;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import java.util.Map;
@@ -45,7 +47,9 @@ public class TestSelectRestaurantAndSales {
 				String address = map.get("address");
 				String tel = map.get("tel");
 				String sales = map.get("sales");
-				System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 총 매출액: " + sales);
+				String time = map.get("opentime");
+				String openTime = time.substring(0, 5);
+				System.out.println("식당 명 : " + name + ", 타입 : " + type +  ", 주소 : " + address + ", 연락처 : " + tel + ", 오픈 시간 : "+ openTime+", 총 매출액: " + sales);
 
 			}
 			
