@@ -44,36 +44,37 @@ public class TestInputCustomerSales {
 				System.out.println("                  ");
 				if (reservationList.isEmpty()) {
 					System.out.println("                        예약자가 없습니다. ");
+					create = true;
 				} else {
 					for (int i = 0; i < reservationList.size(); i++) {
 						System.out.println(reservationList.get(i));
 					}
-				}
-
-				System.out.println("매출액을 입력할 예약 번호를 입력해 주세요.");
-		
-				reservationIdxStr = br.readLine();
-				int reservationIdx = Integer.parseInt(reservationIdxStr);
-				System.out.println("                  ");
-				// 예약자 조회
-				System.out.println("                          *** 선택한 예약자 정보입니다. ***");
-				System.out.println("                  ");
-				Map<String, String> selectedCustomer = service.findSelectedCustomer(accountId, reservationIdx);
-
-				if (selectedCustomer.isEmpty()) {
-					System.out.println("입력하신 예약 번호는 존재하지 않습니다. 다시 입력해 주세요.");
-				} else {
-					for (Map.Entry<String, String> entry : selectedCustomer.entrySet()) {
-						System.out.println(entry.getKey() + " : " + entry.getValue());
+					
+					System.out.println("매출액을 입력할 예약 번호를 입력해 주세요.");
+					
+					reservationIdxStr = br.readLine();
+					int reservationIdx = Integer.parseInt(reservationIdxStr);
+					System.out.println("                  ");
+					// 예약자 조회
+					System.out.println("                          *** 선택한 예약자 정보입니다. ***");
+					System.out.println("                  ");
+					Map<String, String> selectedCustomer = service.findSelectedCustomer(accountId, reservationIdx);
+					
+					if (selectedCustomer.isEmpty()) {
+						System.out.println("입력하신 예약 번호는 존재하지 않습니다. 다시 입력해 주세요.");
+					} else {
+						for (Map.Entry<String, String> entry : selectedCustomer.entrySet()) {
+							System.out.println(entry.getKey() + " : " + entry.getValue());
+						}
+						
+						System.out.println("수정할 매출액을 입력해 주세요. ");
+						sale = br.readLine();
+						int newSale = Integer.parseInt(sale);
+						
+						service.updateCustomerSale(accountId, reservationIdx, newSale);
+						System.out.println("매출액이 성공적으로 입력되었습니다.");
+						create = true;
 					}
-
-					System.out.println("수정할 매출액을 입력해 주세요. ");
-					sale = br.readLine();
-					int newSale = Integer.parseInt(sale);
-
-					service.updateCustomerSale(accountId, reservationIdx, newSale);
-					System.out.println("매출액이 성공적으로 입력되었습니다.");
-					create = true;
 
 				}
 

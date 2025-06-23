@@ -38,7 +38,7 @@ public class TestSelectReservationListByOwner {
 			System.out.println("                        *** 내 식당 예약자 명단 *** ");
 			System.out.println("                  ");
 			if (reservationList.isEmpty()) {
-				System.out.println("예약자가 없습니다. ");
+				throw new NoReservationException("예약이 존재하지 않습니다.");
 			} else {
 				for (int i = 0; i < reservationList.size(); i++) {
 					System.out.println(reservationList.get(i));
