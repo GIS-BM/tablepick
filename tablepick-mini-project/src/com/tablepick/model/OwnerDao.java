@@ -149,8 +149,7 @@ public class OwnerDao {
 				if (rs.next()) {
 
 					retaurantVO = new RestaurantVO(rs.getInt("idx"), rs.getString("account_id"), rs.getString("name"),
-							rs.getString("type"), rs.getString("address"), rs.getString("tel"),
-							rs.getTime("opentime").toLocalTime());
+							rs.getString("type"), rs.getString("address"), rs.getString("tel"), rs.getTime("opentime").toLocalTime());
 				}
 			}
 		}
@@ -168,27 +167,27 @@ public class OwnerDao {
 	 * @throws SQLException
 	 * @throws AccountNotFoundException
 	 * @throws NotMatchedPasswordException
-	 * @throws NotFoundAccountException 
+	 * @throws NotFoundAccountException
 	 */
 	public void deleteMyRestaurant(String accountId, String password)
-		
-		throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
-			Connection con = null;
-			PreparedStatement pstmt = null;
-	
-			findAccount(accountId, password);
-	
-			try {
-				con = DatabaseUtil.getConnection();
-				String sql = "DELETE FROM restaurant WHERE account_id =?";
-				pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, accountId);
-				pstmt.executeUpdate();
-			}
-	
-			finally {
-				DatabaseUtil.closeAll(pstmt, con);
-			}
+
+			throws SQLException, NotMatchedPasswordException, NotFoundAccountException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		findAccount(accountId, password);
+
+		try {
+			con = DatabaseUtil.getConnection();
+			String sql = "DELETE FROM restaurant WHERE account_id =?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, accountId);
+			pstmt.executeUpdate();
+		}
+
+		finally {
+			DatabaseUtil.closeAll(pstmt, con);
+		}
 	}
 
 	/**
@@ -204,7 +203,7 @@ public class OwnerDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			con = DatabaseUtil.getConnection();
 			String sql = "SELECT 1 FROM restaurant WHERE account_id = ?";
@@ -215,7 +214,7 @@ public class OwnerDao {
 		} finally {
 			DatabaseUtil.closeAll(rs, pstmt, con);
 		}
-		
+
 		return existRestaurant;
 	}
 
@@ -232,7 +231,7 @@ public class OwnerDao {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		try {
 			con = DatabaseUtil.getConnection();
 			String sql = "SELECT 1 FROM reserve WHERE idx = ?";
@@ -263,7 +262,8 @@ public class OwnerDao {
 
 		List<Map<String, String>> reservationList = new ArrayList<Map<String, String>>();
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT rs.idx AS reserve_idx, rs.account_id AS customer_id, a.name AS customer_name, rs.reservepeople, rs.reservedate, ");
+		sql.append(
+				"SELECT rs.idx AS reserve_idx, rs.account_id AS customer_id, a.name AS customer_name, rs.reservepeople, rs.reservedate, ");
 		sql.append("rs.reservetime, rs.registerdate, rt.idx AS restaurant_idx, IFNULL(s.sales, 0) AS sales_amount ");
 		sql.append("FROM reserve rs ");
 		sql.append("LEFT JOIN restaurant rt ON rs.restaurant_idx = rt.idx ");
@@ -271,7 +271,7 @@ public class OwnerDao {
 		sql.append("LEFT JOIN account o ON rt.account_id = o.id ");
 		sql.append("LEFT JOIN sales s ON rs.idx = s.reserve_idx ");
 		sql.append("WHERE rt.account_id = ? ");
-		sql.append("ORDER BY rs.reservedate, rs.reservetime;"); 
+		sql.append("ORDER BY rs.reservedate, rs.reservetime;");
 
 		try (Connection con = DatabaseUtil.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
@@ -280,7 +280,8 @@ public class OwnerDao {
 				while (rs.next()) {
 					Map<String, String> map = new LinkedHashMap<String, String>();
 					map.put("예약 번호", Integer.toString(rs.getInt("reserve_idx")));
-					map.put("예약 일자", rs.getTimestamp("registerdate").toLocalDateTime().format(DateTimeFormatter.ofPattern("yy-MM-dd HH:mm")));
+					map.put("예약 일자",
+							rs.getTimestamp("registerdate").toLocalDateTime().format(DateTimeFormatter.ofPattern("yy-MM-dd HH:mm")));
 
 					map.put("예약 시간", String.format("%02d:00", rs.getInt("reservetime")));
 					map.put("예약자 아이디", rs.getString("customer_id"));
@@ -295,7 +296,6 @@ public class OwnerDao {
 		return reservationList;
 	}
 
-
 	/**
 	 * Owner가 내 식당의 정보와 매출액을 조회하는 메서드 입니다. <br>
 	 * 내 식당이 존재하는지 existRestaurant() 메서드 먼저 실행 후 메서드를 실행합니다. <br>
@@ -306,7 +306,8 @@ public class OwnerDao {
 	 * @throws SQLException
 	 * @throws RestaurantNotFoundException
 	 */
-	public List<Map<String, String>> findMyRestaurantAndSales(String accountId, int restaurantIdx) throws SQLException, NotFoundRestaurantException {
+	public List<Map<String, String>> findMyRestaurantAndSales(String accountId, int restaurantIdx)
+			throws SQLException, NotFoundRestaurantException {
 		if (existRestaurant(accountId) == false) {
 			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
@@ -323,7 +324,7 @@ public class OwnerDao {
 
 		try (Connection con = DatabaseUtil.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
-			
+
 			con.setAutoCommit(false);
 			pstmt.setString(1, accountId);
 			pstmt.setInt(2, restaurantIdx);
@@ -361,70 +362,66 @@ public class OwnerDao {
 	public void updateMyRestaurantInfo(String accountId, int reservationIdx, String newName, String newType,
 			String newAddress, String newTel, LocalTime newTime) throws SQLException, NotFoundRestaurantException {
 
-		if (existRestaurant(accountId) == false) {
+		if (!existRestaurant(accountId)) {
 			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
 		}
 
-		Connection con = DatabaseUtil.getConnection();
-		PreparedStatement pstmt = null;
+		Connection con = null;
 		try {
-
-			 con.setAutoCommit(false); // 트랜젝션 처리를 위한 자동 커밋 모드 해제
+			con = DatabaseUtil.getConnection();
+			con.setAutoCommit(false); // 트랜잭션 시작
 
 			String updateRestaurantInfoSql = "UPDATE restaurant SET name = ?, type = ?, address = ?, tel = ?, opentime = ? WHERE account_id = ?";
-			String updateSalesSql = "UPDATE sales SET sales = 0 WHERE reserve_idx = ?";
-			
-			
-			pstmt = con.prepareStatement(updateRestaurantInfoSql);
-			pstmt.setString(1, newName);
-			pstmt.setString(2, newType);
-			pstmt.setString(3, newAddress);
-			pstmt.setString(4, newTel);
-			pstmt.setObject(5, newTime); // newTime은 LocalTime
-			pstmt.setString(6, accountId);
-			pstmt .executeUpdate();
-			
-			pstmt.close();
-			
-			pstmt = con.prepareStatement(updateSalesSql);
-			pstmt.setInt(1, reservationIdx);
+			try (PreparedStatement pstmt = con.prepareStatement(updateRestaurantInfoSql)) {
+				pstmt.setString(1, newName);
+				pstmt.setString(2, newType);
+				pstmt.setString(3, newAddress);
+				pstmt.setString(4, newTel);
+				pstmt.setObject(5, newTime);
+				pstmt.setString(6, accountId);
+				pstmt.executeUpdate();
+			}
 
-			pstmt.executeUpdate();
-			
+			String updateSalesSql = "UPDATE sales SET sales = 0 WHERE reserve_idx = ?";
+			try (PreparedStatement pstmt = con.prepareStatement(updateSalesSql)) {
+				pstmt.setInt(1, reservationIdx);
+				pstmt.executeUpdate();
+			}
+
+// deleteMyReservationList에 커넥션 전달
 			deleteMyReservationList(accountId, con);
-			
-			 con.commit(); // 정보 업데이트 내의 모든 세부 작업 정상 처리
-			 
+
+			con.commit();
+
 		} catch (Exception e) {
-			con.rollback();
+			if (con != null) {
+				con.rollback();
+			}
 			throw e;
 		} finally {
-//			DatabaseUtil.closeAll(pstmt, con);
-			pstmt.close();
+			if (con != null) {
+				con.setAutoCommit(true); // 원래 상태 복구
+				con.close();
+			}
 		}
 	}
-	
-	public void deleteMyReservationList(String accountId, Connection con) throws SQLException, NotFoundRestaurantException {
-	    PreparedStatement pstmt = null;
 
-	    try {
-	    	con = DatabaseUtil.getConnection();
-	        RestaurantVO restaurantVO = findMyRestaurant(accountId); 
-	        int restaurantIdx = restaurantVO.getRestaurantId(); 
+//커넥션을 파라미터로 받아서 동일 트랜잭션 내에서 실행되도록 변경
+	public void deleteMyReservationList(String accountId, Connection con)
+			throws SQLException, NotFoundRestaurantException {
+		String deleteSql = "DELETE FROM reserve WHERE restaurant_idx = ?";
 
+		RestaurantVO restaurantVO = findMyRestaurant(accountId);
+		int restaurantIdx = restaurantVO.getRestaurantId();
 
-	        String deleteSql = "DELETE FROM reserve WHERE restaurant_idx = ?";
-	        pstmt = con.prepareStatement(deleteSql);
-	        pstmt.setInt(1, restaurantIdx);
-	        pstmt.executeUpdate();
-
-	    } finally {
-	        DatabaseUtil.closeAll(pstmt, con);
-	    }
+		try (PreparedStatement pstmt = con.prepareStatement(deleteSql)) {
+			pstmt.setInt(1, restaurantIdx);
+			pstmt.executeUpdate();
+		}
 	}
 
 	/**
-	 * Owner가 식당 메뉴를 생성하는 메소드 입니다. <br> 
+	 * Owner가 식당 메뉴를 생성하는 메소드 입니다. <br>
 	 * 메뉴 데이터 뿐만 아니라 레스토랑 ID도 필요합니다. <br>
 	 * 
 	 * @param menuVO
@@ -546,12 +543,12 @@ public class OwnerDao {
 	 * @param menuVO
 	 * @throws SQLException
 	 * @throws NotFoundMenuException
-	 * @throws NotFoundAccountException 
+	 * @throws NotFoundAccountException
 	 * @throws RestaurantNotFoundException
 	 */
 
-	public void updateMenu(String accountId, String name, int price)
-			throws SQLException, NotFoundMenuException, NotFoundAccountException, NotFoundRestaurantException, NotFoundAccountException {
+	public void updateMenu(String accountId, String name, int price) throws SQLException, NotFoundMenuException,
+			NotFoundAccountException, NotFoundRestaurantException, NotFoundAccountException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		int result = 0;
@@ -634,7 +631,7 @@ public class OwnerDao {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-		
+
 				// 계속 맵을 만들어줘야 함
 				// 한 객체의 주솟값을 계속 받아버리면 이전의 데이터는 사라짐 (덮어쓰기가 되므로)
 				Map<String, String> map = new HashMap<String, String>();
@@ -642,7 +639,7 @@ public class OwnerDao {
 				map.put("별점", rs.getString("rvw.star"));
 				map.put("내용", rs.getString("rvw.comment"));
 				map.put("작성일자", rs.getString("rvw.registerdate"));
-			
+
 				list.add(map);
 			}
 		}
