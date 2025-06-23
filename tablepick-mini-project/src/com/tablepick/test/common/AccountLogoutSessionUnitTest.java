@@ -2,6 +2,7 @@ package com.tablepick.test.common;
 
 import java.sql.SQLException;
 
+import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.service.CommonService;
 import com.tablepick.session.SessionManager;
@@ -37,6 +38,9 @@ public class AccountLogoutSessionUnitTest {
 			System.out.println("로그인 데이터 값 출력 : " + loginData);
 			
 		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		} catch (NotFoundAccountException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
