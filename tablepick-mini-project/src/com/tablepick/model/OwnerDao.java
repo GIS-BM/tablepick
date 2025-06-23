@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -91,7 +92,7 @@ public class OwnerDao {
 			con = DatabaseUtil.getConnection();
 			// 트랜잭션 처리합니다.
 			con.setAutoCommit(false);
-			String sql = "INSERT INTO restaurant(account_id, name, type, address, tel) VALUES(?,?,?,?,?);";
+			String sql = "INSERT INTO restaurant(account_id, name, type, address, tel, opentime) VALUES(?,?,?,?,?,?);";
 
 			pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, restaurantVO.getAccountId());
@@ -99,6 +100,7 @@ public class OwnerDao {
 			pstmt.setString(3, restaurantVO.getType());
 			pstmt.setString(4, restaurantVO.getAddress());
 			pstmt.setString(5, restaurantVO.getTel());
+			pstmt.setTime(6, java.sql.Time.valueOf(restaurantVO.getOpenTime()));
 			pstmt.executeUpdate();
 			rs = pstmt.getGeneratedKeys(); // 발급된 레스토랑 id를 반환받는다.
 			if (rs.next())
@@ -310,12 +312,12 @@ public class OwnerDao {
 		List<Map<String, String>> listM = new ArrayList<Map<String, String>>();
 		StringBuilder sql = new StringBuilder();
 		sql.append(
-				"SELECT r.name AS name, r.type AS type, r.address AS address, r.tel AS tel, COALESCE(SUM(s.sales), 0) AS sales ");
+				"SELECT r.name AS name, r.type AS type, r.address AS address, r.tel AS tel, COALESCE(SUM(s.sales), 0) AS sales, r.opentime AS opentime ");
 		sql.append("FROM restaurant r ");
 		sql.append("LEFT JOIN reserve rv ON r.idx = rv.restaurant_idx ");
 		sql.append("LEFT JOIN sales s ON rv.idx = s.reserve_idx ");
 		sql.append("WHERE r.account_id =? AND r.idx = ? ");
-		sql.append("GROUP BY r.idx, r.name, r.type, r.address, r.tel;");
+		sql.append("GROUP BY r.idx, r.name, r.type, r.address, r.tel, r.opentime;");
 
 		try (Connection con = DatabaseUtil.getConnection();
 				PreparedStatement pstmt = con.prepareStatement(sql.toString());) {
@@ -331,7 +333,7 @@ public class OwnerDao {
 					map.put("address", rs.getString("address"));
 					map.put("tel", rs.getString("tel"));
 					map.put("sales", String.valueOf(rs.getLong("sales")));
-
+					map.put("opentime", rs.getString("opentime"));
 					listM.add(map);
 				}
 			}
@@ -355,7 +357,7 @@ public class OwnerDao {
 	 * @throws RestaurantNotFoundException
 	 */
 	public void updateMyRestaurantInfo(String accountId, int reservationIdx, String newName, String newType,
-			String newAddress, String newTel) throws SQLException, NotFoundRestaurantException {
+			String newAddress, String newTel, LocalTime newTime) throws SQLException, NotFoundRestaurantException {
 
 		if (existRestaurant(accountId) == false) {
 			throw new NotFoundRestaurantException(accountId + "님의 식당이 존재하지 않습니다.");
@@ -367,7 +369,7 @@ public class OwnerDao {
 
 			 con.setAutoCommit(false); // 트랜젝션 처리를 위한 자동 커밋 모드 해제
 
-			String updateRestaurantInfoSql = "UPDATE restaurant SET name = ?, type = ?, address = ?, tel = ? WHERE account_id = ?";
+			String updateRestaurantInfoSql = "UPDATE restaurant SET name = ?, type = ?, address = ?, tel = ?, opentime = ? WHERE account_id = ?";
 			String updateSalesSql = "UPDATE sales SET sales = 0 WHERE reserve_idx = ?";
 			
 			
@@ -376,7 +378,8 @@ public class OwnerDao {
 			pstmt.setString(2, newType);
 			pstmt.setString(3, newAddress);
 			pstmt.setString(4, newTel);
-			pstmt.setString(5, accountId);
+			pstmt.setObject(5, newTime); // newTime은 LocalTime
+			pstmt.setString(6, accountId);
 			pstmt .executeUpdate();
 			
 			pstmt.close();
@@ -623,12 +626,13 @@ public class OwnerDao {
 
 		try {
 			con = DatabaseUtil.getConnection();
-			String sql = "SELECT rsv.account_id, rvw.star, rvw.comment, rvw.registerdate FROM reserve rsv JOIN review rvw ON rsv.idx = rvw.idx WHERE rsv.restaurant_idx = ?;";
+			String sql = "SELECT rsv.account_id, rvw.star, rvw.comment, rvw.registerdate FROM reserve rsv JOIN review rvw ON rsv.idx = rvw.reserve_idx WHERE rsv.restaurant_idx = ?;";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, resVo.getRestaurantId());
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
+		
 				// 계속 맵을 만들어줘야 함
 				// 한 객체의 주솟값을 계속 받아버리면 이전의 데이터는 사라짐 (덮어쓰기가 되므로)
 				Map<String, String> map = new HashMap<String, String>();
@@ -636,6 +640,7 @@ public class OwnerDao {
 				map.put("별점", rs.getString("rvw.star"));
 				map.put("내용", rs.getString("rvw.comment"));
 				map.put("작성일자", rs.getString("rvw.registerdate"));
+			
 				list.add(map);
 			}
 		}
