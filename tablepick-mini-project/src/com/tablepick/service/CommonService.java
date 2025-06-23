@@ -11,6 +11,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import com.tablepick.common.DbConfig;
 import com.tablepick.exception.NotFoundAccountException;
 import com.tablepick.exception.NotFoundRestaurantException;
+import com.tablepick.exception.NotMatchedPasswordException;
 import com.tablepick.model.AccountDao;
 import com.tablepick.model.AccountVO;
 import com.tablepick.session.SessionManager;
@@ -149,7 +150,7 @@ public class CommonService {
 
 // 세션 로그인 메서드 (id, password 체크)
 //로그인 성공이면 타입에 따라서 판별하여 고객 혹은 멤버 페이지로 이동
-	public AccountVO loginSession(String id, String password) throws SQLException {
+	public AccountVO loginSession(String id, String password) throws SQLException, NotFoundAccountException {
 		AccountVO loginDataSession = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -163,14 +164,16 @@ public class CommonService {
 			rs = pstmt.executeQuery();
 
 			if (!rs.next()) {
-				System.out.println("로그인 실패: 해당 ID는 존재하지 않습니다.");
-				return null;
+				// System.out.println("로그인 실패: 해당 ID는 존재하지 않습니다.");
+				// return null;
+				throw new NotFoundAccountException("로그인 실패: 해당 ID는 존재하지 않습니다. (입력된 ID: " + id + ")");
 			}
 
 			String dbPassword = rs.getString("password");
 			if (!dbPassword.equals(password)) {
-				System.out.println("로그인 실패: 비밀번호가 일치하지 않습니다.");
-				return null;
+				// System.out.println("로그인 실패: 비밀번호가 일치하지 않습니다.");
+				// return null;
+				throw new NotMatchedPasswordException("로그인 실패: 비밀번호가 일치하지 않습니다.");
 			}
 
 			// 로그인 성공
@@ -184,10 +187,14 @@ public class CommonService {
 			// 세션 저장
 			SessionManager.login(loginDataSession);
 			this.logindatasession = loginDataSession;
-
-			// System.out.println(rs.getString("name")+"님 안녕하세요");
 			// System.out.println("로그인 성공! 로그인 정보: " + loginDataSession); // 테스트용 코드
 
+		} catch (NotFoundAccountException e) {
+			System.out.println(e.getMessage());
+			return null;
+		} catch (NotMatchedPasswordException e) {
+			System.out.println(e.getMessage());
+			return null;
 		} catch (SQLException e) {
 			System.out.println("DB 오류로 로그인에 실패했습니다.");
 			throw e;
