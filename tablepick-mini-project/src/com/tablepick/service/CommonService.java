@@ -61,8 +61,19 @@ public class CommonService {
 			System.out.println("회원가입 실패: 허용되지 않은 계정 타입입니다. (입력된 타입: " + type + ")");
 			return false;
 		}
-
 		try {
+
+			// 2. 아이디 중복 검사
+			con = accountDao.getConnection();
+			String checkSql = "SELECT COUNT(*) FROM account WHERE id = ?";
+			pstmt = con.prepareStatement(checkSql);
+			pstmt.setString(1, accountVO.getId());
+			rs = pstmt.executeQuery();
+			if (rs.next() && rs.getInt(1) > 0) {
+				System.out.println("회원가입 실패: 이미 존재하는 아이디입니다. (입력된 아이디: " + accountVO.getId() + ")");
+				return false;
+			}
+
 			con = accountDao.getConnection();
 			String sql = "INSERT INTO account (id, type, name, password, tel) VALUES (?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(sql);
@@ -139,53 +150,53 @@ public class CommonService {
 // 세션 로그인 메서드 (id, password 체크)
 //로그인 성공이면 타입에 따라서 판별하여 고객 혹은 멤버 페이지로 이동
 	public AccountVO loginSession(String id, String password) throws SQLException {
-    AccountVO loginDataSession = null;
-    Connection con = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+		AccountVO loginDataSession = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-    try {
-        con = accountDao.getConnection();
-        String sql = "SELECT id, type, name, password, tel FROM account WHERE id = ?";
-        pstmt = con.prepareStatement(sql);
-        pstmt.setString(1, id);
-        rs = pstmt.executeQuery();
+		try {
+			con = accountDao.getConnection();
+			String sql = "SELECT id, type, name, password, tel FROM account WHERE id = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
 
-        if (!rs.next()) {
-            System.out.println("로그인 실패: 해당 ID는 존재하지 않습니다.");
-            return null;
-        }
+			if (!rs.next()) {
+				System.out.println("로그인 실패: 해당 ID는 존재하지 않습니다.");
+				return null;
+			}
 
-        String dbPassword = rs.getString("password");
-        if (!dbPassword.equals(password)) {
-            System.out.println("로그인 실패: 비밀번호가 일치하지 않습니다.");
-            return null;
-        }
+			String dbPassword = rs.getString("password");
+			if (!dbPassword.equals(password)) {
+				System.out.println("로그인 실패: 비밀번호가 일치하지 않습니다.");
+				return null;
+			}
 
-        // 로그인 성공
-        loginDataSession = new AccountVO();
-        loginDataSession.setId(rs.getString("id"));
-        loginDataSession.setPassword(dbPassword);
-        loginDataSession.setType(rs.getString("type"));
-        loginDataSession.setName(rs.getString("name"));
-        loginDataSession.setTel(rs.getString("tel"));
+			// 로그인 성공
+			loginDataSession = new AccountVO();
+			loginDataSession.setId(rs.getString("id"));
+			loginDataSession.setPassword(dbPassword);
+			loginDataSession.setType(rs.getString("type"));
+			loginDataSession.setName(rs.getString("name"));
+			loginDataSession.setTel(rs.getString("tel"));
 
-        // 세션 저장
-        SessionManager.login(loginDataSession);
-        this.logindatasession = loginDataSession;
+			// 세션 저장
+			SessionManager.login(loginDataSession);
+			this.logindatasession = loginDataSession;
 
-        // System.out.println(rs.getString("name")+"님 안녕하세요");
-        // System.out.println("로그인 성공! 로그인 정보: " + loginDataSession); // 테스트용 코드
+			// System.out.println(rs.getString("name")+"님 안녕하세요");
+			// System.out.println("로그인 성공! 로그인 정보: " + loginDataSession); // 테스트용 코드
 
-    } catch (SQLException e) {
-        System.out.println("DB 오류로 로그인에 실패했습니다.");
-        throw e;
-    } finally {
-        accountDao.closeAll(rs, pstmt, con);
-    }
+		} catch (SQLException e) {
+			System.out.println("DB 오류로 로그인에 실패했습니다.");
+			throw e;
+		} finally {
+			accountDao.closeAll(rs, pstmt, con);
+		}
 
-    return loginDataSession;
-}
+		return loginDataSession;
+	}
 
 	// 세션 로그인 데이터 가져오기
 	public AccountVO getLoginDataSession() {
