@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -279,7 +280,8 @@ public class OwnerDao {
 				while (rs.next()) {
 					Map<String, String> map = new LinkedHashMap<String, String>();
 					map.put("예약 번호", Integer.toString(rs.getInt("reserve_idx")));
-					map.put("예약 일자", rs.getTimestamp("registerdate").toString());
+					map.put("예약 일자", rs.getTimestamp("registerdate").toLocalDateTime().format(DateTimeFormatter.ofPattern("yy-MM-dd HH:mm")));
+
 					map.put("예약 시간", String.format("%02d:00", rs.getInt("reservetime")));
 					map.put("예약자 아이디", rs.getString("customer_id"));
 					map.put("예약자 명", rs.getString("customer_name"));
