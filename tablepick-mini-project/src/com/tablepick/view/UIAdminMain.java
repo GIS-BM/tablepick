@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.tablepick.service.AdminService;
+import com.tablepick.service.CommonService;
 
 public class UIAdminMain {
     private static final UIAdminMain instance = new UIAdminMain();
@@ -48,8 +49,19 @@ public class UIAdminMain {
                 AdminService.getInstance().searchMostReserve();
                 break;
             case "5":
-                System.out.println("로그아웃합니다.");
-                return false; // 루프 종료
+            	System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다.\n");
+    			CommonService.getInstance().logoutSession();
+    			// 메인 화면으로 이동
+    			UIIndex UIIndex = new UIIndex();
+    			UIIndex.run();
+    			return false; // 현재 CustomerMain 종료
+            case "6":
+            	System.out.println("이전 화면으로 돌아갑니다.\n");
+            	CommonService.getInstance().logoutSession();
+            	// 메인 화면으로 이동
+            	UIIndex UIIndex1 = new UIIndex();
+            	UIIndex1.run();
+            	return false; // 현재 AdminMain 종료
             case "0":
                 System.out.println("서비스를 종료합니다.");
                 System.exit(0);
@@ -61,8 +73,10 @@ public class UIAdminMain {
     }
 
     private void printAdminMenu() {
+		System.out.println("                          ");
         System.out.println(
-            "\n============================================================================================");
+            "============================================================================================");
+		System.out.println("                          ");
         System.out.println("                                  ._________________.");
         System.out.println("                                  |.---------------.|");
         System.out.println("                                  ||               ||");
@@ -76,17 +90,21 @@ public class UIAdminMain {
         System.out.println("                                /.-.-.-.-.-.-.-.-.-.-.\\");
         System.out.println("                               /______/__________\\___o_\\ ");
         System.out.println("                               \\_______________________/");
+		System.out.println("                          ");
+
         System.out.println(
             "============================================================================================");
-        System.out.println("                                *** Admin 메인 서비스 ***");
-        System.out.println(
-            "============================================================================================");
-        System.out.println("                                   1. 전체 회원 조회");
-        System.out.println("                                   2. 회원 정보 검색");
-        System.out.println("                                   3. 전체 예약 목록");
-        System.out.println("                                   4. 최대 예약자 조회");
-        System.out.println("                                   5. 로그아웃");
-        System.out.println("                                   0. 서비스 종료하기");
+		System.out.println("                          ");
+        System.out.println("                           *** 어서오세요. 관리자 전용 페이지입니다. ***");
+		System.out.println("                          ");
+        System.out.println("                                1. 전체 회원 조회하기");
+        System.out.println("                                2. 회원 정보 검색하기");
+        System.out.println("                                3. 전체 예약 목록 조회하기");
+        System.out.println("                                4. 최대 예약자 조회하기");
+        System.out.println("                                5. 로그아웃");
+		System.out.println("                                6. 이전 화면으로 돌아가기");
+		System.out.println("                                0. 프로그램 종료하기");
+		System.out.println("                          ");		
         System.out.println(
             "============================================================================================");
         System.out.print("메뉴를 선택하세요: ");

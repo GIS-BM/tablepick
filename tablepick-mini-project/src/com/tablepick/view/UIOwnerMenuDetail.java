@@ -46,6 +46,7 @@ public class UIOwnerMenuDetail {
 					"============================================================================================");
 			System.out.println("                          ");
 			System.out.println("                  *** 메뉴를 관리할 수 있는 화면입니다. ***");
+			System.out.println("                  ");
 			System.out.println("                          1. 메뉴 조회하기");
 			System.out.println("                          2. 메뉴 생성하기");
 			System.out.println("                          3. 메뉴 수정하기");
