@@ -99,8 +99,7 @@ public class TestCreateRestaurant {
 				RestaurantVO vo1 = new RestaurantVO(accountId, name, type, address, tel, opentime);
 
 				try {
-				
-					System.out.println("내 식당 등록 번호 : " + service.createRestaurant(vo1));
+					service.createRestaurant(vo1);
 					System.out.println("식당이 등록되었습니다.");
 				} catch (SQLException e) {
 
