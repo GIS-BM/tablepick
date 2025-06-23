@@ -68,14 +68,14 @@ public class UICustomerReserve {
 	private void printReserveMenu() {
 		System.out.println(
 				"\n============================================================================================\n");
-		System.out.println("                              *** 식당 예약을 할 수 있는 화면입니다. ***");
+		System.out.println("                            *** 식당 예약을 할 수 있는 화면입니다. ***");
 		System.out.println("                  ");
-		System.out.println("                                    1. 식당 예약하기");
-		System.out.println("                                    2. 내 예약 확인하기");
-		System.out.println("                                    3. 내 예약 변경하기");
-		System.out.println("                                    4: 내 예약 삭제하기");
-		System.out.println("                                    5. 이전 화면으로 돌아가기");
-		System.out.println("                                    0. 프로그램 종료하기");
+		System.out.println("                                  1. 식당 예약하기");
+		System.out.println("                                  2. 예약 확인하기");
+		System.out.println("                                  3. 내 예약 변경하기");
+		System.out.println("                                  4: 내 예약 삭제하기");
+		System.out.println("                                  5. 이전 화면으로 돌아가기");
+		System.out.println("                                  0. 프로그램 종료하기");
 		System.out.println(
 				"\n============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");

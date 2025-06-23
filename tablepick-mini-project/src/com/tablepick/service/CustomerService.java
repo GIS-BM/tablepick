@@ -8,11 +8,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import com.tablepick.exception.AlreadyReservedException;
 import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.CustomerDao;
@@ -83,8 +82,8 @@ public class CustomerService {
 	}
 
 	// 예약 등록
-	public boolean registerReserve(ReserveVO reserveVO) throws Exception {
-		return customerDao.insertReserve(reserveVO);
+	public boolean registerReserve(ReserveVO reserveVO, String id) throws Exception {
+		return customerDao.insertReserve(reserveVO, id);
 	}
 
 	// 특정 식당의 예약 목록
@@ -140,7 +139,7 @@ public class CustomerService {
 							+ vo.getOpenTime());
 				}
 			}
-			System.out.print("식당명: ");
+			System.out.print("\n식당명: ");
 			String name = reader.readLine();
 			System.out.print("예약 인원: ");
 			int count;
@@ -150,23 +149,25 @@ public class CustomerService {
 				System.out.println("숫자를 입력하세요.");
 				return;
 			}
-			System.out.print("예약 날짜 ( 예:2025-06-12 ) : ");
+			System.out.print("예약 날짜 ( 예:2025-06-12 ): ");
 			String date = reader.readLine();
-			System.out.println("예약 시간:");
+			System.out.println("예약 시간 (9시 ~ 21시):");
 			int time = Integer.parseInt(reader.readLine());
-			int restaurantId = customerDao.findRestaurantIdByName(name);
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			if (time < 9 || time > 21) {
 				System.out.println("9시와 21시 사이에 시간을 입력해 주십시오.");
 				return;
 			}
+			int restaurantId = customerDao.findRestaurantIdByName(name);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate registerDate = LocalDate.parse(date, formatter);
 			ReserveVO reserveVO = new ReserveVO(accountId.getId(), restaurantId, count, registerDate, time);
 
-			if (customerDao.insertReserve(reserveVO)) {
+			if (customerDao.insertReserve(reserveVO, accountId.getId())) {
 				System.out.println("예약이 성공하였습니다.");
 			}
 
+		} catch (AlreadyReservedException e) {
+			System.out.println(e.getMessage());
 		} catch (DateTimeParseException e) {
 			System.out.println("날짜 양식에 맞춰 입력해 주십시오.");
 		} catch (SQLException e) {
@@ -236,9 +237,9 @@ public class CustomerService {
 			String name = reader.readLine();
 			System.out.print("예약 인원 (기존: " + old.getReservePeople() + "): ");
 			String countInput = reader.readLine();
-			System.out.print("예약 날짜 ( 예)2025-06-12 ) (기존: " + old.getReserveDate() + "): ");
+			System.out.print("예약 날짜 ( 예:2025-06-12 ) (기존: " + old.getReserveDate() + "): ");
 			String date = reader.readLine();
-			System.out.print("예약 시간 (기존: " + old.getReserveTime() + "): ");
+			System.out.print("예약 시간 (9시 ~ 21시) (기존: " + old.getReserveTime() + "시): ");
 			int time = Integer.parseInt(reader.readLine());
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate reserveDate = LocalDate.parse(date, formatter);
@@ -441,27 +442,21 @@ public class CustomerService {
 			while (true) {
 				System.out.println("\n[식당 리뷰 등록]");
 				System.out.println("예약한 식당:");
-				ArrayList<ReserveVO> reserveList = customerDao.getAccountReserves(accountId.getId());
+				ArrayList<ReserveVO> reserveList = customerDao.findReservedReview(accountId.getId());
 				if (reserveList.isEmpty()) {
-					System.out.println("등록된 예약이 없습니다.");
+					System.out.println("리뷰가 등록되지 않은 예약이 없습니다.");
 					return;
 				} else {
-					Set<String> printedNames = new HashSet<>();
-					for (ReserveVO vo : reserveList) {
-						String restaurantName = customerDao.findRestaurantNameById(vo.getRestaurantId());
-						if (printedNames.add(restaurantName)) {
-							System.out.println(restaurantName);
-						}
+					for (int i = 0; i < reserveList.size(); i++) {
+						ReserveVO vo = reserveList.get(i);
+						System.out.println((i+1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId())
+								+ " 예약날짜: " + vo.getReserveDate() + " 예약시간: " + vo.getReserveTime() + "시");
 					}
-
-					System.out.print("\n식당명: ");
-					String name = reader.readLine();
-
-					if (!printedNames.contains(name)) {
-						System.out.println("예약한 식당 중에 없습니다. 다시 시도하세요.");
-						break;
-					}
-
+					
+					System.out.print("\n리뷰를 등록할 예약 번호: ");
+					int num = Integer.parseInt(reader.readLine());
+					ReserveVO vo = reserveList.get(num-1);
+					
 					int star = 0;
 					while (true) {
 						System.out.print("별점 (1~10): ");
@@ -479,7 +474,7 @@ public class CustomerService {
 					System.out.print("코멘트: ");
 					String comment = reader.readLine();
 
-					int reserveId = customerDao.findReserveIdxByRestaurantName(name, accountId.getId());
+					int reserveId = customerDao.findReserveIdxByRestaurantIdx(vo.getRestaurantId(),accountId.getId());
 					boolean reviewResult = customerDao.createReview(reserveId, star, comment);
 					if (reviewResult) {
 						System.out.println(customerDao.findRestaurantNameByReserveIdx(reserveId) + " 리뷰 등록하였습니다.");

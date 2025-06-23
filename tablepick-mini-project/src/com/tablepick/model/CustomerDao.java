@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tablepick.common.DbConfig;
+import com.tablepick.exception.AlreadyReservedException;
 import com.tablepick.exception.InfoNotEnoughException;
 import com.tablepick.exception.NotFoundRestaurantException;
 
@@ -36,8 +37,106 @@ public class CustomerDao {
 			rs.close();
 		closeAll(pstmt, con);
 	}
-	
-	
+
+	// restaurant 이름으로 reserve idx 찾는 메서드
+	public int findReserveIdxByRestaurantName(String name, String accountId)
+			throws SQLException, NotFoundRestaurantException {
+		int reserveId = 0;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT r.idx FROM reserve r JOIN restaurant res ON r.restaurant_idx = res.idx "
+					+ " LEFT JOIN review rv ON r.idx = rv.reserve_idx  WHERE res.name = ? AND r.account_id = ?; ";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, name);
+			pstmt.setString(2, accountId);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				reserveId = rs.getInt("r.idx");
+			if (reserveId == 0)
+				throw new NotFoundRestaurantException(name + " 식당이 존재하지 않습니다.");
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return reserveId;
+	}
+	// restaurant 번호로 reserve idx 찾는 메서드
+	public int findReserveIdxByRestaurantIdx(int idx, String accountId)
+			throws SQLException, NotFoundRestaurantException {
+		int reserveId = 0;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT r.idx,res.name FROM reserve r JOIN restaurant res ON r.restaurant_idx = res.idx "
+					+ " LEFT JOIN review rv ON r.idx = rv.reserve_idx WHERE res.idx = ? AND r.account_id = ?; ";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			pstmt.setString(2, accountId);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				reserveId = rs.getInt("r.idx");
+			else
+				throw new NotFoundRestaurantException("식당이 존재하지 않습니다.");
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return reserveId;
+	}
+
+	// reserve idx 로 restaurant 이름 찾는 메서드
+	public String findRestaurantNameByReserveIdx(int idx) throws SQLException, NotFoundRestaurantException {
+		String restaurantName = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT res.name FROM reserve r JOIN restaurant res ON r.restaurant_idx = res.idx "
+					+ " LEFT JOIN review rv ON r.idx = rv.reserve_idx WHERE r.idx = ? ";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			rs = pstmt.executeQuery();
+			if (rs.next())
+				restaurantName = rs.getString("name");
+			if (restaurantName == null)
+				throw new NotFoundRestaurantException("식당이 존재하지 않습니다.");
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return restaurantName;
+	}
+
+	// 리뷰 중복 확인 메서드
+	public ArrayList<ReserveVO> findReservedReview(String id) throws SQLException {
+		ArrayList<ReserveVO> list = new ArrayList<>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = getConnection();
+			String sql = "SELECT v.* FROM reserve v LEFT JOIN review rv "
+					+ " ON v.idx = rv.reserve_idx WHERE v.account_id = ? AND rv.idx IS null";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Date reserveDateTime = rs.getDate("reservedate");
+				Timestamp registerDateTime = rs.getTimestamp("registerdate");
+				LocalDate reserveDate = reserveDateTime.toLocalDate();
+				LocalDateTime registerDate = registerDateTime.toLocalDateTime();
+
+				list.add(new ReserveVO(rs.getInt("idx"), rs.getString("account_id"), rs.getInt("restaurant_idx"),
+						rs.getInt("reservepeople"), reserveDate, rs.getInt("reservetime"), registerDate));
+			}
+		} finally {
+			closeAll(rs, pstmt, con);
+		}
+		return list;
+	}
 
 	// 리뷰 등록 메서드
 	// 해당 예약에 대한 리뷰를 등록해야한다.
@@ -70,11 +169,8 @@ public class CustomerDao {
 
 		try {
 			con = getConnection();
-			String sql ="SELECT r.idx, r.reserve_idx, r.star, r.comment, r.registerdate "
-					+ " FROM review r "
-					+ " JOIN reserve rs "
-					+ " ON r.reserve_idx = rs.idx "
-					+ " WHERE rs.account_id = ?";
+			String sql = "SELECT r.idx, r.reserve_idx, r.star, r.comment, r.registerdate " + " FROM review r "
+					+ " JOIN reserve rs " + " ON r.reserve_idx = rs.idx " + " WHERE rs.account_id = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, accountId);
 			// ? 에 accountId 값 바인딩
@@ -108,8 +204,6 @@ public class CustomerDao {
 		ReviewVO updatedReview = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
 		try {
 			con = getConnection();
 			StringBuilder sql = new StringBuilder();
@@ -182,58 +276,6 @@ public class CustomerDao {
 		return result;
 	}
 
-	// restaurant 이름으로 reserve idx 찾는 메서드
-	public int findReserveIdxByRestaurantName(String name, String accountId) throws SQLException, NotFoundRestaurantException {
-		int reserveId = 0;
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			con = getConnection();
-			String sql = "SELECT r.idx "
-					+ " FROM reserve r "
-					+ " JOIN restaurant res ON r.restaurant_idx = res.idx "
-					+ " LEFT JOIN review rv ON r.idx = rv.reserve_idx "
-					+ " WHERE res.name = ? AND r.account_id = ?; ";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, name);
-			pstmt.setString(2, accountId);
-			rs = pstmt.executeQuery();
-			if (rs.next())
-				reserveId = rs.getInt("r.idx");
-			if (reserveId == 0)
-				throw new NotFoundRestaurantException(name + " 식당이 존재하지 않습니다.");
-		} finally {
-			closeAll(rs, pstmt, con);
-		}
-		return reserveId;
-	}
-	// reserve idx 로 restaurant 이름 찾는 메서드
-		public String findRestaurantNameByReserveIdx(int idx) throws SQLException, NotFoundRestaurantException {
-			String restaurantName = null;
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			try {
-				con = getConnection();
-				String sql = "SELECT res.name "
-				           + " FROM reserve r "
-				           + " JOIN restaurant res ON r.restaurant_idx = res.idx "
-				           + " LEFT JOIN review rv ON r.idx = rv.reserve_idx "
-				           + " WHERE rv.idx = ? ";
-				pstmt = con.prepareStatement(sql);
-				pstmt.setInt(1, idx);
-				rs = pstmt.executeQuery();
-				if (rs.next())
-					restaurantName = rs.getString("name");
-				if (restaurantName == null)
-					throw new NotFoundRestaurantException("식당이 존재하지 않습니다.");
-			} finally {
-				closeAll(rs, pstmt, con);
-			}
-			return restaurantName;
-		}
-
 	// 레스토랑 idx 찾는 메서드
 	public int findRestaurantIdByName(String name) throws SQLException, NotFoundRestaurantException {
 		int restaurantId = 0;
@@ -279,7 +321,15 @@ public class CustomerDao {
 	}
 
 	// 예약 등록
-	public boolean insertReserve(ReserveVO reserveVO) throws Exception {
+	public boolean insertReserve(ReserveVO reserveVO, String id) throws Exception {
+		// 같은 식당, 같은 시간, 같은 날짜에 예약 중복을 막는다.
+		ArrayList<ReserveVO> myReserve = getAccountReserves(id);
+		for (ReserveVO vo : myReserve) {
+			if (vo.getRestaurantId() == reserveVO.getRestaurantId()
+					&& vo.getReserveDate().equals(reserveVO.getReserveDate())
+					&& vo.getReserveTime() == reserveVO.getReserveTime())
+				throw new AlreadyReservedException("중복된 예약입니다.");
+		}
 		boolean result = false;
 		Connection con = null;
 		PreparedStatement pstmt = null;
