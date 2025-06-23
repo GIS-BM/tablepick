@@ -14,6 +14,7 @@ import com.tablepick.exception.NotFoundRestaurantException;
 import com.tablepick.model.AccountVO;
 import com.tablepick.model.AdminDao;
 import com.tablepick.model.ReserveVO;
+import com.tablepick.view.UIAdminMain;
 
 
 public class AdminService {
@@ -116,7 +117,7 @@ public class AdminService {
 							return;
 						case "3":
 							System.out.println("회원 정보 관리 시스템으로 돌아갑니다.\n");
-							searchAccount(reader);
+							UIAdminMain.getInstance().run();;
 							break;
 						case "4":
 							System.out.println("관리자 페이지로 돌아갑니다.");
