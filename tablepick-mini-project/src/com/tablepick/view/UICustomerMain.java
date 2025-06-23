@@ -83,12 +83,13 @@ public class UICustomerMain {
 		System.out.println("                          ");
 		System.out.println("                          *** 어서오세요. 손님 전용 페이지 입니다. ***             ");
 		System.out.println("                          ");
-		System.out.println("                                   1. 식당 조회하기");
-		System.out.println("                                   2. 식당 예약하기");
-		System.out.println("                                   3. 식당 리뷰하기");
-		System.out.println("                                   4. 로그아웃");		
-		System.out.println("                                   5. 이전 화면으로 돌아가기");		
-		System.out.println("                                   0. 프로그램 종료하기");
+		System.out.println("                                  1. 식당 조회하기");
+		System.out.println("                                  2. 식당 예약하기");
+		System.out.println("                                  3. 식당 리뷰하기");
+		System.out.println("                                  4. 로그아웃");		
+		System.out.println("                                  5. 이전 화면으로 돌아가기");		
+		System.out.println("                                  0. 프로그램 종료하기");
+		System.out.println("                          ");
 		System.out.println("============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");
 	}
