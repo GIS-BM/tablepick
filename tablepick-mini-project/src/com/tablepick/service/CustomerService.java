@@ -57,7 +57,8 @@ public class CustomerService {
 	}
 
 	// 내 리뷰 수정(아이디랑 리뷰 번호로 변경 데이터 찾기)
-	public ReviewVO updateMyReview(String accountId, int reviewIdx, int newStar, String newComment) throws SQLException {
+	public ReviewVO updateMyReview(String accountId, int reviewIdx, int newStar, String newComment)
+			throws SQLException {
 		return customerDao.updateMyReviewById(accountId, reviewIdx, newStar, newComment);
 	}
 
@@ -130,38 +131,52 @@ public class CustomerService {
 	public void reserveRestaurant() {
 		try {
 			System.out.println("\n[식당 예약]");
+			ArrayList<RestaurantVO> list = customerDao.searchAllRestaurants();
+			if (list.isEmpty()) {
+				System.out.println("등록된 식당이 없습니다.");
+			} else {
+				for (RestaurantVO vo : list) {
+					System.out.println(vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: "
+							+ vo.getOpenTime());
+				}
+			}
 			System.out.print("식당명: ");
 			String name = reader.readLine();
 			System.out.print("예약 인원: ");
-			int count = Integer.parseInt(reader.readLine());
-			System.out.print("예약 날짜 ( 예)2025-06-12 ) : ");
+			int count;
+			try {
+				count = Integer.parseInt(reader.readLine());
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력하세요.");
+				return;
+			}
+			System.out.print("예약 날짜 ( 예:2025-06-12 ) : ");
 			String date = reader.readLine();
 			System.out.println("예약 시간:");
 			int time = Integer.parseInt(reader.readLine());
 			int restaurantId = customerDao.findRestaurantIdByName(name);
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			if (time < 9 || time > 21) {
-				System.out.println("잘못된 입력입니다.");
+				System.out.println("9시와 21시 사이에 시간을 입력해 주십시오.");
 				return;
 			}
 			LocalDate registerDate = LocalDate.parse(date, formatter);
 			ReserveVO reserveVO = new ReserveVO(accountId.getId(), restaurantId, count, registerDate, time);
+
 			if (customerDao.insertReserve(reserveVO)) {
 				System.out.println("예약이 성공하였습니다.");
-			} else {
-				System.out.println("예약 등록 실패");
 			}
 
 		} catch (DateTimeParseException e) {
-			System.out.println("잘못된 입력입니다.");
+			System.out.println("날짜 양식에 맞춰 입력해 주십시오.");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("예약 등록에 실패하였습니다.");
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("잘못된 입력입니다.");
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("예약 등록에 실패하였습니다.");
 		}
 	}
 
@@ -181,12 +196,12 @@ public class CustomerService {
 				for (ReserveVO vo : list) {
 					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
 					System.out.println("식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId()) + " 인원 수: "
-							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: " + vo.getReserveTime()
-							+ "시 예약한 날짜: " + formattedRegisterDate);
+							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
+							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("등록된 예약이 없습니다.");
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
 		}
@@ -204,9 +219,9 @@ public class CustomerService {
 				for (int i = 0; i < list.size(); i++) {
 					ReserveVO vo = list.get(i);
 					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
-					System.out.println((i + 1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId()) + " 인원 수: "
-							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: " + vo.getReserveTime()
-							+ "시 예약한 날짜: " + formattedRegisterDate);
+					System.out.println((i + 1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId())
+							+ " 인원 수: " + vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
+							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
 				}
 			}
 			System.out.print("수정할 예약: ");
@@ -220,7 +235,7 @@ public class CustomerService {
 			System.out.print("식당명 (기존: " + customerDao.findRestaurantNameById(old.getRestaurantId()) + "): ");
 			String name = reader.readLine();
 			System.out.print("예약 인원 (기존: " + old.getReservePeople() + "): ");
-			int count = Integer.parseInt(reader.readLine());
+			String countInput = reader.readLine();
 			System.out.print("예약 날짜 ( 예)2025-06-12 ) (기존: " + old.getReserveDate() + "): ");
 			String date = reader.readLine();
 			System.out.print("예약 시간 (기존: " + old.getReserveTime() + "): ");
@@ -229,7 +244,8 @@ public class CustomerService {
 			LocalDate reserveDate = LocalDate.parse(date, formatter);
 			int resId = customerDao.findRestaurantIdByName(name);
 			ReserveVO updated = new ReserveVO(old.getReserveId(), accountId.getId(),
-					name.isEmpty() ? old.getRestaurantId() : resId, count == 0 ? old.getReservePeople() : count,
+					name.isEmpty() ? old.getRestaurantId() : resId,
+					countInput.isEmpty() ? old.getReservePeople() : Integer.parseInt(countInput),
 					date.isEmpty() ? old.getReserveDate() : reserveDate, time == 0 ? old.getReserveTime() : time);
 
 			if (customerDao.updateReserve(updated)) {
@@ -240,18 +256,18 @@ public class CustomerService {
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			System.out.println("잘못된 입력입니다.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("잘못된 입력입니다.");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("수정이 실패하였습니다.");
 		}
 	}
 
 	// 예약 delete
 	public void reserveDelete() {
 		try {
-			System.out.print("\n등록된 예약 목록");
+			System.out.println("\n등록된 예약 목록");
 			ArrayList<ReserveVO> list = customerDao.getAccountReserves(accountId.getId());
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			if (list.isEmpty()) {
@@ -260,9 +276,9 @@ public class CustomerService {
 				for (int i = 0; i < list.size(); i++) {
 					ReserveVO vo = list.get(i);
 					String formattedRegisterDate = vo.getRegisterDate().format(dateTimeFormatter);
-					System.out.println((i + 1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId()) + " 인원 수: "
-							+ vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: " + vo.getReserveTime()
-							+ "시 예약한 날짜: " + formattedRegisterDate);
+					System.out.println((i + 1) + ". 식당명: " + customerDao.findRestaurantNameById(vo.getRestaurantId())
+							+ " 인원 수: " + vo.getReservePeople() + " 예약 날짜: " + vo.getReserveDate() + " 예약 시간: "
+							+ vo.getReserveTime() + "시 예약한 날짜: " + formattedRegisterDate);
 				}
 			}
 			System.out.print("삭제할 예약: ");
@@ -280,11 +296,11 @@ public class CustomerService {
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("삭제가 실패하였습니다.");
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			System.out.println("잘못된 입력입니다.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("잘못된 입력입니다.");
 		}
 	}
 
@@ -297,12 +313,12 @@ public class CustomerService {
 				System.out.println("등록된 식당이 없습니다.");
 			} else {
 				for (RestaurantVO vo : list) {
-					System.out.println(
-							vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: " + vo.getOpenTime());
+					System.out.println(vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: "
+							+ vo.getOpenTime());
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("오류가 발생했습니다. 다시 시도해주세요.");
 		}
 	}
 
@@ -310,8 +326,15 @@ public class CustomerService {
 	public void searchRestaurantByType() {
 		try {
 			System.out.println("\n조회할 식당 타입을 선택하세요");
-			System.out.println(" 1. 한식 2. 중식 3. 일식 4. 양식");
-			int choice = Integer.parseInt(reader.readLine());
+			System.out.println("1. 한식 2. 중식 3. 일식 4. 양식");
+			String input = reader.readLine();
+			int choice;
+			try {
+				choice = Integer.parseInt(input);
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요.");
+				return;
+			}
 			String type = null;
 			switch (choice) {
 			case 1:
@@ -335,12 +358,12 @@ public class CustomerService {
 				System.out.println("선택한 타입의 식당이 없습니다.");
 			} else {
 				for (RestaurantVO vo : list) {
-					System.out.println(
-							vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: " + vo.getOpenTime());
+					System.out.println(vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: "
+							+ vo.getOpenTime());
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("오류가 발생했습니다. 다시 시도해주세요.");
 		}
 	}
 
@@ -358,7 +381,18 @@ public class CustomerService {
 							+ " 오픈 시간: " + vo.getOpenTime());
 				}
 			}
-			int choice = Integer.parseInt(reader.readLine());
+			String input = reader.readLine();
+			int choice;
+			try {
+				choice = Integer.parseInt(input);
+				if (choice < 1 || choice > list.size()) {
+					System.out.println("잘못된 선택입니다.");
+					return;
+				}
+			} catch (NumberFormatException e) {
+				System.out.println("숫자를 입력해주세요.");
+				return;
+			}
 			RestaurantVO vo = list.get(choice - 1);
 			int restaurantId = vo.getRestaurantId();
 			ArrayList<ReviewVO> reviewList = customerDao.searchRestaurantReviewView(restaurantId);
@@ -375,7 +409,7 @@ public class CustomerService {
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("식당 조회 중 오류가 발생했습니다.");
 		}
 	}
 
@@ -392,66 +426,73 @@ public class CustomerService {
 					double avgStar = values[0];
 					int count = (int) values[1];
 					System.out.println(vo.getName() + " 주소: " + vo.getAddress() + " 전화번호: " + vo.getTel() + " 오픈 시간: "
-							+ vo.getOpenTime() + " 평균 별점: " + avgStar + " 예약자 수: " + count);
+							+ vo.getOpenTime() + " 평균 별점: " + String.format("%.2f", avgStar) + " 예약자 수: " + count
+							+ "명");
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			System.out.println("식당 조회 중 오류가 발생했습니다.");
 		}
 	}
 
 	// 리뷰 등록하는 테스트 메서드
 	public void createReview() throws IOException {
 		try {
-			System.out.println("\n[식당 리뷰 등록]");
-			System.out.println("예약한 식당:");
-			ArrayList<ReserveVO> reserveList = customerDao.getAccountReserves(accountId.getId());
-			if (reserveList.isEmpty()) {
-				System.out.println("등록된 예약이 없습니다.");
-				return;
-			} else {
-				Set<String> printedNames = new HashSet<>();
-				for (ReserveVO vo : reserveList) {
-					String restaurantName = customerDao.findRestaurantNameById(vo.getRestaurantId());
-					if (!printedNames.contains(restaurantName)) {
-						System.out.println(restaurantName);
-						printedNames.add(restaurantName);
-					}
-				}
-			}
-			System.out.print("\n식당명: ");
-			String name = reader.readLine();
-			int star = 0;
 			while (true) {
-				System.out.print("별점 (1~10): ");
-				try {
-					star = Integer.parseInt(reader.readLine());
-					if (star >= 1 && star <= 10) {
-						break;
-					} else {
-						System.out.println("별점은 1에서 10 사이의 숫자여야 합니다.");
+				System.out.println("\n[식당 리뷰 등록]");
+				System.out.println("예약한 식당:");
+				ArrayList<ReserveVO> reserveList = customerDao.getAccountReserves(accountId.getId());
+				if (reserveList.isEmpty()) {
+					System.out.println("등록된 예약이 없습니다.");
+					return;
+				} else {
+					Set<String> printedNames = new HashSet<>();
+					for (ReserveVO vo : reserveList) {
+						String restaurantName = customerDao.findRestaurantNameById(vo.getRestaurantId());
+						if (printedNames.add(restaurantName)) {
+							System.out.println(restaurantName);
+						}
 					}
-				} catch (NumberFormatException e) {
-					System.out.println("숫자를 입력해주세요.");
+
+					System.out.print("\n식당명: ");
+					String name = reader.readLine();
+
+					if (!printedNames.contains(name)) {
+						System.out.println("예약한 식당 중에 없습니다. 다시 시도하세요.");
+						break;
+					}
+
+					int star = 0;
+					while (true) {
+						System.out.print("별점 (1~10): ");
+						try {
+							star = Integer.parseInt(reader.readLine());
+							if (star >= 1 && star <= 10) {
+								break;
+							} else {
+								System.out.println("별점은 1에서 10 사이의 숫자여야 합니다.");
+							}
+						} catch (NumberFormatException e) {
+							System.out.println("숫자를 입력해주세요.");
+						}
+					}
+					System.out.print("코멘트: ");
+					String comment = reader.readLine();
+
+					int reserveId = customerDao.findReserveIdxByRestaurantName(name, accountId.getId());
+					boolean reviewResult = customerDao.createReview(reserveId, star, comment);
+					if (reviewResult) {
+						System.out.println(customerDao.findRestaurantNameByReserveIdx(reserveId) + " 리뷰 등록하였습니다.");
+					} else {
+						System.out.println("리뷰 등록에 실패하였습니다.");
+					}
+					break;
 				}
-			}
-			System.out.print("코멘트: ");
-			String comment = reader.readLine();
-			int reserveId = customerDao.findReserveIdxByRestaurantName(name, accountId.getId());
-			boolean reviewResult = customerDao.createReview(reserveId, star, comment);
-			if (reviewResult) {
-				System.out.println(customerDao.findRestaurantNameByReserveIdx(reserveId) + " 리뷰 등록하였습니다.");
-			} else {
-				System.out.println("리뷰 등록에 실패하였습니다.");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("리뷰 등록에 실패하였습니다.");
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -459,10 +500,9 @@ public class CustomerService {
 	public void findMyReviewById() {
 		try {
 			System.out.println("\n[내 리뷰 검색]");
-			System.out.println("서비스 클래스 findMyReviewById 메서드 실행 성공");
 			System.out.println(accountId.getId());
 			ArrayList<ReviewVO> list = customerDao.findMyReviewById(accountId.getId());
-			
+
 			if (list.isEmpty()) {
 				System.out.println("작성한 리뷰가 없습니다.");
 				return;
@@ -472,7 +512,7 @@ public class CustomerService {
 						+ vo.getStar() + "점 코멘트: " + vo.getComment());
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("데이터베이스 오류가 발생했습니다.");
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
 		}
@@ -533,12 +573,12 @@ public class CustomerService {
 			}
 
 		} catch (IOException e) {
-			System.out.println("fail : 입력 오류가 발생했습니다.");
+			System.out.println("입력 오류가 발생했습니다.");
 			e.printStackTrace();
 		} catch (NumberFormatException e) {
-			System.out.println("fail : 숫자 입력이 잘못되었습니다.");
+			System.out.println("숫자 입력이 잘못되었습니다.");
 		} catch (SQLException e) {
-			System.out.println("fail : 데이터베이스 오류가 발생했습니다.");
+			System.out.println("데이터베이스 오류가 발생했습니다.");
 			e.printStackTrace();
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
@@ -576,7 +616,7 @@ public class CustomerService {
 				System.out.println("리뷰 삭제가 실패했습니다.");
 			}
 		} catch (SQLException | NumberFormatException | IOException e) {
-			e.printStackTrace();
+			System.out.println("리뷰 삭제가 실패했습니다.");
 		} catch (NotFoundRestaurantException e) {
 			System.out.println(e.getMessage());
 			;
