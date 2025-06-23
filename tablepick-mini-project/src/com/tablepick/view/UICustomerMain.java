@@ -43,11 +43,18 @@ public class UICustomerMain {
 			UICustomerReview.getInstance().run(reader);
 			break;
 		case "4":
-			System.out.println("로그아웃합니다.");
+			System.out.println("로그아웃이 완료되었으므로 프로그램 홈으로 돌아갑니다.\n");
 			CommonService.getInstance().logoutSession();
 			// 메인 화면으로 이동
 			UIIndex UIIndex = new UIIndex();
 			UIIndex.run();
+			return false; // 현재 CustomerMain 종료
+		case "5":
+			System.out.println("이전 화면으로 돌아갑니다.\n");
+			CommonService.getInstance().logoutSession();
+			// 메인 화면으로 이동
+			UIIndex UIIndex1 = new UIIndex();
+			UIIndex1.run();
 			return false; // 현재 CustomerMain 종료
 		case "0":
 			System.out.println("서비스를 종료합니다.");
@@ -60,23 +67,28 @@ public class UICustomerMain {
 	}
 
 	private void printCustomerMenu() {
+		System.out.println("                          ");
 		System.out
 				.println("\n============================================================================================");
-		System.out.println("                             __...--~~~~~-._   _.-~~~~~--...__");
-		System.out.println("                           //               `V'               \\\\ ");
-		System.out.println("                          //     CUSTOMER    |     PAGE        \\\\ ");
-		System.out.println("                         //__...--~~~~~~-._  |  _.-~~~~~~--...__\\\\ ");
-		System.out.println("                        //__.....----~~~~._\\ | /_.~~~~----.....__\\\\");
-		System.out.println("                       ====================\\\\|//====================");
-		System.out.println("                                           `---`");
+		System.out.println("                          ");
+		System.out.println("                            __...--~~~~~-._   _.-~~~~~--...__");
+		System.out.println("                          //               `V'               \\\\ ");
+		System.out.println("                         //     CUSTOMER    |     PAGE        \\\\ ");
+		System.out.println("                        //__...--~~~~~~-._  |  _.-~~~~~~--...__\\\\ ");
+		System.out.println("                       //__.....----~~~~._\\ | /_.~~~~----.....__\\\\");
+		System.out.println("                      ====================\\\\|//====================");
+		System.out.println("                                          `---`");
+		System.out.println("                          ");
 		System.out.println("============================================================================================");
-		System.out.println("                               *** Customer 메인 서비스 ***");
-		System.out.println("============================================================================================");
-		System.out.println("                                    1. 식당 조회");
-		System.out.println("                                    2. 식당 예약");
-		System.out.println("                                    3. 식당 리뷰");
-		System.out.println("                                    4. 로그아웃");
-		System.out.println("                                    0. 서비스 종료하기");
+		System.out.println("                          ");
+		System.out.println("                          *** 어서오세요. 손님 전용 페이지 입니다. ***             ");
+		System.out.println("                          ");
+		System.out.println("                                   1. 식당 조회하기");
+		System.out.println("                                   2. 식당 예약하기");
+		System.out.println("                                   3. 식당 리뷰하기");
+		System.out.println("                                   4. 로그아웃");		
+		System.out.println("                                   5. 이전 화면으로 돌아가기");		
+		System.out.println("                                   0. 프로그램 종료하기");
 		System.out.println("============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");
 	}
