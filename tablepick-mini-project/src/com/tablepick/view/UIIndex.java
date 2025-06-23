@@ -99,7 +99,7 @@ public class UIIndex {
 				System.out.println("회원가입 실패: 이미 존재하는 ID일 수 있습니다.");
 			}
 		} catch (IOException | SQLException e) {
-			System.err.println("회원가입 오류: " + e.getMessage());
+			//System.err.println("회원가입 오류: " + e.getMessage());
 		}
 	}
 
