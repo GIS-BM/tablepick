@@ -67,18 +67,17 @@ public class UICustomerReview {
 
 	private void printSearchRestaurantMenu() {
 		System.out.println(
+				"\n============================================================================================\n");
+		System.out.println("                            *** 식당 리뷰를 할 수 있는 화면입니다. ***");
+		System.out.println("                  ");
+		System.out.println("                                    1. 식당 리뷰 등록하기");
+		System.out.println("                                    2. 내 리뷰 검색하기");
+		System.out.println("                                    3. 내 리뷰 수정하기");
+		System.out.println("                                    4: 내 리뷰 삭제하기");
+		System.out.println("                                    5. 이전 화면으로 돌아가기");
+		System.out.println("                                    0. 프로그램 종료하기");
+		System.out.println(
 				"\n============================================================================================");
-		System.out.println("                                 *** 식당 리뷰 서비스 ***");
-		System.out.println(
-				"============================================================================================");
-		System.out.println("                                    1. 식당 리뷰 등록");
-		System.out.println("                                    2. 내 리뷰 검색");
-		System.out.println("                                    3. 내 리뷰 수정");
-		System.out.println("                                    4: 내 리뷰 삭제");
-		System.out.println("                                    5. 뒤로가기");
-		System.out.println("                                    0. 서비스 종료하기");
-		System.out.println(
-				"============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");
 	}
 }

@@ -66,16 +66,16 @@ public class UICustomerFindRestaurant {
 
 	private void printSearchRestaurantMenu() {
 		System.out.println(
-				"\n============================================================================================");
-		System.out.println("                                 *** 식당 조회 서비스 ***");
-		System.out.println(
-				"============================================================================================");
-		System.out.println("                                    1. 식당 전체 조회");
-		System.out.println("                                    2. 식당 타입별 조회");
-		System.out.println("                                    3. 해당 식당 리뷰 조회");
-		System.out.println("                                    4: 평균 별점 높은순 식당 조회");
-		System.out.println("                                    5. 뒤로가기");
-		System.out.println("                                    0. 서비스 종료하기");
+				"\n============================================================================================\n");
+		System.out.println("                          *** 식당을 조회 할 수 있는 화면입니다. ***");
+		System.out.println("                  ");
+		System.out.println("                                1. 식당 전체 조회하기");
+		System.out.println("                                2. 식당 타입별 조회하기");
+		System.out.println("                                3. 해당 식당 리뷰 조회하기");
+		System.out.println("                                4: 평균 별점 높은순 식당 조회하기");
+		System.out.println("                                5. 이전 화면으로 돌아가기");
+		System.out.println("                                0. 프로그램 종료하기");
+		System.out.println("                  ");
 		System.out.println(
 				"============================================================================================");
 		System.out.print("메뉴를 선택하세요: ");
